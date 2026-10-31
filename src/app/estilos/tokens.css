@@ -1,0 +1,38 @@
+/* Identidad mesawow (docs/requerimiento-mesawow.md §10). Valores finales del prototipo,
+   con el gris secundario oscurecido para cumplir contraste AA. */
+:root {
+  --rosa: #F22E62;
+  --rosa-oscuro: #C8174A;
+  --naranja: #FF7A00;
+  --amarillo: #FFFF00;
+  --amarillo-rayo: #FFC700;
+  --violeta: #9B5CFF;
+  --teal: #00A2AF;
+  --noche: #0F1B3D;
+
+  --tinta: #0F1B3D;
+  --tinta-2: #4A5274;
+  --apagado: #5E6382;        /* prototipo #7A7F9A: no alcanzaba 4,5:1 sobre el fondo */
+  --fondo: #FBF6FA;
+  --tarjeta: #FFFFFF;
+  --linea: #ECE6F0;
+  --suave: #FFE9EF;
+
+  --verde: #1F7A5C;
+  --rojo: #B3364F;
+  --ambar: #8A5A00;
+
+  --wow: linear-gradient(90deg, #F22E62, #FF7A00);
+  --wow-diagonal: linear-gradient(135deg, #F22E62, #FF7A00);
+
+  --radio-s: 10px;
+  --radio-m: 16px;
+  --radio-l: 24px;
+  --sombra: 0 10px 30px rgba(15, 27, 61, .08);
+  --sombra-wow: 0 6px 18px rgba(242, 46, 98, .28);
+
+  --fuente: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --tactil: 44px;
+  --ancho-lateral: 248px;
+  --alto-barra-inferior: 64px;
+}
