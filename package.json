@@ -1,0 +1,37 @@
+{
+  "name": "mesawow",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "npm run build && vite preview",
+    "types": "wrangler types",
+    "typecheck": "tsc --noEmit -p tsconfig.worker.json && tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.scripts.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "db:migrate:local": "wrangler d1 migrations apply DB --local",
+    "db:seed:local": "wrangler d1 execute DB --local --file=seed/desarrollo.sql",
+    "db:reset:local": "rm -rf .wrangler/state/v3/d1 && npm run db:migrate:local && npm run db:seed:local",
+    "datos-base": "node scripts/generar-datos-base.ts",
+    "importar": "node scripts/importar-prototipo.ts"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "1.64.0",
+    "@cloudflare/vitest-plugin": "1.4.4",
+    "@preact/preset-vite": "2.10.6",
+    "@types/node": "24.10.1",
+    "typescript": "5.9.3",
+    "vite": "8.3.4",
+    "vitest": "4.1.12",
+    "wrangler": "4.151.1"
+  },
+  "dependencies": {
+    "hono": "4.13.13",
+    "preact": "10.29.8",
+    "zod": "4.6.7"
+  }
+}

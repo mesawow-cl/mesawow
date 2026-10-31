@@ -1,0 +1,60 @@
+// mesawow · configuración de Cloudflare Workers
+// Local: `npm run dev` (Vite + Workers). Staging y production se completan en la Fase 8
+// con los IDs reales de `wrangler d1 create` y `wrangler r2 bucket create`.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "mesawow",
+  "main": "src/worker/index.ts",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  },
+  "observability": { "enabled": true },
+  "vars": {
+    "ENTORNO": "local"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "mesawow-local",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "r2_buckets": [
+    { "binding": "ARCHIVOS", "bucket_name": "mesawow-archivos-local" }
+  ],
+  "env": {
+    "staging": {
+      "name": "mesawow-staging",
+      "vars": { "ENTORNO": "staging" },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "mesawow-staging",
+          "database_id": "00000000-0000-0000-0000-000000000001",
+          "migrations_dir": "migrations"
+        }
+      ],
+      "r2_buckets": [
+        { "binding": "ARCHIVOS", "bucket_name": "mesawow-archivos-staging" }
+      ]
+    },
+    "production": {
+      "name": "mesawow",
+      "vars": { "ENTORNO": "production" },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "mesawow-production",
+          "database_id": "00000000-0000-0000-0000-000000000002",
+          "migrations_dir": "migrations"
+        }
+      ],
+      "r2_buckets": [
+        { "binding": "ARCHIVOS", "bucket_name": "mesawow-archivos-production" }
+      ]
+    }
+  }
+}
