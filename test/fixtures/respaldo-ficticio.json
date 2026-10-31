@@ -1,0 +1,57 @@
+{
+  "generalAdminId": "p-luz",
+  "brands": [
+    { "id": "b0", "name": "Marca Lima", "color": "#2463D4", "director": "p-luz", "teamRoles": { "marketing": "Luz Inventada", "ejecucion": "Persona Sin Cuenta" },
+      "minimums": [ { "title": "Manual de marca", "state": "Vigente", "note": "ok" }, { "title": "Brandboard", "state": "Raro", "note": "" } ] },
+    { "id": "b1", "name": "Marca Pera", "color": "rojo" }
+  ],
+  "mesas": [ { "id": "mesa-1", "name": "Marketing", "active": true, "owner": "p-luz" }, { "id": "mesa-9", "name": "Diseño Gráfico", "active": true } ],
+  "people": [
+    { "id": "p-luz", "name": "Luz Inventada", "email": "LUZ@ficticio.test", "role": "Administrador general", "area": "Marketing", "brands": ["b0", "b1"], "salt": "abc", "passwordHash": "deadbeef", "phone": "+56900000001" },
+    { "id": "p-mar", "name": "Mar Imaginaria", "email": "mar@ficticio.test", "role": "Administrador general", "area": "Comercial", "brands": ["b0"], "phone": "123" },
+    { "id": "p-sol", "name": "Sol Supuesto", "email": "", "role": "Jefe Supremo", "area": "Diseño", "brands": ["b0", "b-inexistente"] }
+  ],
+  "archivedPeople": [ { "id": "p-rio", "name": "Río Pasado", "email": "rio@ficticio.test", "role": "Ejecutor", "departed": true, "departureNote": "Salió del equipo", "referenceOnly": true } ],
+  "campaigns": [ { "id": "c1", "brand": "b0", "name": "Campaña ficticia", "status": "Aprobada", "version": 2, "approvedVersion": 2, "html": "<p>Hola</p>", "channels": ["Meta Ads", "Brevo · mailing y newsletter", "Meta Ads"], "protocolReviewer": "Luz Inventada", "type": "360", "scope": { "organic": 12 } } ],
+  "tasks": [
+    { "id": "t1", "brand": "b0", "campaign": "c1", "title": "Tarea uno", "owner": "Mar Imaginaria", "reviewer": "Luz Inventada", "collaborators": ["Sol Supuesto", "Nadie Conocido"], "approvers": ["Luz Inventada"],
+      "start": "2026-11-02", "due": "2026-11-06", "status": "Aprobada", "acceptance": "Que funcione", "result": "Listo", "resultType": "image", "resultContent": "data:image/png;base64,iVBORw0KGgo=", "area": "Comercial",
+      "comments": [ { "id": "k1", "author": "Luz Inventada", "at": "2026-11-03T12:00:00.000Z", "text": "Bien" } ],
+      "airSeries": { "name": "Mail", "channel": "Correo (Brevo)", "days": ["1", "3", "5"], "time": "10:00", "from": "2026-11-09", "weeks": 1, "hours": 0.5 },
+      "air": [
+        { "id": "s1", "channel": "Correo (Brevo)", "at": "2026-11-09T10:00", "series": true, "piece": "Mail 1", "status": "Al aire", "auto": true, "publishedAt": "2026-11-09 10:00" },
+        { "id": "s2", "channel": "Instagram", "at": "2026-11-10T12:00", "status": "Programada", "riskNotified": true }
+      ],
+      "sprintId": "sp1", "sprintHistory": [ { "sprint": "sp1", "event": "Agregada", "reason": "Automática", "at": "2026-11-02T12:00:00.000Z", "user": "Luz Inventada" } ] },
+    { "id": "t2", "brand": "b0", "title": "Tarea dos", "owner": "Luz Inventada", "start": "2026-11-09", "due": "2026-11-05", "status": "Hecha", "dependencies": ["t1", "t2", "t-fantasma"], "depends": "t1", "priority": "Urgente" },
+    { "id": "t3", "brand": "b-inexistente", "title": "Tarea huérfana", "start": "2026-11-02", "due": "2026-11-02" }
+  ],
+  "scrum": {
+    "holidays": ["2026-12-08", "2026-12-08", "no-es-fecha"],
+    "sprints": [ { "id": "sp1", "brand": "b0", "name": "Semana 2026-11-02", "start": "2026-11-02", "end": "2026-11-06", "status": "Cerrado", "members": ["Mar Imaginaria", "Luz Inventada"], "dailyHours": { "Mar Imaginaria": 6 },
+      "closedRecords": [ { "id": "t1", "title": "Tarea uno", "status": "Aprobada", "approved": true } ], "goalResult": "Alcanzado", "facilitator": "Luz Inventada" } ]
+  },
+  "calendar": {
+    "meetings": [ { "id": "m1", "person": "p-mar", "title": "Reunión", "start": "2026-11-03T10:00", "end": "2026-11-03T11:00" } ],
+    "plans": [ { "task": "t1", "person": "p-mar", "start": "2026-11-02T09:00", "hours": 2, "blocks": [ { "start": 29893500, "end": 29893620 } ], "finish": 29893620 } ],
+    "settings": { "p-mar": { "calendarId": "mar@ficticio.test", "status": "Sin conexión Google" } },
+    "changes": []
+  },
+  "social": {
+    "profiles": { "p-luz": { "bio": "Hola", "photo": "data:image/webp;base64,UklGRg==" } },
+    "preferences": { "p-mar": { "mentions": false, "summary": "Diario", "email": true, "whatsapp": false } },
+    "achievements": [
+      { "id": "a1", "key": "task:t1:1", "type": "Tarea aceptada", "source": "task", "sourceId": "t1", "title": "Tarea uno", "brand": "b0", "mesa": "Marketing", "people": ["p-mar", "p-luz"], "taskIds": ["t1"], "valid": true, "created": "2026-11-06T15:00:00.000Z",
+        "reactions": [ { "person": "p-luz", "at": "2026-11-06T16:00:00.000Z" } ], "comments": [ { "id": "ac1", "person": "p-luz", "text": "¡Bravo!", "at": "2026-11-06T16:01:00.000Z" } ] },
+      { "id": "a2", "key": "raro:1", "type": "Tipo inventado", "source": "task" }
+    ],
+    "inbox": [ { "id": "i1", "person": "p-mar", "achievement": "a1", "from": "p-luz", "at": "2026-11-06T16:01:00.000Z", "read": false } ],
+    "commitments": [ { "id": "co1", "person": "p-mar", "day": "2026-11-06", "end": "18:00", "tasks": ["t1"], "baseline": ["t1"] } ],
+    "reports": [ { "id": "r1", "achievement": "a2", "by": "p-mar", "reason": "?", "status": "Pendiente" } ]
+  },
+  "history": [ { "at": "2026-11-02T12:00:00.000Z", "action": "Tarea iniciada Tarea uno", "user": "Mar Imaginaria" } ],
+  "settings": [ { "name": "Brevo", "account": "cuenta", "owner": "Luz Inventada", "url": "javascript:alert(1)" } ],
+  "notifications": [ {}, {} ],
+  "emailDrafts": [ {} ],
+  "invitations": [ { "token": "secreto" } ]
+}
