@@ -3,6 +3,7 @@ import { Hono } from 'hono';
 import { agenda, recalcularAgenda, sincronizarFeriados } from './agenda';
 import { campanas } from './campanas';
 import { equipo, invitacionPropia } from './equipo';
+import { estrategia, publico } from './estrategia';
 import { cuerpoError, ErrorApi } from './errores';
 import { esLocal, requiereIdentidad, requiereSesion, type Entorno } from './identidad';
 import { organizacion } from './organizacion';
@@ -40,7 +41,7 @@ api.get('/dev/personas', async (c) => {
 });
 
 // Una sola puerta: sin sesión (salud y desarrollo), solo correo verificado (aceptar invitación) o sesión completa.
-const SIN_SESION = new Set(['/api/v1/salud', '/api/v1/dev/personas']);
+const SIN_SESION = new Set(['/api/v1/salud', '/api/v1/dev/personas', '/api/v1/publico/mesa']);
 const SOLO_IDENTIDAD = new Set(['/api/v1/invitaciones/mia', '/api/v1/invitaciones/aceptar']);
 api.use('*', (c, next) => {
   if (SIN_SESION.has(c.req.path)) return next();
@@ -48,6 +49,7 @@ api.use('*', (c, next) => {
   return requiereSesion(c, next);
 });
 
+api.route('/', publico);
 api.route('/', invitacionPropia);
 api.route('/', equipo);
 api.route('/', perfil);
@@ -57,6 +59,7 @@ api.route('/', agenda);
 api.route('/', sprints);
 api.route('/', planificacion);
 api.route('/', campanas);
+api.route('/', estrategia);
 
 const conSesion = new Hono<Entorno>();
 

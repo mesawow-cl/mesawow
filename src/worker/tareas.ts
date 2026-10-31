@@ -202,13 +202,14 @@ tareas.get('/tareas', async (c) => {
   }
   const { results } = await c.env.DB.prepare(`
     SELECT t.id, t.title, t.status, t.due, t.start_date, t.complexity, t.priority, t.blocked, t.brand_id, b.name AS marca, b.color,
-           t.owner_id, o.name AS responsable, t.campaign_id, t.mesa_id, m.name AS mesa, t.estimated_hours, t.sprint_id, t.confidential
+           t.owner_id, o.name AS responsable, t.campaign_id, t.mesa_id, m.name AS mesa, t.estimated_hours, t.sprint_id, t.confidential,
+           (SELECT json_group_array(depends_on_id) FROM task_dependencies d WHERE d.task_id = t.id) AS dependencias
       FROM tasks t JOIN brands b ON b.id = t.brand_id LEFT JOIN people o ON o.id = t.owner_id LEFT JOIN mesas m ON m.id = t.mesa_id
      WHERE ${cond.join(' AND ')}
      ORDER BY CASE WHEN t.status IN ('Aprobada','Completada') THEN 1 ELSE 0 END, t.due, t.title
      LIMIT 500`).bind(...params).all<Fila>();
   const hoy = hoySantiago();
-  return c.json({ tareas: results.map((t) => ({ ...t, atrasada: !tareaHecha(t.status) && t.due < hoy })) });
+  return c.json({ tareas: results.map((t) => ({ ...t, dependencias: JSON.parse(t.dependencias), atrasada: !tareaHecha(t.status) && t.due < hoy })) });
 });
 
 tareas.get('/tareas/:id', async (c) => {
