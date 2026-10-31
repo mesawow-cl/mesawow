@@ -59,7 +59,7 @@ export const Equipo = ({ actorId, aviso }: { actorId: string; aviso: (m: string)
   useEffect(() => {
     cargar();
     pedir<{ marcas: Marca[] }>('/marcas').then((r) => setMarcas(r.marcas));
-    pedir<{ mesas: Mesa[] }>('/mesas').then((r) => setMesas(r.mesas));
+    pedir<{ mesas: (Mesa & { active: number })[] }>('/mesas').then((r) => setMesas(r.mesas.filter((m) => m.active)));
   }, []);
 
   const visibles = useMemo(() => {

@@ -70,3 +70,24 @@ export const cerrarSesion = () => {
   // Cierra la sesión de Cloudflare Access.
   location.assign('/cdn-cgi/access/logout');
 };
+
+/**
+ * Abre un archivo protegido de la API. PDF e imágenes se abren en otra pestaña; todo lo demás
+ * (en especial HTML) se descarga: un blob conserva el origen de la app y no debe ejecutarse.
+ */
+export const abrirArchivo = async (ruta: string, nombre = 'resultado') => {
+  const r = await fetch(ruta, { headers: cabecerasBase({}) });
+  if (!r.ok) return;
+  const tipo = (r.headers.get('content-type') ?? '').split(';')[0]!.trim();
+  const blob = await r.blob();
+  const url = URL.createObjectURL(blob);
+  if (tipo === 'application/pdf' || ['image/png', 'image/jpeg', 'image/webp'].includes(tipo)) {
+    open(url, '_blank', 'noopener');
+  } else {
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = nombre;
+    a.click();
+  }
+  setTimeout(() => URL.revokeObjectURL(url), 60_000);
+};

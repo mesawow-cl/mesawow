@@ -1,23 +1,20 @@
 // En qué fase se construye cada vista (docs/requerimiento-mesawow.md, plan de fases).
 import type { Vista } from '../../shared/navegacion';
 
-export const FASE_DE: Record<Exclude<Vista, 'more' | 'team' | 'profile'>, { fase: number; detalle: string }> = {
+export const FASE_DE: Record<Exclude<Vista, 'more' | 'team' | 'profile' | 'tasks' | 'mesas' | 'brands'>, { fase: number; detalle: string }> = {
   muro: { fase: 3, detalle: 'Métricas, Tu día y Tus paneles con datos reales (Fase 3); actividad en vivo (Fase 5); Momento WOW y logros (Fase 7).' },
   plaza: { fase: 7, detalle: 'Logros automáticos del equipo, felicitaciones, comentarios y menciones.' },
   recognition: { fase: 7, detalle: 'Logros válidos por mesa, sin rankings, con resumen descargable.' },
   agenda: { fase: 3, detalle: 'Tu día con bloques de trabajo y reuniones, en jornada 09:00–14:00 y 15:00–18:00, con recálculo automático.' },
   calendario: { fase: 4, detalle: 'Calendario de trabajo y calendario al aire: vista de mes, vista semanal tipo horario escolar y Semana del equipo.' },
-  tasks: { fase: 3, detalle: 'Tus encargos con filtros, detalle, entrega con evidencia, revisión y aprobación.' },
   gantt: { fase: 3, detalle: 'Tiempo de trabajo por tarea y mes.' },
   home: { fase: 3, detalle: 'Resumen: lo que necesita avanzar, campañas en preparación y marcas.' },
   notifications: { fase: 6, detalle: 'Tus avisos por app, push, correo (Brevo) y WhatsApp, con su estado de entrega.' },
   preferences: { fase: 6, detalle: 'Cómo y cuándo quieres recibir avisos y resúmenes.' },
-  mesas: { fase: 3, detalle: 'Las mesas de trabajo, su encargado y sus entregas aceptadas.' },
   metro: { fase: 3, detalle: 'El recorrido del trabajo por marca, con dependencias.' },
   scrum: { fase: 3, detalle: 'Sprints de lunes a viernes: tablero, backlog, capacidad, avance diario y cierre.' },
   campaigns: { fase: 3, detalle: 'Proyectos y campañas: 360, webinar, versiones, revisión y programación.' },
   library: { fase: 3, detalle: 'Entregables y versiones de cada campaña.' },
-  brands: { fase: 3, detalle: 'Marcas y sus 21 mínimos.' },
   strategy: { fase: 3, detalle: 'Planes trimestrales, KPI, iniciativas y la vista de mandantes.' },
   aire: { fase: 4, detalle: 'Series y salidas al aire por canal, con su estado y aviso de riesgo.' },
   bases: { fase: 3, detalle: 'Bases de contactos, segmentos y exclusiones.' },

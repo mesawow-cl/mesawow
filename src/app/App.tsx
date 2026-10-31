@@ -7,6 +7,8 @@ import { logoColor } from './marca';
 import { alHacerClicEnEnlace, ir, useUbicacion } from './rutas';
 import { EntrarComo } from './vistas/EntrarComo';
 import { Equipo } from './vistas/Equipo';
+import { Marcas, Mesas } from './vistas/Organizacion';
+import { Tareas } from './vistas/Tareas';
 import { Perfil } from './vistas/Perfil';
 import { Registro } from './vistas/Registro';
 import { EnConstruccion, Inicio, Mas } from './vistas/Vistas';
@@ -43,6 +45,7 @@ export const App = () => {
   const [personas, setPersonas] = useState<PersonaVisible[]>([]);
   const [viendoComo, setViendoComo] = useState('');
   const [aviso, setAviso] = useState('');
+  const [crearTarea, setCrearTarea] = useState(false);
   const { vista, desde } = useUbicacion();
 
   const cargar = useCallback((silencioso = false) => {
@@ -101,6 +104,9 @@ export const App = () => {
       case 'muro': return <Inicio persona={persona} />;
       case 'more': return <Mas persona={persona} alAbrirCuenta={() => setAbierto('cuenta')} />;
       case 'team': return <Equipo actorId={actor.id} aviso={setAviso} />;
+      case 'tasks': return <Tareas persona={persona} aviso={setAviso} crear={crearTarea && !viendoOtra} alCrear={setCrearTarea} />;
+      case 'mesas': return <Mesas persona={persona} aviso={setAviso} />;
+      case 'brands': return <Marcas persona={persona} aviso={setAviso} />;
       case 'profile': return <Perfil personaId={idPerfil} soloLectura={viendoOtra || actor.permisos.soloLectura && idPerfil !== actor.id} aviso={setAviso} />;
       default: return <EnConstruccion vista={vistaFinal} />;
     }
@@ -125,7 +131,11 @@ export const App = () => {
       <BarraInferior vista={vistaFinal} desde={desde} permisos={permisos} alCrear={() => setAbierto('crear')} />
 
       <MenuCrear abierto={abierto === 'crear'} alCerrar={() => setAbierto(null)} persona={persona}
-        alElegir={(id) => { setAbierto(null); ir(DESTINO_CREAR[id].vista); setAviso(DESTINO_CREAR[id].aviso); }} />
+        alElegir={(id) => {
+          setAbierto(null);
+          ir(DESTINO_CREAR[id].vista);
+          if (id === 'tarea') setCrearTarea(true); else setAviso(DESTINO_CREAR[id].aviso);
+        }} />
       <MenuCuenta abierto={abierto === 'cuenta'} alCerrar={() => setAbierto(null)} persona={actor}
         personas={personas} viendoComo={viendoComo} alVerComo={verComo} alSalir={cerrarSesion} />
       <Campana abierto={abierto === 'campana'} alCerrar={() => setAbierto(null)} />

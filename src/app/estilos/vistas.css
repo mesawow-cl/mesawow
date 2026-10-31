@@ -128,3 +128,61 @@
   .acciones { justify-content: stretch; }
   .acciones button { flex: 1; }
 }
+
+/* ── Asistente por pasos */
+.pasos { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin-bottom: 16px; padding-bottom: 2px; }
+.pasos button { flex: none; display: inline-flex; align-items: center; gap: 8px; min-height: var(--tactil); padding: 0 14px 0 6px; font-size: 13px; }
+.pasos button .n { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: #F4F0F7; font-weight: 700; }
+.pasos button[aria-current="step"] { border-color: transparent; background: var(--wow); color: #fff; }
+.pasos button[aria-current="step"] .n { background: rgba(255, 255, 255, .25); }
+.pasos button.hecho .n { background: var(--teal); color: #fff; }
+.paso-pie { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--linea); }
+.mas-opciones { justify-self: start; border-style: dashed; }
+.lista-elegible { max-height: 220px; overflow-y: auto; display: grid; gap: 6px; padding: 4px; border: 1px solid var(--linea); border-radius: 12px; }
+.lista-elegible label { display: flex; gap: 10px; align-items: center; min-height: var(--tactil); padding: 0 10px; border-radius: 10px; font-weight: 500; }
+.lista-elegible label:hover { background: #FBF6FA; }
+.lista-elegible input { width: 20px; height: 20px; min-height: 0; accent-color: var(--rosa); }
+@media (max-width: 760px) {
+  .pasos button:not([aria-current="step"]) .t { display: none; }
+  .pasos button:not([aria-current="step"]) { padding: 0 6px; }
+}
+
+/* ── Mis encargos */
+.filtros { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.filtros label { display: grid; gap: 4px; font-size: 13px; font-weight: 600; color: var(--tinta-2); }
+.tabla-tareas { display: grid; gap: 8px; }
+.tabla-tareas .fila {
+  display: grid; grid-template-columns: minmax(0, 2.4fr) 1.2fr 1fr .8fr 1.2fr; gap: 12px; align-items: center;
+  width: 100%; min-height: 64px; padding: 12px 16px; text-align: left; font-weight: 400;
+  background: #fff; border: 1px solid var(--linea); border-radius: 14px;
+}
+.tabla-tareas .fila:hover { border-color: var(--rosa); }
+.tabla-tareas .cabeza { background: transparent; border: 0; min-height: 0; padding: 0 16px; font-size: 12px; font-weight: 600; color: var(--tinta-2); text-transform: uppercase; letter-spacing: .8px; }
+.tarea-titulo { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; min-width: 0; }
+.tarea-titulo strong { width: 100%; overflow-wrap: anywhere; }
+.enlace { min-height: 0; padding: 0; border: 0; background: none; color: var(--rosa-oscuro); text-decoration: underline; font-weight: 600; }
+
+/* ── Detalle de tarea */
+.detalle-tarea { display: grid; gap: 4px; }
+.aviso-bloqueo { margin-top: 10px; padding: 10px 14px; border-radius: 12px; background: #FCE5EA; color: var(--rojo); }
+.ficha { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; margin: 16px 0 4px; padding: 14px; border-radius: 14px; background: #FBF6FA; }
+.ficha div { min-width: 0; }
+.ficha .ancho { grid-column: 1 / -1; }
+.ficha dt { font-size: 12px; font-weight: 600; color: var(--tinta-2); text-transform: uppercase; letter-spacing: .6px; }
+.ficha dd { margin: 2px 0 0; overflow-wrap: anywhere; }
+.bloque { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--linea); }
+.bloque h4 { margin: 0 0 8px; font-size: 15px; }
+.lista-simple { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; overflow-wrap: anywhere; }
+
+@media (max-width: 760px) {
+  .filtros { grid-template-columns: 1fr 1fr; }
+  .filtros label:first-child { grid-column: 1 / -1; }
+  .tabla-tareas .cabeza { display: none; }
+  .tabla-tareas .fila { grid-template-columns: 1fr auto; }
+  .tabla-tareas .fila > :nth-child(2), .tabla-tareas .fila > :nth-child(4) { display: none; }
+  .tabla-tareas .fila > :nth-child(3) { grid-column: 1; font-size: 13px; color: var(--tinta-2); }
+  .tabla-tareas .fila > :nth-child(5) { grid-row: 2; grid-column: 2; }
+  .ficha { grid-template-columns: 1fr; }
+}
+.progreso { height: 8px; border-radius: 999px; background: #F1ECF4; overflow: hidden; }
+.progreso i { display: block; height: 100%; border-radius: inherit; background: var(--wow); }
