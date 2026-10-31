@@ -7,6 +7,7 @@ import { cuerpoError, ErrorApi } from './errores';
 import { esLocal, requiereIdentidad, requiereSesion, type Entorno } from './identidad';
 import { organizacion } from './organizacion';
 import { perfil } from './perfil';
+import { planificacion } from './planificacion';
 import { sprints } from './sprints';
 import { tareas } from './tareas';
 
@@ -54,6 +55,7 @@ api.route('/', tareas);
 api.route('/', organizacion);
 api.route('/', agenda);
 api.route('/', sprints);
+api.route('/', planificacion);
 api.route('/', campanas);
 
 const conSesion = new Hono<Entorno>();
