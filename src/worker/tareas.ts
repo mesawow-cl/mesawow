@@ -8,6 +8,7 @@ import {
 import { hoySantiago } from '../shared/fechas';
 import { asegurarPlanDeTarea } from './agenda';
 import { encolarAvisos } from './avisos';
+import { entrarSolaAlSprint } from './sprints';
 import { ErrorApi } from './errores';
 import { exigir, type Ctx, type Entorno, type Persona } from './identidad';
 import { auditoria, cuerpo, nuevoId } from './util';
@@ -165,7 +166,9 @@ const sentenciasPersonas = (db: D1Database, id: string, d: DatosTarea, deps: str
 /** Reserva o libera las horas de la tarea; si la agenda no cuadra, la tarea igual queda guardada y se informa. */
 const reservarHoras = async (db: D1Database, tareaId: string, actorId: string) => {
   try {
-    return { cambios: await asegurarPlanDeTarea(db, tareaId, actorId) };
+    const cambios = await asegurarPlanDeTarea(db, tareaId, actorId);
+    const sprint = await entrarSolaAlSprint(db, tareaId);
+    return sprint ? { cambios, sprint } : { cambios };
   } catch (e) {
     if (e instanceof ErrorApi) return { cambios: [], avisoAgenda: e.message };
     throw e;

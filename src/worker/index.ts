@@ -6,6 +6,7 @@ import { cuerpoError, ErrorApi } from './errores';
 import { esLocal, requiereIdentidad, requiereSesion, type Entorno } from './identidad';
 import { organizacion } from './organizacion';
 import { perfil } from './perfil';
+import { sprints } from './sprints';
 import { tareas } from './tareas';
 
 const api = new Hono<Entorno>().basePath('/api/v1');
@@ -51,6 +52,7 @@ api.route('/', perfil);
 api.route('/', tareas);
 api.route('/', organizacion);
 api.route('/', agenda);
+api.route('/', sprints);
 
 const conSesion = new Hono<Entorno>();
 
