@@ -1,5 +1,6 @@
 // mesawow · Worker: API REST /api/v1 (la app estática la sirve Workers Assets).
 import { Hono } from 'hono';
+import { agenda, recalcularAgenda, sincronizarFeriados } from './agenda';
 import { equipo, invitacionPropia } from './equipo';
 import { cuerpoError, ErrorApi } from './errores';
 import { esLocal, requiereIdentidad, requiereSesion, type Entorno } from './identidad';
@@ -49,6 +50,7 @@ api.route('/', equipo);
 api.route('/', perfil);
 api.route('/', tareas);
 api.route('/', organizacion);
+api.route('/', agenda);
 
 const conSesion = new Hono<Entorno>();
 
@@ -85,6 +87,14 @@ api.route('/', conSesion);
 
 export default {
   fetch: api.fetch,
+  // Tareas programadas (Cron Triggers). Cada lunes: feriados oficiales del año y el siguiente (D3).
+  async scheduled(_evento, env, ctx) {
+    const anio = new Date().getUTCFullYear();
+    ctx.waitUntil((async () => {
+      await sincronizarFeriados(env.DB, [anio, anio + 1]);
+      await recalcularAgenda(env.DB, 'Feriados oficiales actualizados', null);
+    })());
+  },
 } satisfies ExportedHandler<Env>;
 
 export type Api = typeof api;

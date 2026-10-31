@@ -6,6 +6,7 @@ import {
   accionesPosibles, creaCiclo, estadoAlEntregar, impedimentoParaAprobar, impedimentoParaAvanzar, participa, type TareaReglas,
 } from '../shared/dominio/tareas';
 import { hoySantiago } from '../shared/fechas';
+import { asegurarPlanDeTarea } from './agenda';
 import { encolarAvisos } from './avisos';
 import { ErrorApi } from './errores';
 import { exigir, type Ctx, type Entorno, type Persona } from './identidad';
@@ -161,6 +162,16 @@ const sentenciasPersonas = (db: D1Database, id: string, d: DatosTarea, deps: str
   ...deps.map((x) => db.prepare('INSERT INTO task_dependencies (task_id, depends_on_id) VALUES (?1, ?2)').bind(id, x)),
 ];
 
+/** Reserva o libera las horas de la tarea; si la agenda no cuadra, la tarea igual queda guardada y se informa. */
+const reservarHoras = async (db: D1Database, tareaId: string, actorId: string) => {
+  try {
+    return { cambios: await asegurarPlanDeTarea(db, tareaId, actorId) };
+  } catch (e) {
+    if (e instanceof ErrorApi) return { cambios: [], avisoAgenda: e.message };
+    throw e;
+  }
+};
+
 // ─────────────────────────────── rutas
 
 export const tareas = new Hono<Entorno>();
@@ -255,7 +266,7 @@ tareas.post('/tareas', async (c) => {
     auditoria(db, actor.id, `Tarea creada ${d.titulo}`, 'task', id),
     ...encolarAvisos(db, 'Nueva tarea asignada', id, [d.responsableId, d.revisorId, ...d.colaboradores, ...d.aprobadores].filter((x): x is string => !!x && x !== actor.id)),
   ]);
-  return c.json({ id }, 201);
+  return c.json({ id, ...(await reservarHoras(db, id, actor.id)) }, 201);
 });
 
 tareas.patch('/tareas/:id', async (c) => {
@@ -277,7 +288,7 @@ tareas.patch('/tareas/:id', async (c) => {
     ...encolarAvisos(db, 'Cambio de tarea o asignación', t.fila.id, [...ahora].filter((x) => x !== actor.id)),
     ...encolarAvisos(db, 'Retiro de asignación', t.fila.id, [...antes].filter((x) => !ahora.has(x) && x !== actor.id)),
   ]);
-  return c.json({ ok: true });
+  return c.json({ ok: true, ...(await reservarHoras(db, t.fila.id, actor.id)) });
 });
 
 /** Ejecuta una acción del ciclo de vida verificando permisos con las reglas compartidas. */
@@ -288,6 +299,8 @@ const accion = (nombre: keyof ReturnType<typeof accionesPosibles>, mensaje: stri
     const actor = c.get('actor');
     if (!accionesPosibles(t, actor.id, actor.permisos)[nombre]) throw new ErrorApi(403, 'sin_permiso', mensaje);
     await c.env.DB.batch(await hacer(c, t, actor));
+    // Al terminar o reabrir, la agenda libera o vuelve a reservar las horas.
+    if (['entregar', 'aprobar', 'reabrir'].includes(nombre)) return c.json({ ok: true, ...(await reservarHoras(c.env.DB, t.fila.id, actor.id)) });
     return c.json({ ok: true });
   };
 
