@@ -20,7 +20,7 @@ export const PERSONAS_DEMO: PersonaSemilla[] = [
   { id: 'demo-bruno', name: 'Bruno Ejemplo', role: 'Coordinación de Marketing', mesa: 'Marketing', marcas: todas },
   { id: 'demo-carla', name: 'Carla Muestra', role: 'Responsable de marca o área', mesa: 'Comercial y Ventas', marcas: ['demo-aurora', 'demo-boreal'] },
   { id: 'demo-diego', name: 'Diego Ensayo', role: 'Ejecutor', mesa: 'Marketing', marcas: todas },
-  { id: 'demo-elena', name: 'Elena Simulada', role: 'Ejecutor', mesa: 'Operaciones', marcas: ['demo-aurora'] },
+  { id: 'demo-elena', name: 'Elena Simulada', role: 'Ejecutor', mesa: 'Operaciones', marcas: ['demo-aurora', 'demo-cumbre'] },
   { id: 'demo-fabian', name: 'Fabián Ficticio', role: 'Revisor o aprobador', mesa: 'Marketing', marcas: todas },
   { id: 'demo-gloria', name: 'Gloria Directiva', role: 'Ejecutor', mesa: 'Dirección', marcas: todas },
   { id: 'demo-hugo', name: 'Hugo Consulta', role: 'Consulta', mesa: 'Finanzas', marcas: ['demo-boreal'] },

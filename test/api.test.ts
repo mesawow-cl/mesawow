@@ -57,7 +57,7 @@ describe('API /api/v1', () => {
 
   it('/marcas devuelve solo las marcas asignadas', async () => {
     const r = await llamar('/marcas', 'elena@mesawow.test');
-    expect(r.cuerpo.marcas.map((m: { id: string }) => m.id)).toEqual(['demo-aurora']);
+    expect(r.cuerpo.marcas.map((m: { id: string }) => m.id)).toEqual(['demo-aurora', 'demo-cumbre']);
   });
 
   describe('fuera de local (staging y production)', () => {

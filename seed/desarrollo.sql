@@ -100,6 +100,7 @@ INSERT OR IGNORE INTO person_brands (person_id, brand_id) VALUES ('demo-diego', 
 INSERT OR IGNORE INTO person_brands (person_id, brand_id) VALUES ('demo-diego', 'demo-boreal');
 INSERT OR IGNORE INTO person_brands (person_id, brand_id) VALUES ('demo-diego', 'demo-cumbre');
 INSERT OR IGNORE INTO person_brands (person_id, brand_id) VALUES ('demo-elena', 'demo-aurora');
+INSERT OR IGNORE INTO person_brands (person_id, brand_id) VALUES ('demo-elena', 'demo-cumbre');
 INSERT OR IGNORE INTO person_brands (person_id, brand_id) VALUES ('demo-fabian', 'demo-aurora');
 INSERT OR IGNORE INTO person_brands (person_id, brand_id) VALUES ('demo-fabian', 'demo-boreal');
 INSERT OR IGNORE INTO person_brands (person_id, brand_id) VALUES ('demo-fabian', 'demo-cumbre');

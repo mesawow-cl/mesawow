@@ -168,8 +168,8 @@ describe('perfil y foto', () => {
     await llamar('/me/perfil', { como: 'diego@mesawow.test', metodo: 'PUT', cuerpo: { bio: 'Diseño y mailings' } });
     const r = await llamar('/personas/demo-diego/perfil', { como: 'elena@mesawow.test' });
     expect(r.cuerpo.perfil).toMatchObject({ bio: 'Diseño y mailings', propio: false, foto: null });
-    // Elena solo tiene Aurora: solo ve esa marca en el perfil de Diego.
-    expect(r.cuerpo.perfil.marcas.map((m: any) => m.id)).toEqual(['demo-aurora']);
+    // Elena no tiene Boreal: no la ve en el perfil de Diego.
+    expect(r.cuerpo.perfil.marcas.map((m: any) => m.id)).toEqual(['demo-aurora', 'demo-cumbre']);
   });
 
   it('sube la foto a R2, la sirve al equipo y reemplaza la anterior', async () => {
