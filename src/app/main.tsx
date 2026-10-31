@@ -1,6 +1,7 @@
 import { render } from 'preact';
 import { entrarComo } from './api';
 import { App } from './App';
+import { MesaPublica } from './vistas/Estrategia';
 import { guardarTokenDeInvitacion } from './vistas/Registro';
 import './estilos/tokens.css';
 import './estilos/base.css';
@@ -19,4 +20,6 @@ if (import.meta.env.DEV) {
 }
 
 guardarTokenDeInvitacion();
-render(<App />, document.getElementById('raiz')!);
+// mesawow.cl (y /mandantes en local) es la vista pública de mandantes; app.mesawow.cl es la app del equipo (D1).
+const esPublica = /^(www\.)?mesawow\.cl$/.test(location.hostname) || location.pathname === '/mandantes';
+render(esPublica ? <MesaPublica /> : <App />, document.getElementById('raiz')!);

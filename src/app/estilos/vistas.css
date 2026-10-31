@@ -258,3 +258,57 @@
 .vista-correo.movil { width: 360px; max-width: 100%; }
 .codigo { font-family: ui-monospace, monospace; font-size: 13px; }
 label.primario { color: #fff; border: 0; cursor: pointer; }
+
+/* ── Inicio con datos */
+.sin-subrayado { text-decoration: none; color: inherit; }
+.chip-filtro { min-height: 36px; padding: 0 14px; font-size: 13px; }
+.chip-filtro[aria-pressed="true"] { background: var(--wow); color: #fff; border-color: transparent; }
+.tu-dia { display: flex; align-items: center; gap: 16px; }
+.anillo { --p: 0; flex: none; width: 76px; height: 76px; border-radius: 50%; display: grid; place-items: center;
+  background: conic-gradient(var(--rosa) calc(var(--p) * 1%), #F1ECF4 0); }
+.anillo span { width: 58px; height: 58px; border-radius: 50%; background: #fff; display: grid; place-items: center; font-weight: 700; }
+.paneles { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.paneles a { display: flex; justify-content: space-between; align-items: center; min-height: var(--tactil); padding: 0 12px; border-radius: 10px; color: var(--tinta); text-decoration: none; font-weight: 500; }
+.paneles a:hover { background: var(--suave); }
+.actividad li { padding: 6px 0; border-bottom: 1px solid var(--linea); }
+
+/* ── Gantt */
+.gantt { display: grid; gap: 6px; overflow-x: auto; background: #fff; border: 1px solid var(--linea); border-radius: var(--radio-m); padding: 12px; }
+.gantt-fila { display: grid; grid-template-columns: 220px minmax(calc(var(--dias) * 28px), 1fr); gap: 10px; align-items: center; }
+.gantt-fila > a { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--tinta); font-size: 13px; }
+.gantt-dias, .gantt-pista { display: grid; grid-template-columns: repeat(var(--dias), minmax(24px, 1fr)); }
+.gantt-dias span { text-align: center; font-size: 11px; color: var(--apagado); }
+.gantt-pista { min-height: 30px; background: repeating-linear-gradient(90deg, transparent 0 calc(100% / var(--dias) - 1px), #F1ECF4 0 calc(100% / var(--dias))); }
+.gantt-barra { align-self: center; height: 26px; border-radius: 8px; padding: 0 8px; color: #fff; font-size: 11px; font-weight: 600; display: flex; align-items: center; overflow: hidden; white-space: nowrap; text-shadow: 0 1px 1px rgba(0,0,0,.25); }
+.gantt-barra.hecha { background: var(--verde); }
+.gantt-barra.bloqueada { background: var(--rojo); }
+.gantt-movil, .metro-movil { display: none; }
+
+/* ── Mapa metro */
+.metro { overflow: auto; max-height: 75vh; background: #fff; border: 1px solid var(--linea); border-radius: var(--radio-m); }
+.metro svg { display: block; font-family: var(--fuente); }
+.metro-dia { font-size: 11px; fill: var(--apagado); text-anchor: middle; }
+.metro-marca { font-size: 13px; font-weight: 700; fill: var(--tinta); }
+.metro-hoy { stroke: var(--rosa); stroke-width: 2; stroke-dasharray: 4 4; }
+.metro-hoy-t { font-size: 11px; font-weight: 700; fill: var(--rosa); }
+.metro-dep { fill: none; stroke: #9B8FB0; stroke-width: 1.5; stroke-dasharray: 5 4; }
+.metro-estacion { cursor: pointer; }
+.metro-estacion:focus-visible circle { stroke: var(--violeta); }
+.metro-simbolo { font-size: 13px; font-weight: 700; text-anchor: middle; fill: var(--tinta); }
+.metro-titulo { font-size: 11px; text-anchor: middle; fill: var(--tinta-2); }
+.metro-seleccion { position: sticky; bottom: 16px; display: grid; gap: 6px; margin-top: 12px; }
+.punto { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
+@media (max-width: 760px) {
+  .gantt, .metro { display: none; }
+  .gantt-movil, .metro-movil { display: grid; }
+}
+
+/* ── Estrategia y vista pública */
+.linea-tiempo { display: grid; gap: 10px; background: #fff; border: 1px solid var(--linea); border-radius: var(--radio-m); padding: 14px; }
+.lt-fila { display: grid; grid-template-columns: minmax(0, 1fr) 2fr auto; gap: 12px; align-items: center; }
+.lt-nombre { font-size: 13px; font-weight: 600; overflow-wrap: anywhere; }
+.lt-pista { position: relative; height: 14px; border-radius: 999px; background: #F1ECF4; }
+.lt-barra { position: absolute; top: 0; bottom: 0; border-radius: 999px; background: var(--wow); }
+.publica { min-height: 100dvh; }
+.publica-cabeza { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px clamp(16px, 4vw, 34px); border-bottom: 1px solid var(--linea); background: #fff; }
+@media (max-width: 760px) { .lt-fila { grid-template-columns: 1fr; } }

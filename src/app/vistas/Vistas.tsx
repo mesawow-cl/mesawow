@@ -1,6 +1,9 @@
+import { useEffect, useState } from 'preact/hooks';
 import { ESPACIOS, pestanasVisibles, type Vista } from '../../shared/navegacion';
+import { hoySantiago } from '../../shared/fechas';
 import { ZONA_HORARIA } from '../../shared/constantes';
-import type { Persona } from '../api';
+import { pedir, type Persona } from '../api';
+import { fechaCorta } from '../datos';
 import { Icono, type NombreIcono } from '../componentes/Icono';
 import { sonrisa } from '../marca';
 import { hrefDe } from '../rutas';
@@ -40,8 +43,30 @@ const Pronto = ({ texto }: { texto: string }) => (
   <div class="pronto"><img src={sonrisa} alt="" width={72} height={50} /><p>{texto}</p></div>
 );
 
+const hace = (iso: string) => {
+  const min = Math.round((Date.now() - Date.parse(iso)) / 60_000);
+  if (min < 1) return 'ahora';
+  if (min < 60) return `hace ${min} min`;
+  if (min < 1440) return `hace ${Math.round(min / 60)} h`;
+  return `hace ${Math.round(min / 1440)} d`;
+};
+
+interface DatosInicio {
+  stats: { misTareas: number; enProgreso: number; completadas: number; logrosHoy: number };
+  tuDia: { tareas: { id: string; title: string; status: string }[]; hechas: number; pendientes: { id: string; title: string; due: string; status: string }[] };
+  paneles: { encargos: number; hoyRestantes: number; mesas: number; sprint: string | null; campanas: number; menciones: number };
+  actividad: { at: string; persona: string; verbo: string; objeto: string; tipo: string; tareaId: string | null }[];
+}
+
 export const Inicio = ({ persona }: { persona: Persona }) => {
   const nombre = persona.name.split(' ')[0];
+  const [d, setD] = useState<DatosInicio | null>(null);
+  const [filtro, setFiltro] = useState('todo');
+  useEffect(() => { pedir<DatosInicio>('/inicio').then(setD).catch(() => setD(null)); }, [persona.id]);
+  const hoy = hoySantiago();
+  const total = d?.tuDia.tareas.length ?? 0;
+  const pct = total ? Math.round(((d?.tuDia.hechas ?? 0) / total) * 100) : 0;
+  const actividad = (d?.actividad ?? []).filter((e) => filtro === 'todo' || e.tipo === filtro);
   return (
     <section aria-labelledby="titulo-vista">
       <div class="hero">
@@ -50,46 +75,61 @@ export const Inicio = ({ persona }: { persona: Persona }) => {
           <span class="en-vivo"><i aria-hidden="true" />En vivo</span>
         </div>
         <h1 id="titulo-vista">¡Hola, <span>{nombre}</span>! 👋</h1>
-        <p>Hoy hacemos que las cosas pasen. Aquí verás tu trabajo, el del equipo y lo que celebramos.</p>
+        <p>Hoy hacemos que las cosas pasen. {d?.tuDia.tareas.length ? `Tienes ${d.tuDia.tareas.length} encargo(s) que vencen hoy.` : 'Aquí verás tu trabajo, el del equipo y lo que celebramos.'}</p>
       </div>
       <div class="metricas" role="list" aria-label="Tus números">
-        <div role="listitem"><Metrica icono="check" color="#9B5CFF" fondo="#F1EAFF" valor="—" etiqueta="Mis tareas" /></div>
-        <div role="listitem"><Metrica icono="sparkle" color="#F22E62" fondo="#FFEAF0" valor="—" etiqueta="En progreso" /></div>
-        <div role="listitem"><Metrica icono="trophy" color="#00808A" fondo="#E3F6F7" valor="—" etiqueta="Completadas" /></div>
-        <div role="listitem"><Metrica icono="smile" color="#C25A00" fondo="#FFF3E6" valor="—" etiqueta="Logros hoy" /></div>
+        <a role="listitem" href={hrefDe('tasks')} class="sin-subrayado"><Metrica icono="check" color="#9B5CFF" fondo="#F1EAFF" valor={d ? String(d.stats.misTareas) : '—'} etiqueta="Mis tareas" /></a>
+        <a role="listitem" href={hrefDe('tasks')} class="sin-subrayado"><Metrica icono="sparkle" color="#F22E62" fondo="#FFEAF0" valor={d ? String(d.stats.enProgreso) : '—'} etiqueta="En progreso" /></a>
+        <a role="listitem" href={hrefDe('tasks')} class="sin-subrayado"><Metrica icono="trophy" color="#00808A" fondo="#E3F6F7" valor={d ? String(d.stats.completadas) : '—'} etiqueta="Completadas" /></a>
+        <a role="listitem" href={hrefDe('plaza')} class="sin-subrayado"><Metrica icono="smile" color="#C25A00" fondo="#FFF3E6" valor="—" etiqueta="Logros hoy" /></a>
       </div>
       <div class="inicio-grilla">
         <div>
           <section class="tarjeta" aria-labelledby="t-wow">
             <div class="seccion-cabeza"><h2 id="t-wow">Momento WOW</h2></div>
-            <Pronto texto="Los hitos del equipo (sprint completo, lanzamiento verificado) llegan en la Fase 7." />
-          </section>
-          <section class="tarjeta" aria-labelledby="t-logros">
-            <div class="seccion-cabeza"><h2 id="t-logros">Logros del día</h2><a href={hrefDe('plaza')}>Ver todos →</a></div>
-            <Pronto texto="Los logros automáticos aparecen aquí desde la Fase 7." />
+            <Pronto texto="Los hitos del equipo (sprint completo, lanzamiento verificado) se celebran aquí desde la Fase 7." />
           </section>
           <section class="tarjeta" aria-labelledby="t-actividad">
-            <div class="seccion-cabeza"><h2 id="t-actividad">Actividad del equipo</h2><span class="insignia">En vivo · Fase 5</span></div>
-            <Pronto texto="Entregas, revisiones, sprints y reconocimientos, en vivo." />
+            <div class="seccion-cabeza"><h2 id="t-actividad">Actividad del equipo</h2><span class="insignia">En vivo desde la Fase 5</span></div>
+            <div class="chips" role="group" aria-label="Filtrar actividad" style={{ marginBottom: '10px' }}>
+              {[['todo', 'Todo'], ['entrega', 'Entregas'], ['revision', 'Revisiones'], ['logro', 'Aprobaciones'], ['sprint', 'Sprints']].map(([k, t]) => (
+                <button type="button" key={k} class="chip-filtro" aria-pressed={filtro === k} onClick={() => setFiltro(k!)}>{t}</button>
+              ))}
+            </div>
+            {!actividad.length ? <p class="apagado">Todavía no hay actividad para mostrar.</p> : (
+              <ul class="lista-simple actividad" aria-live="polite">
+                {actividad.slice(0, 12).map((e, i) => (
+                  <li key={i}><strong>{e.persona}</strong> {e.verbo} {e.tareaId ? <a href={`/encargos?tarea=${e.tareaId}`}>{e.objeto}</a> : e.objeto}
+                    <span class="apagado"> · {hace(e.at)}</span></li>
+                ))}
+              </ul>
+            )}
           </section>
         </div>
         <div>
           <section class="tarjeta" aria-labelledby="t-dia">
             <div class="seccion-cabeza"><h2 id="t-dia">Tu día</h2></div>
-            <Pronto texto="Tus encargos de hoy y tu compromiso del día llegan en la Fase 3." />
+            <div class="tu-dia">
+              <div class="anillo" style={{ '--p': pct } as never} role="img" aria-label={`${d?.tuDia.hechas ?? 0} de ${total} encargos de hoy listos`}><span>{d?.tuDia.hechas ?? 0}/{total}</span></div>
+              <p>{!d ? 'Cargando…' : total && d.tuDia.hechas === total ? '¡Todo listo por hoy! 🎉' : total ? `Te quedan ${total - d.tuDia.hechas} encargo(s) para hoy.` : d.tuDia.pendientes.length ? 'Nada vence hoy. Buen momento para adelantar.' : 'Sin encargos pendientes.'}</p>
+            </div>
+            <ul class="lista-simple" style={{ marginTop: '10px' }}>
+              {d?.tuDia.pendientes.map((t) => (
+                <li key={t.id}><a href={`/encargos?tarea=${t.id}`}>{t.title}</a> <span class={`insignia ${t.due < hoy ? 'roja' : t.due === hoy ? 'ambar' : 'gris'}`}>{t.due < hoy ? 'Atrasada' : t.due === hoy ? 'Hoy' : fechaCorta(t.due)}</span></li>
+              ))}
+            </ul>
+            <div class="acciones" style={{ justifyContent: 'flex-start' }}><a class="casilla" href={hrefDe('agenda')}>Ir a Mi mesa</a></div>
           </section>
           <section class="tarjeta" aria-labelledby="t-paneles">
             <div class="seccion-cabeza"><h2 id="t-paneles">Tus paneles</h2><a href={hrefDe('more')}>Todos →</a></div>
-            <div class="mas-grilla" style={{ gridTemplateColumns: '1fr' }}>
-              <ul>
-                <li><a href={hrefDe('tasks')}>Mis encargos</a></li>
-                <li><a href={hrefDe('agenda')}>Mi mesa</a></li>
-                <li><a href={hrefDe('mesas')}>Mesas</a></li>
-                <li><a href={hrefDe('scrum')}>Sprints</a></li>
-                <li><a href={hrefDe('campaigns')}>Proyectos</a></li>
-                <li><a href={hrefDe('plaza')}>Comunidad</a></li>
-              </ul>
-            </div>
+            <ul class="paneles">
+              <li><a href={hrefDe('tasks')}>Mis encargos <span class="insignia">{d?.paneles.encargos ?? '—'}</span></a></li>
+              <li><a href={hrefDe('agenda')}>Mi mesa <span class="insignia">{d?.paneles.hoyRestantes ?? '—'}</span></a></li>
+              <li><a href={hrefDe('mesas')}>Mesas <span class="insignia">{d?.paneles.mesas ?? '—'}</span></a></li>
+              <li><a href={hrefDe('scrum')}>Sprints <span class="insignia">{d?.paneles.sprint ?? 'Planificar el próximo'}</span></a></li>
+              <li><a href={hrefDe('campaigns')}>Proyectos <span class="insignia">{d?.paneles.campanas ?? '—'}</span></a></li>
+              <li><a href={hrefDe('plaza')}>Comunidad</a></li>
+            </ul>
           </section>
         </div>
       </div>

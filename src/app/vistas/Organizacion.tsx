@@ -44,12 +44,13 @@ export const Mesas = ({ persona, aviso }: { persona: Persona; aviso: (m: string)
               </div>
               <p class="contacto">Encargado: {m.encargado ?? 'Sin asignar'}<br />{m.aceptadas} de {m.total} entregas aceptadas · {m.abiertas} abiertas</p>
               <div class="progreso" aria-hidden="true"><i style={{ width: `${m.total ? Math.round((m.aceptadas / m.total) * 100) : 0}%` }} /></div>
-              {persona.permisos.esAdmin && (
-                <div class="persona-acciones">
+              <div class="persona-acciones">
+                <a class="casilla" href={`/mesa-de-trabajo?mesa=${m.id}`}>Ver trabajo</a>
+                {persona.permisos.esAdmin && <>
                   <button type="button" onClick={() => setEditar(m)}>Editar</button>
                   <button type="button" onClick={() => archivar(m, !!m.active)}>{m.active ? 'Archivar' : 'Restaurar'}</button>
-                </div>
-              )}
+                </>}
+              </div>
             </article>
           ))}
         </div>

@@ -1,17 +1,13 @@
 // En qué fase se construye cada vista (docs/requerimiento-mesawow.md, plan de fases).
 import type { Vista } from '../../shared/navegacion';
 
-export const FASE_DE: Record<Exclude<Vista, 'more' | 'team' | 'profile' | 'tasks' | 'mesas' | 'brands' | 'agenda' | 'scrum' | 'campaigns' | 'library' | 'bases'>, { fase: number; detalle: string }> = {
+export const FASE_DE: Record<Exclude<Vista, 'more' | 'team' | 'profile' | 'tasks' | 'mesas' | 'brands' | 'agenda' | 'scrum' | 'campaigns' | 'library' | 'bases' | 'home' | 'gantt' | 'metro' | 'strategy'>, { fase: number; detalle: string }> = {
   muro: { fase: 3, detalle: 'Métricas, Tu día y Tus paneles con datos reales (Fase 3); actividad en vivo (Fase 5); Momento WOW y logros (Fase 7).' },
   plaza: { fase: 7, detalle: 'Logros automáticos del equipo, felicitaciones, comentarios y menciones.' },
   recognition: { fase: 7, detalle: 'Logros válidos por mesa, sin rankings, con resumen descargable.' },
   calendario: { fase: 4, detalle: 'Calendario de trabajo y calendario al aire: vista de mes, vista semanal tipo horario escolar y Semana del equipo.' },
-  gantt: { fase: 3, detalle: 'Tiempo de trabajo por tarea y mes.' },
-  home: { fase: 3, detalle: 'Resumen: lo que necesita avanzar, campañas en preparación y marcas.' },
   notifications: { fase: 6, detalle: 'Tus avisos por app, push, correo (Brevo) y WhatsApp, con su estado de entrega.' },
   preferences: { fase: 6, detalle: 'Cómo y cuándo quieres recibir avisos y resúmenes.' },
-  metro: { fase: 3, detalle: 'El recorrido del trabajo por marca, con dependencias.' },
-  strategy: { fase: 3, detalle: 'Planes trimestrales, KPI, iniciativas y la vista de mandantes.' },
   aire: { fase: 4, detalle: 'Series y salidas al aire por canal, con su estado y aviso de riesgo.' },
   connections: { fase: 6, detalle: 'Brevo para correo y WhatsApp: cuenta, dominio y estado de envíos.' },
   settings: { fase: 6, detalle: 'Fichas de plataformas: Brevo, Meta, Google y más. Sin claves.' },

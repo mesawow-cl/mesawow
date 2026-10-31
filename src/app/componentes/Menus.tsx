@@ -60,7 +60,7 @@ export const MenuCuenta = ({ abierto, alCerrar, persona, personas, viendoComo, a
         )}
         <button type="button" onClick={() => navegar('profile')}>Mi perfil</button>
         <button type="button" onClick={() => navegar('preferences')}>Mis avisos</button>
-        <button type="button" onClick={() => { alCerrar(); open('https://mesawow.cl', '_blank', 'noopener'); }}>Ver la mesa de mandantes ↗</button>
+        <button type="button" onClick={() => { alCerrar(); open(location.hostname.endsWith('mesawow.cl') ? 'https://mesawow.cl' : '/mandantes', '_blank', 'noopener'); }}>Ver la mesa de mandantes ↗</button>
         <button type="button" class="peligro" onClick={alSalir}>Cerrar sesión</button>
       </div>
     </Dialogo>
