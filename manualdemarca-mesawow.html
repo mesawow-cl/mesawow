@@ -1,0 +1,650 @@
+<title>Manual de marca mesawow</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%22110%2090%20780%20780%22%3E%3Ctitle%3Emesawow%3C/title%3E%3Cdefs%3E%3ClinearGradient%20id=%22fs%22%20x1=%22190%22%20y1=%220%22%20x2=%22810%22%20y2=%220%22%20gradientUnits=%22userSpaceOnUse%22%3E%3Cstop%20offset=%220%22%20stop-color=%22%23F22E62%22/%3E%3Cstop%20offset=%221%22%20stop-color=%22%23FF4F48%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath%20fill=%22none%22%20stroke=%22url%28%23fs%29%22%20stroke-width=%22130%22%20stroke-linecap=%22round%22%20d=%22M210%20590Q500%20900%20790%20590%22/%3E%3Cpath%20fill=%22none%22%20stroke=%22%23F22E62%22%20stroke-width=%22112%22%20stroke-linecap=%22round%22%20d=%22M294.9%20394.9L181.8%20281.8%22/%3E%3Cpath%20fill=%22none%22%20stroke=%22%23FFC700%22%20stroke-width=%22112%22%20stroke-linecap=%22round%22%20d=%22M500%20310L500%20130%22/%3E%3Cpath%20fill=%22none%22%20stroke=%22%23FF7A00%22%20stroke-width=%22112%22%20stroke-linecap=%22round%22%20d=%22M705.1%20394.9L818.2%20281.8%22/%3E%3C/svg%3E">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: índice fijo a la izquierda + láminas del manual a la derecha; una columna en teléfono.
+   Look deliberadamente claro (un solo tema): los fondos de cada lámina son parte de la norma de marca. */
+:root{
+  --rosa:#F22E62; --naranja:#FF7A00; --amarillo:#FFFF00; --violeta:#9B5CFF; --turquesa:#00A2AF; --navy:#0F1B3D;
+  --amarillo-claro:#FFC700;
+  --wow:linear-gradient(90deg,#F22E62,#FF7A00);
+  --wow-diag:linear-gradient(135deg,#F22E62,#FF7A00);
+  --ink:#0F1B3D; --ink-2:#4A5274; --ink-3:#7A7F9A;
+  --paper:#FFFFFF; --mist:#FBF6FA; --line:#ECE6F0; --blush:#FFF0F4;
+  --display:'Poppins',ui-rounded,'Segoe UI',system-ui,sans-serif;
+  --body:'Poppins','Segoe UI',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;
+  --r-s:10px; --r-m:16px; --r-l:24px; --r-pill:999px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--mist);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.15}
+h2{font-size:clamp(26px,3.4vw,36px);font-weight:800;letter-spacing:-.01em}
+h3{font-size:18px;font-weight:700}
+p{margin:0}
+.lead{font-size:17px;color:var(--ink-2);max-width:62ch}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--rosa)}
+code,.mono{font-family:var(--mono);font-size:13px}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--violeta);outline-offset:2px;border-radius:6px}
+svg{display:block}
+
+.shell{display:grid;grid-template-columns:230px minmax(0,1fr);max-width:1280px;margin:0 auto;gap:40px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 80px}
+nav.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 24px);align-self:start;display:flex;flex-direction:column;gap:4px}
+nav.toc .toc-logo{width:150px;margin-bottom:20px}
+nav.toc a{text-decoration:none;font-size:14px;font-weight:500;color:var(--ink-2);padding:7px 12px;border-radius:var(--r-s)}
+nav.toc a:hover{background:var(--blush);color:var(--rosa)}
+nav.toc .v{margin-top:20px;font-size:12px;color:var(--ink-3);padding:0 12px}
+main{display:flex;flex-direction:column;gap:28px;min-width:0}
+.sheet{background:var(--paper);border-radius:var(--r-l);padding:clamp(22px,4vw,48px);display:flex;flex-direction:column;gap:28px;scroll-margin-top:24px;min-width:0}
+.sheet-head{display:flex;flex-direction:column;gap:10px}
+
+/* Portada */
+.cover{position:relative;overflow:hidden;background:var(--paper);gap:36px}
+.cover .blob{position:absolute;border-radius:50%;filter:blur(2px);pointer-events:none}
+.cover .b1{width:340px;height:340px;right:-120px;top:-140px;background:radial-gradient(circle at 30% 30%,#ffd0e0,#c9b0ff 70%);opacity:.7}
+.cover .b2{width:260px;height:260px;left:-120px;bottom:-140px;background:radial-gradient(circle at 60% 40%,#fff38a,#ffb36b 70%);opacity:.6}
+.cover-logo{width:min(100%,620px);position:relative}
+.cover .tagline{font-size:clamp(20px,2.6vw,28px);font-weight:500;max-width:22ch;line-height:1.3;position:relative}
+.cover-meta{display:flex;flex-wrap:wrap;gap:10px 24px;font-size:13px;color:var(--ink-3);position:relative}
+
+/* grids */
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.tile{border-radius:var(--r-m);padding:28px;display:flex;flex-direction:column;gap:18px;justify-content:space-between;min-height:180px}
+.tile.light{background:var(--mist)} .tile.dark{background:var(--navy);color:#fff} .tile.white{background:#fff;border:1px solid var(--line)}
+.tile.grad{background:var(--wow-diag);color:#fff}
+.tile .art{display:flex;align-items:center;justify-content:center;flex:1}
+.tile .art svg{width:100%;max-width:340px;height:auto}
+.cap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:13px}
+.cap b{font-weight:600}
+.cap a{font-size:12px;opacity:.75}
+.dark .cap,.grad .cap{color:rgba(255,255,255,.85)}
+
+/* principios */
+.principles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.pr{background:var(--mist);border-radius:var(--r-m);padding:22px;display:flex;flex-direction:column;gap:8px}
+.pr .k{font-family:var(--display);font-weight:800;font-size:28px;background:var(--wow);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
+.pr p{color:var(--ink-2);font-size:14px}
+
+/* niveles de celebración */
+.levels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.lvl{border:1px solid var(--line);border-radius:var(--r-m);padding:22px;display:flex;flex-direction:column;gap:12px}
+.lvl .meter{display:flex;gap:4px}
+.lvl .meter i{height:6px;flex:1;border-radius:3px;background:var(--line)}
+.lvl .meter i.on{background:var(--wow)}
+.lvl ul{margin:0;padding-left:18px;color:var(--ink-2);font-size:14px;display:flex;flex-direction:column;gap:4px}
+.lvl .when{font-size:13px;font-weight:600;color:var(--rosa)}
+
+/* construcción */
+.construct{background:var(--mist);border-radius:var(--r-m);padding:clamp(20px,4vw,44px);overflow-x:auto}
+.construct svg{min-width:520px;width:100%;height:auto}
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.rule{display:flex;flex-direction:column;gap:6px}
+.rule .n{font-family:var(--display);font-weight:800;font-size:26px}
+.rule p{font-size:14px;color:var(--ink-2)}
+
+/* isotipo tamaños */
+.sizes{display:flex;align-items:flex-end;gap:28px;flex-wrap:wrap}
+.sizes figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:8px;font-size:12px;color:var(--ink-3)}
+
+/* incorrectos */
+.dont{border-radius:var(--r-m);background:var(--mist);padding:20px;display:flex;flex-direction:column;gap:12px;position:relative}
+.dont .art{height:110px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.dont .art svg{width:80%;height:auto}
+.dont p{font-size:13px;color:var(--ink-2)}
+.dont .x{position:absolute;top:12px;right:12px;width:26px;height:26px;border-radius:50%;background:var(--rosa);color:#fff;display:grid;place-items:center;font-weight:700;font-size:15px;line-height:1}
+
+/* color */
+.swatches{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.sw{border-radius:var(--r-m);overflow:hidden;border:1px solid var(--line);display:flex;flex-direction:column}
+.sw .chip{height:130px;padding:16px;display:flex;align-items:flex-end;font-family:var(--display);font-weight:700;font-size:18px}
+.sw .info{padding:14px 16px;display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--ink-2)}
+.sw .info .codes{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;color:var(--ink)}
+.copy{border:0;background:var(--mist);border-radius:var(--r-s);padding:3px 8px;font:500 12px var(--mono);color:var(--ink);cursor:pointer}
+.copy:hover{background:var(--blush)}
+.ratio{display:flex;height:44px;border-radius:var(--r-s);overflow:hidden}
+.ratio div{display:flex;align-items:center;padding:0 10px;font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden}
+.gradbar{height:120px;border-radius:var(--r-m);background:var(--wow);display:flex;align-items:flex-end;justify-content:space-between;padding:16px 20px;color:#fff;font-weight:600;font-size:14px;gap:10px;flex-wrap:wrap}
+.contrast{width:100%;border-collapse:collapse;font-size:14px;min-width:520px}
+.contrast th,.contrast td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+.contrast th{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+.pill-ok,.pill-no{display:inline-block;padding:2px 10px;border-radius:var(--r-pill);font-size:12px;font-weight:600}
+.pill-ok{background:#E3F6F7;color:#00747D}.pill-no{background:var(--blush);color:#B5123E}
+.scroll{overflow-x:auto}
+
+/* tipografía */
+.type-hero{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:24px;align-items:center}
+.type-hero .big{font-family:var(--display);font-weight:800;font-size:clamp(64px,10vw,128px);line-height:.9;letter-spacing:-.02em}
+.type-hero .glyphs{font-family:var(--display);font-weight:600;font-size:22px;letter-spacing:.04em;color:var(--ink-2);word-break:break-all}
+.scale{display:flex;flex-direction:column}
+.scale .row{display:grid;grid-template-columns:150px minmax(0,1fr);gap:16px;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--line)}
+.scale .row .lbl{font-size:12px;color:var(--ink-3);font-family:var(--mono)}
+.scale .row .s{font-family:var(--display);min-width:0;overflow-wrap:anywhere}
+
+/* iconos */
+.icons{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:12px}
+.icon{display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 6px;border-radius:var(--r-m);background:var(--mist);font-size:12px;color:var(--ink-2);text-align:center}
+.icon svg{width:34px;height:34px}
+
+/* ====== Componentes de interfaz ====== */
+.demo{background:linear-gradient(160deg,#FFF6F9,#F6F1FF);border-radius:var(--r-m);padding:clamp(18px,3vw,32px);display:flex;flex-direction:column;gap:18px}
+.demo-label{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.btn{font:600 15px var(--body);border-radius:var(--r-pill);padding:12px 22px;border:0;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:transform .15s ease, box-shadow .15s ease}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--wow);color:#fff;box-shadow:0 6px 18px rgba(242,46,98,.28)}
+.btn-primary:hover{box-shadow:0 8px 24px rgba(242,46,98,.38)}
+.btn-secondary{background:#fff;color:var(--navy);box-shadow:inset 0 0 0 2px var(--navy)}
+.btn-ghost{background:transparent;color:var(--rosa)}
+.btn-ghost:hover{background:var(--blush)}
+.btn-dark{background:var(--navy);color:#fff}
+.chip{display:inline-flex;align-items:center;gap:10px;padding:10px 18px 10px 12px;border-radius:var(--r-pill);font-weight:600;font-size:15px;background:#fff;box-shadow:0 2px 10px rgba(15,27,61,.06)}
+.chip svg{width:24px;height:24px}
+.chip.c-or{background:#FFF3E6}.chip.c-pk{background:#FFEAF0}.chip.c-vi{background:#F1EAFF}.chip.c-tq{background:#E3F6F7}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:520px}
+.stat{border-radius:var(--r-m);padding:14px 16px;display:flex;flex-direction:column;gap:4px}
+.stat .l{font-size:13px;color:var(--ink-2)}
+.stat .v{display:flex;align-items:center;gap:8px;font-family:var(--display);font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
+.stat svg{width:22px;height:22px}
+.stat.s1{background:#F1EAFF}.stat.s2{background:#FFEAF0}.stat.s3{background:#E3F6F7}
+.comp-cols{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:18px;align-items:start}
+.wowcard{background:#fff;border-radius:var(--r-l);overflow:hidden;box-shadow:0 10px 30px rgba(15,27,61,.08);position:relative}
+.wowcard .tab{display:inline-flex;align-items:center;gap:8px;background:var(--wow);color:#fff;font-family:var(--display);font-weight:700;font-size:18px;padding:10px 22px 10px 18px;border-radius:0 0 var(--r-m) 0}
+.wowcard .body{padding:18px 22px 20px;display:flex;flex-direction:column;gap:6px}
+.wowcard .body h3{font-size:20px}
+.wowcard .body p{color:var(--ink-2);font-size:14px;max-width:34ch}
+.wowcard .rays{position:absolute;right:18px;top:12px;width:70px;transform-origin:50% 100%}
+.reacts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.react{border:0;background:var(--mist);border-radius:var(--r-pill);padding:6px 12px;font:600 14px var(--body);display:inline-flex;gap:6px;align-items:center;cursor:pointer;color:var(--ink);font-variant-numeric:tabular-nums}
+.react[aria-pressed="true"]{background:#FFEAF0;color:var(--rosa)}
+.react svg{width:18px;height:18px}
+.feed{background:#fff;border-radius:var(--r-l);padding:18px 20px;display:flex;flex-direction:column;gap:12px;box-shadow:0 10px 30px rgba(15,27,61,.06)}
+.feed h3{font-size:16px}
+.feed li{display:flex;gap:12px;align-items:center;font-size:14px}
+.feed ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.feed .ic{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex:none}
+.feed .ic svg{width:20px;height:20px}
+.feed time{margin-left:auto;font-size:12px;color:var(--ink-3);white-space:nowrap}
+.composer{display:flex;align-items:center;gap:10px;background:#fff;border-radius:var(--r-pill);padding:6px 6px 6px 8px;box-shadow:0 2px 10px rgba(15,27,61,.06);max-width:560px}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--wow-diag);color:#fff;display:grid;place-items:center;font-weight:700;font-size:14px;flex:none}
+.composer input{flex:1;min-width:0;border:0;font:15px var(--body);color:var(--ink);background:transparent;padding:8px 4px}
+.composer input::placeholder{color:var(--ink-3)}
+.composer input:focus{outline:none}
+.composer:focus-within{box-shadow:0 0 0 3px rgba(155,92,255,.35)}
+.navdemo{background:var(--navy);border-radius:var(--r-l);padding:20px 14px;display:flex;flex-direction:column;gap:4px;max-width:260px}
+.navdemo .nl{width:130px;margin:0 8px 16px}
+.navdemo a{display:flex;align-items:center;gap:12px;color:rgba(255,255,255,.82);text-decoration:none;font-size:15px;padding:10px 14px;border-radius:var(--r-m)}
+.navdemo a svg{width:20px;height:20px}
+.navdemo a.on{background:var(--wow);color:#fff;font-weight:600}
+.navdemo a:not(.on):hover{background:rgba(255,255,255,.08)}
+.toast{display:flex;gap:14px;align-items:center;background:var(--navy);color:#fff;border-radius:var(--r-m);padding:14px 18px;max-width:420px}
+.toast .sm{width:44px;flex:none}
+.toast b{display:block;font-size:15px}
+.toast span{font-size:13px;color:rgba(255,255,255,.75)}
+.badge{display:inline-flex;align-items:center;gap:6px;border-radius:var(--r-pill);padding:4px 12px;font-size:12px;font-weight:600}
+.b-ok{background:#E3F6F7;color:#00747D}.b-prog{background:#FFF3E6;color:#B45200}.b-new{background:#F1EAFF;color:#6A2FE0}.b-wow{background:var(--wow);color:#fff}
+.tokens{background:var(--navy);color:#E9ECF7;border-radius:var(--r-m);padding:20px;overflow-x:auto;position:relative}
+.tokens pre{margin:0;font:13px/1.7 var(--mono)}
+.tokens .copy{position:absolute;top:12px;right:12px;background:rgba(255,255,255,.12);color:#fff}
+.files{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 24px;font-size:14px}
+.files a{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);text-decoration:none}
+.files a span:last-child{color:var(--ink-3);font-size:12px}
+.files a:hover span:first-child{color:var(--rosa)}
+
+/* confeti */
+.confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.confetti i{position:absolute;width:9px;height:14px;border-radius:3px;top:30%;left:50%;opacity:0}
+@keyframes pop{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--rot))}}
+.wowcard.party .rays{animation:rays .7s ease}
+@keyframes rays{0%{transform:scale(1)}30%{transform:scale(1.35) rotate(-6deg)}60%{transform:scale(.95)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.wowcard.party .rays{animation:none}.confetti{display:none}}
+
+@media (max-width:980px){
+  .shell{grid-template-columns:minmax(0,1fr)}
+  nav.toc{position:static;flex-direction:row;flex-wrap:wrap;gap:6px}
+  nav.toc .toc-logo{width:120px;margin:0 12px 8px 0;flex-basis:100%}
+  nav.toc .v{display:none}
+  nav.toc a{background:#fff;font-size:13px}
+  .g4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .icons{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .comp-cols,.type-hero{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:640px){
+  .g2,.g3,.principles,.levels,.rules,.swatches,.files{grid-template-columns:minmax(0,1fr)}
+  .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .stat .v{font-size:22px}
+  .scale .row{grid-template-columns:minmax(0,1fr);gap:4px}
+  .tile{padding:20px;min-height:150px}
+}
+</style>
+
+<!-- iconos de interfaz: trazo 2px redondeado sobre grilla de 24 -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="ig" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF7A00"/></linearGradient>
+  </defs>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3.5 11 12 4l8.5 7M6 9.5V19a1 1 0 0 0 1 1h3.5v-5h3v5H17a1 1 0 0 0 1-1V9.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 4 8.5 4.5L12 13 3.5 8.5 12 4Zm-8.5 8L12 16.5l8.5-4.5M3.5 15.5 12 20l8.5-4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M9 4.5H7a2 2 0 0 0-2 2V19a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6.5a2 2 0 0 0-2-2h-2M9 3.5h6v3H9zM8.5 13.5l2.5 2.5 4.5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M5 4.5h14a1.5 1.5 0 0 1 1.5 1.5v9a1.5 1.5 0 0 1-1.5 1.5h-7L7.5 20v-3.5H5A1.5 1.5 0 0 1 3.5 15V6A1.5 1.5 0 0 1 5 4.5ZM8 10.5h.01M12 10.5h.01M16 10.5h.01" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><path d="M9 11a3.25 3.25 0 1 0 0-6.5A3.25 3.25 0 0 0 9 11Zm-6 8.5c0-3 2.7-5 6-5s6 2 6 5M16 4.8a3 3 0 0 1 0 5.9M17.5 14.8c2 .5 3.5 2.2 3.5 4.7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M7.5 4h9v5a4.5 4.5 0 0 1-9 0V4ZM7.5 6H4.5v1.5A3 3 0 0 0 7.6 10.5M16.5 6h3v1.5a3 3 0 0 1-3.1 3M12 13.5V17M8.5 20.5h7l-1-3.5h-5l-1 3.5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-rocket" viewBox="0 0 24 24"><path d="M14.5 4.5c2.5-1 4.5-1 5-.5s.5 2.5-.5 5l-6 6-4-4 5.5-6.5ZM9 11l-3.5-.5L3.5 13l4 1M13 15l.5 3.5-2.5 2-1-4M15.5 8.5h.01M6.5 17.5 4 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2.5 5 13.5h6l-1 8 8-11h-6l1-8Z" fill="currentColor"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.3 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10Z" fill="currentColor"/></symbol>
+  <symbol id="i-clap" viewBox="0 0 24 24"><path d="M8 13.5 5.3 9.2a1.4 1.4 0 0 1 2.4-1.4l3 4.6M9.7 8.9 8.3 6.6a1.4 1.4 0 0 1 2.4-1.4l3.6 5.7M12.3 7.6a1.4 1.4 0 0 1 2.4-1.4l3 4.8c1.8 3 .9 6.6-2 8.3-2.6 1.6-5.6.8-7.3-1.6L5.6 13.6a1.4 1.4 0 0 1 2.4-1.4M17 3.5l.6-1.5M19.8 5.3l1.4-.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.8-5.2 2.8 1-5.8-4.3-4.1 5.9-.9L12 3.5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+  <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 3c.6 4.6 2.4 6.4 7 7-4.6.6-6.4 2.4-7 7-.6-4.6-2.4-6.4-7-7 4.6-.6 6.4-2.4 7-7Z" fill="currentColor"/></symbol>
+</svg>
+
+<div class="shell">
+  <nav class="toc" aria-label="Índice del manual">
+    <div class="toc-logo"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 -268.1 5665.3 1522.1" role="img" aria-label="mesawow"><defs><linearGradient id="mwcolor-wow" x1="2919" y1="0" x2="5301" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF7A00"/></linearGradient><linearGradient id="mwcolor-smile" x1="3181" y1="0" x2="5039" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF4F48"/></linearGradient></defs><path fill="#0F1B3D" d="M1056 433V760H860V459Q860 414 835 389Q810 364 767 364Q724 364 699 389Q674 414 674 459V760H478V459Q478 414 453.5 389Q429 364 386 364Q342 364 317 389Q292 414 292 459V760H96V199H292V273Q318 237 359.5 215.5Q401 194 455 194Q517 194 565.5 221Q614 248 642 297Q672 251 721 222.5Q770 194 829 194Q935 194 995.5 258Q1056 322 1056 433ZM1684 519H1313Q1316 565 1338.5 587.5Q1361 610 1396 610Q1445 610 1466 566H1675Q1662 624 1624.5 669.5Q1587 715 1530 741Q1473 767 1404 767Q1321 767 1256.5 732Q1192 697 1155.5 632Q1119 567 1119 479Q1119 391 1155 326.5Q1191 262 1255.5 227Q1320 192 1404 192Q1487 192 1551 226Q1615 260 1651 323.5Q1687 387 1687 473Q1687 496 1684 519ZM1487 424Q1487 388 1463 367.5Q1439 347 1403 347Q1367 347 1344 366.5Q1321 386 1314 424ZM1726 571H1916Q1920 598 1941 613Q1962 628 1993 628Q2017 628 2031 618Q2045 608 2045 592Q2045 571 2022 561Q1999 551 1946 539Q1886 527 1846 512Q1806 497 1776.5 463Q1747 429 1747 371Q1747 321 1774 280.5Q1801 240 1853.5 216Q1906 192 1980 192Q2090 192 2153 246Q2216 300 2226 388H2049Q2044 361 2025.5 346.5Q2007 332 1976 332Q1952 332 1939.5 341Q1927 350 1927 366Q1927 386 1950 396.5Q1973 407 2024 418Q2085 431 2125.5 447Q2166 463 2196.5 498.5Q2227 534 2227 595Q2227 644 2198.5 683Q2170 722 2117.5 744.5Q2065 767 1994 767Q1918 767 1858.5 741.5Q1799 716 1764.5 671.5Q1730 627 1726 571ZM2518 192Q2576 192 2618 215Q2660 238 2683 277V199H2879V760H2683V682Q2660 721 2617.5 744Q2575 767 2518 767Q2451 767 2396.5 732Q2342 697 2310.5 631.5Q2279 566 2279 479Q2279 392 2310.5 327Q2342 262 2396.5 227Q2451 192 2518 192ZM2581 363Q2537 363 2508 393.5Q2479 424 2479 479Q2479 533 2508 564.5Q2537 596 2581 596Q2624 596 2653.5 565Q2683 534 2683 479Q2683 425 2653.5 394Q2624 363 2581 363Z"/><path fill="url(#mwcolor-wow)" d="M3804 199 3661 760H3441L3363 420L3282 760H3063L2921 199H3116L3179 571L3262 199H3472L3558 572L3620 199ZM3816 479Q3816 392 3854.5 327Q3893 262 3959.5 227Q4026 192 4110 192Q4194 192 4260.5 227Q4327 262 4365.5 327Q4404 392 4404 479Q4404 566 4365.5 631.5Q4327 697 4260 732Q4193 767 4109 767Q4025 767 3958.5 732Q3892 697 3854 632Q3816 567 3816 479ZM4205 479Q4205 422 4177.5 392Q4150 362 4110 362Q4070 362 4043 392Q4016 422 4016 479Q4016 537 4042 567Q4068 597 4109 597Q4150 597 4177.5 566.5Q4205 536 4205 479ZM5301 199 5158 760H4938L4860 420L4779 760H4560L4418 199H4613L4676 571L4759 199H4969L5055 572L5117 199Z"/><path fill="none" stroke="url(#mwcolor-smile)" stroke-width="128" stroke-linecap="round" d="M3181 900Q4110 1400 5039 900"/><path fill="none" stroke="#F22E62" stroke-width="100" stroke-linecap="round" d="M4935.6 -5.4L4905 -223.3"/><path fill="none" stroke="#FFC700" stroke-width="100" stroke-linecap="round" d="M5211.4 28.6L5312.2 -178.1"/><path fill="none" stroke="#FF7A00" stroke-width="100" stroke-linecap="round" d="M5403.9 217.9L5575.3 114.9"/></svg></div>
+    <a href="#esencia">Esencia</a>
+    <a href="#logotipo">Logotipo</a>
+    <a href="#versiones">Versiones</a>
+    <a href="#isotipo">Isotipo mw!</a>
+    <a href="#sonrisa">La sonrisa WOW</a>
+    <a href="#incorrectos">Usos incorrectos</a>
+    <a href="#color">Color</a>
+    <a href="#tipografia">Tipografía</a>
+    <a href="#iconos">Iconografía</a>
+    <a href="#componentes">Componentes</a>
+    <a href="#archivos">Archivos</a>
+    <div class="v">Versión 1.0 · octubre 2026</div>
+  </nav>
+
+  <main>
+    <!-- PORTADA -->
+    <section class="sheet cover" aria-label="Portada">
+      <div class="blob b1"></div><div class="blob b2"></div>
+      <span class="eyebrow" style="position:relative">Manual de marca · v1.0</span>
+      <div class="cover-logo"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 -268.1 5665.3 1522.1" role="img" aria-label="mesawow"><defs><linearGradient id="mwcolor-wow" x1="2919" y1="0" x2="5301" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF7A00"/></linearGradient><linearGradient id="mwcolor-smile" x1="3181" y1="0" x2="5039" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF4F48"/></linearGradient></defs><path fill="#0F1B3D" d="M1056 433V760H860V459Q860 414 835 389Q810 364 767 364Q724 364 699 389Q674 414 674 459V760H478V459Q478 414 453.5 389Q429 364 386 364Q342 364 317 389Q292 414 292 459V760H96V199H292V273Q318 237 359.5 215.5Q401 194 455 194Q517 194 565.5 221Q614 248 642 297Q672 251 721 222.5Q770 194 829 194Q935 194 995.5 258Q1056 322 1056 433ZM1684 519H1313Q1316 565 1338.5 587.5Q1361 610 1396 610Q1445 610 1466 566H1675Q1662 624 1624.5 669.5Q1587 715 1530 741Q1473 767 1404 767Q1321 767 1256.5 732Q1192 697 1155.5 632Q1119 567 1119 479Q1119 391 1155 326.5Q1191 262 1255.5 227Q1320 192 1404 192Q1487 192 1551 226Q1615 260 1651 323.5Q1687 387 1687 473Q1687 496 1684 519ZM1487 424Q1487 388 1463 367.5Q1439 347 1403 347Q1367 347 1344 366.5Q1321 386 1314 424ZM1726 571H1916Q1920 598 1941 613Q1962 628 1993 628Q2017 628 2031 618Q2045 608 2045 592Q2045 571 2022 561Q1999 551 1946 539Q1886 527 1846 512Q1806 497 1776.5 463Q1747 429 1747 371Q1747 321 1774 280.5Q1801 240 1853.5 216Q1906 192 1980 192Q2090 192 2153 246Q2216 300 2226 388H2049Q2044 361 2025.5 346.5Q2007 332 1976 332Q1952 332 1939.5 341Q1927 350 1927 366Q1927 386 1950 396.5Q1973 407 2024 418Q2085 431 2125.5 447Q2166 463 2196.5 498.5Q2227 534 2227 595Q2227 644 2198.5 683Q2170 722 2117.5 744.5Q2065 767 1994 767Q1918 767 1858.5 741.5Q1799 716 1764.5 671.5Q1730 627 1726 571ZM2518 192Q2576 192 2618 215Q2660 238 2683 277V199H2879V760H2683V682Q2660 721 2617.5 744Q2575 767 2518 767Q2451 767 2396.5 732Q2342 697 2310.5 631.5Q2279 566 2279 479Q2279 392 2310.5 327Q2342 262 2396.5 227Q2451 192 2518 192ZM2581 363Q2537 363 2508 393.5Q2479 424 2479 479Q2479 533 2508 564.5Q2537 596 2581 596Q2624 596 2653.5 565Q2683 534 2683 479Q2683 425 2653.5 394Q2624 363 2581 363Z"/><path fill="url(#mwcolor-wow)" d="M3804 199 3661 760H3441L3363 420L3282 760H3063L2921 199H3116L3179 571L3262 199H3472L3558 572L3620 199ZM3816 479Q3816 392 3854.5 327Q3893 262 3959.5 227Q4026 192 4110 192Q4194 192 4260.5 227Q4327 262 4365.5 327Q4404 392 4404 479Q4404 566 4365.5 631.5Q4327 697 4260 732Q4193 767 4109 767Q4025 767 3958.5 732Q3892 697 3854 632Q3816 567 3816 479ZM4205 479Q4205 422 4177.5 392Q4150 362 4110 362Q4070 362 4043 392Q4016 422 4016 479Q4016 537 4042 567Q4068 597 4109 597Q4150 597 4177.5 566.5Q4205 536 4205 479ZM5301 199 5158 760H4938L4860 420L4779 760H4560L4418 199H4613L4676 571L4759 199H4969L5055 572L5117 199Z"/><path fill="none" stroke="url(#mwcolor-smile)" stroke-width="128" stroke-linecap="round" d="M3181 900Q4110 1400 5039 900"/><path fill="none" stroke="#F22E62" stroke-width="100" stroke-linecap="round" d="M4935.6 -5.4L4905 -223.3"/><path fill="none" stroke="#FFC700" stroke-width="100" stroke-linecap="round" d="M5211.4 28.6L5312.2 -178.1"/><path fill="none" stroke="#FF7A00" stroke-width="100" stroke-linecap="round" d="M5403.9 217.9L5575.3 114.9"/></svg></div>
+      <p class="tagline">La plataforma donde el trabajo se vive, se comparte y se celebra.</p>
+      <div class="cover-meta"><span>Antes MesaConecta</span><span>Tipografía Poppins</span><span>6 colores de marca</span><span>11 archivos SVG</span></div>
+    </section>
+
+    <!-- ESENCIA -->
+    <section class="sheet" id="esencia">
+      <div class="sheet-head">
+        <span class="eyebrow">01 · Esencia</span>
+        <h2>Reconocer el trabajo bien hecho</h2>
+        <p class="lead">mesawow es el lugar donde los equipos organizan proyectos y sprints, y donde cada avance recibe el reconocimiento que merece. La marca habla como un buen compañero de equipo: cercana, entusiasta y concreta.</p>
+      </div>
+      <div class="principles">
+        <div class="pr"><span class="k">Se vive</span><p>El trabajo diario se ve en un solo lugar: mesas, proyectos y sprints con su avance real.</p></div>
+        <div class="pr"><span class="k">Se comparte</span><p>Los logros se publican solos en el muro del equipo. Nadie tiene que pedir que lo vean.</p></div>
+        <div class="pr"><span class="k">Se celebra</span><p>La sonrisa WOW marca cada reconocimiento. Las celebraciones grandes quedan para los hitos grandes.</p></div>
+      </div>
+      <div class="sheet-head">
+        <h3>Niveles de celebración</h3>
+        <p class="lead" style="font-size:15px">Todo logro se publica automáticamente. La intensidad visual crece con el tamaño del hito, para que celebrar siga siendo especial.</p>
+      </div>
+      <div class="levels">
+        <div class="lvl">
+          <div class="meter"><i class="on"></i><i></i><i></i></div>
+          <h3>Logro publicado</h3>
+          <span class="when">Tarea completada, comentario destacado</span>
+          <ul><li>Entrada automática en Actividad del equipo</li><li>Insignia y sonrisa pequeña, sin animación</li><li>Sin notificación push</li></ul>
+        </div>
+        <div class="lvl">
+          <div class="meter"><i class="on"></i><i class="on"></i><i></i></div>
+          <h3>Reconocimiento</h3>
+          <span class="when">Logro individual, aporte al equipo</span>
+          <ul><li>Tarjeta en el muro con reacciones</li><li>Rayos de la sonrisa en color</li><li>Notificación a la persona reconocida</li></ul>
+        </div>
+        <div class="lvl">
+          <div class="meter"><i class="on"></i><i class="on"></i><i class="on"></i></div>
+          <h3>Momento WOW</h3>
+          <span class="when">Sprint completado, meta de equipo alcanzada</span>
+          <ul><li>Tarjeta Momento WOW destacada arriba del muro</li><li>Rayos animados y confeti, una sola vez</li><li>Notificación a todo el equipo</li></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOGOTIPO -->
+    <section class="sheet" id="logotipo">
+      <div class="sheet-head">
+        <span class="eyebrow">02 · Logotipo</span>
+        <h2>Logotipo principal</h2>
+        <p class="lead">“mesa” en azul noche da la base y la confianza. “wow” lleva el degradado de energía, y debajo la sonrisa convierte la palabra en una expresión. Los tres rayos son el destello del momento en que algo sale bien.</p>
+      </div>
+      <div class="construct" aria-label="Construcción del logotipo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-835 -903.1 7715.3 2792.1" role="img" aria-label="Construcción y zona de protección del logotipo"><rect x="-575" y="-843.1" width="6815.3" height="2672.1" fill="#fff" stroke="#9B5CFF" stroke-width="10" stroke-dasharray="40 30" rx="20"/><rect x="0" y="-268.1" width="5665.3" height="1522.1" fill="none" stroke="#C9B9F5" stroke-width="6"/><line x1="-575" x2="6240.3" y1="760" y2="760" stroke="#00A2AF" stroke-width="6" stroke-dasharray="20 16"/><text x="6270.3" y="790" font-family="Poppins,sans-serif" font-size="96" font-weight="500" fill="#00A2AF">línea base</text><line x1="-575" x2="6240.3" y1="199" y2="199" stroke="#00A2AF" stroke-width="6" stroke-dasharray="20 16"/><text x="6270.3" y="229" font-family="Poppins,sans-serif" font-size="96" font-weight="500" fill="#00A2AF">altura x</text><rect x="-575" y="-843.1" width="575" height="575" fill="#F1EAFF" stroke="#9B5CFF" stroke-width="6"/><text x="-287.5" y="-495.6" text-anchor="middle" font-family="Poppins,sans-serif" font-size="170" font-weight="700" fill="#9B5CFF">o</text><rect x="5665.3" y="-843.1" width="575" height="575" fill="#F1EAFF" stroke="#9B5CFF" stroke-width="6"/><text x="5952.8" y="-495.6" text-anchor="middle" font-family="Poppins,sans-serif" font-size="170" font-weight="700" fill="#9B5CFF">o</text><rect x="-575" y="1254" width="575" height="575" fill="#F1EAFF" stroke="#9B5CFF" stroke-width="6"/><text x="-287.5" y="1601.5" text-anchor="middle" font-family="Poppins,sans-serif" font-size="170" font-weight="700" fill="#9B5CFF">o</text><rect x="5665.3" y="1254" width="575" height="575" fill="#F1EAFF" stroke="#9B5CFF" stroke-width="6"/><text x="5952.8" y="1601.5" text-anchor="middle" font-family="Poppins,sans-serif" font-size="170" font-weight="700" fill="#9B5CFF">o</text><defs><linearGradient id="mwcolor-wow" x1="2919" y1="0" x2="5301" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF7A00"/></linearGradient><linearGradient id="mwcolor-smile" x1="3181" y1="0" x2="5039" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF4F48"/></linearGradient></defs><path fill="#0F1B3D" d="M1056 433V760H860V459Q860 414 835 389Q810 364 767 364Q724 364 699 389Q674 414 674 459V760H478V459Q478 414 453.5 389Q429 364 386 364Q342 364 317 389Q292 414 292 459V760H96V199H292V273Q318 237 359.5 215.5Q401 194 455 194Q517 194 565.5 221Q614 248 642 297Q672 251 721 222.5Q770 194 829 194Q935 194 995.5 258Q1056 322 1056 433ZM1684 519H1313Q1316 565 1338.5 587.5Q1361 610 1396 610Q1445 610 1466 566H1675Q1662 624 1624.5 669.5Q1587 715 1530 741Q1473 767 1404 767Q1321 767 1256.5 732Q1192 697 1155.5 632Q1119 567 1119 479Q1119 391 1155 326.5Q1191 262 1255.5 227Q1320 192 1404 192Q1487 192 1551 226Q1615 260 1651 323.5Q1687 387 1687 473Q1687 496 1684 519ZM1487 424Q1487 388 1463 367.5Q1439 347 1403 347Q1367 347 1344 366.5Q1321 386 1314 424ZM1726 571H1916Q1920 598 1941 613Q1962 628 1993 628Q2017 628 2031 618Q2045 608 2045 592Q2045 571 2022 561Q1999 551 1946 539Q1886 527 1846 512Q1806 497 1776.5 463Q1747 429 1747 371Q1747 321 1774 280.5Q1801 240 1853.5 216Q1906 192 1980 192Q2090 192 2153 246Q2216 300 2226 388H2049Q2044 361 2025.5 346.5Q2007 332 1976 332Q1952 332 1939.5 341Q1927 350 1927 366Q1927 386 1950 396.5Q1973 407 2024 418Q2085 431 2125.5 447Q2166 463 2196.5 498.5Q2227 534 2227 595Q2227 644 2198.5 683Q2170 722 2117.5 744.5Q2065 767 1994 767Q1918 767 1858.5 741.5Q1799 716 1764.5 671.5Q1730 627 1726 571ZM2518 192Q2576 192 2618 215Q2660 238 2683 277V199H2879V760H2683V682Q2660 721 2617.5 744Q2575 767 2518 767Q2451 767 2396.5 732Q2342 697 2310.5 631.5Q2279 566 2279 479Q2279 392 2310.5 327Q2342 262 2396.5 227Q2451 192 2518 192ZM2581 363Q2537 363 2508 393.5Q2479 424 2479 479Q2479 533 2508 564.5Q2537 596 2581 596Q2624 596 2653.5 565Q2683 534 2683 479Q2683 425 2653.5 394Q2624 363 2581 363Z"/><path fill="url(#mwcolor-wow)" d="M3804 199 3661 760H3441L3363 420L3282 760H3063L2921 199H3116L3179 571L3262 199H3472L3558 572L3620 199ZM3816 479Q3816 392 3854.5 327Q3893 262 3959.5 227Q4026 192 4110 192Q4194 192 4260.5 227Q4327 262 4365.5 327Q4404 392 4404 479Q4404 566 4365.5 631.5Q4327 697 4260 732Q4193 767 4109 767Q4025 767 3958.5 732Q3892 697 3854 632Q3816 567 3816 479ZM4205 479Q4205 422 4177.5 392Q4150 362 4110 362Q4070 362 4043 392Q4016 422 4016 479Q4016 537 4042 567Q4068 597 4109 597Q4150 597 4177.5 566.5Q4205 536 4205 479ZM5301 199 5158 760H4938L4860 420L4779 760H4560L4418 199H4613L4676 571L4759 199H4969L5055 572L5117 199Z"/><path fill="none" stroke="url(#mwcolor-smile)" stroke-width="128" stroke-linecap="round" d="M3181 900Q4110 1400 5039 900"/><path fill="none" stroke="#F22E62" stroke-width="100" stroke-linecap="round" d="M4935.6 -5.4L4905 -223.3"/><path fill="none" stroke="#FFC700" stroke-width="100" stroke-linecap="round" d="M5211.4 28.6L5312.2 -178.1"/><path fill="none" stroke="#FF7A00" stroke-width="100" stroke-linecap="round" d="M5403.9 217.9L5575.3 114.9"/></svg></div>
+      <div class="rules">
+        <div class="rule"><span class="n">1 × o</span><p><b>Zona de protección.</b> Deja alrededor del logotipo un margen libre igual a la altura de la letra “o”. Ningún texto ni imagen entra en esa zona.</p></div>
+        <div class="rule"><span class="n">120 px</span><p><b>Tamaño mínimo con rayos.</b> En impresión, 30 mm de ancho. Bajo ese tamaño usa la versión reducida, sin rayos.</p></div>
+        <div class="rule"><span class="n">72 px</span><p><b>Mínimo absoluto.</b> Más pequeño que 72 px (18 mm), usa el isotipo mw! en lugar del logotipo.</p></div>
+      </div>
+    </section>
+
+    <!-- VERSIONES -->
+    <section class="sheet" id="versiones">
+      <div class="sheet-head">
+        <span class="eyebrow">03 · Versiones</span>
+        <h2>Versiones del logotipo</h2>
+        <p class="lead">Usa la versión a color siempre que puedas. Las monocromáticas existen para un solo color de impresión, grabados, sellos, documentos y fondos fotográficos.</p>
+      </div>
+      <div class="g2">
+        <div class="tile light"><div class="art"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 -268.1 5665.3 1522.1" role="img" aria-label="mesawow"><defs><linearGradient id="mwcolor-wow" x1="2919" y1="0" x2="5301" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF7A00"/></linearGradient><linearGradient id="mwcolor-smile" x1="3181" y1="0" x2="5039" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF4F48"/></linearGradient></defs><path fill="#0F1B3D" d="M1056 433V760H860V459Q860 414 835 389Q810 364 767 364Q724 364 699 389Q674 414 674 459V760H478V459Q478 414 453.5 389Q429 364 386 364Q342 364 317 389Q292 414 292 459V760H96V199H292V273Q318 237 359.5 215.5Q401 194 455 194Q517 194 565.5 221Q614 248 642 297Q672 251 721 222.5Q770 194 829 194Q935 194 995.5 258Q1056 322 1056 433ZM1684 519H1313Q1316 565 1338.5 587.5Q1361 610 1396 610Q1445 610 1466 566H1675Q1662 624 1624.5 669.5Q1587 715 1530 741Q1473 767 1404 767Q1321 767 1256.5 732Q1192 697 1155.5 632Q1119 567 1119 479Q1119 391 1155 326.5Q1191 262 1255.5 227Q1320 192 1404 192Q1487 192 1551 226Q1615 260 1651 323.5Q1687 387 1687 473Q1687 496 1684 519ZM1487 424Q1487 388 1463 367.5Q1439 347 1403 347Q1367 347 1344 366.5Q1321 386 1314 424ZM1726 571H1916Q1920 598 1941 613Q1962 628 1993 628Q2017 628 2031 618Q2045 608 2045 592Q2045 571 2022 561Q1999 551 1946 539Q1886 527 1846 512Q1806 497 1776.5 463Q1747 429 1747 371Q1747 321 1774 280.5Q1801 240 1853.5 216Q1906 192 1980 192Q2090 192 2153 246Q2216 300 2226 388H2049Q2044 361 2025.5 346.5Q2007 332 1976 332Q1952 332 1939.5 341Q1927 350 1927 366Q1927 386 1950 396.5Q1973 407 2024 418Q2085 431 2125.5 447Q2166 463 2196.5 498.5Q2227 534 2227 595Q2227 644 2198.5 683Q2170 722 2117.5 744.5Q2065 767 1994 767Q1918 767 1858.5 741.5Q1799 716 1764.5 671.5Q1730 627 1726 571ZM2518 192Q2576 192 2618 215Q2660 238 2683 277V199H2879V760H2683V682Q2660 721 2617.5 744Q2575 767 2518 767Q2451 767 2396.5 732Q2342 697 2310.5 631.5Q2279 566 2279 479Q2279 392 2310.5 327Q2342 262 2396.5 227Q2451 192 2518 192ZM2581 363Q2537 363 2508 393.5Q2479 424 2479 479Q2479 533 2508 564.5Q2537 596 2581 596Q2624 596 2653.5 565Q2683 534 2683 479Q2683 425 2653.5 394Q2624 363 2581 363Z"/><path fill="url(#mwcolor-wow)" d="M3804 199 3661 760H3441L3363 420L3282 760H3063L2921 199H3116L3179 571L3262 199H3472L3558 572L3620 199ZM3816 479Q3816 392 3854.5 327Q3893 262 3959.5 227Q4026 192 4110 192Q4194 192 4260.5 227Q4327 262 4365.5 327Q4404 392 4404 479Q4404 566 4365.5 631.5Q4327 697 4260 732Q4193 767 4109 767Q4025 767 3958.5 732Q3892 697 3854 632Q3816 567 3816 479ZM4205 479Q4205 422 4177.5 392Q4150 362 4110 362Q4070 362 4043 392Q4016 422 4016 479Q4016 537 4042 567Q4068 597 4109 597Q4150 597 4177.5 566.5Q4205 536 4205 479ZM5301 199 5158 760H4938L4860 420L4779 760H4560L4418 199H4613L4676 571L4759 199H4969L5055 572L5117 199Z"/><path fill="none" stroke="url(#mwcolor-smile)" stroke-width="128" stroke-linecap="round" d="M3181 900Q4110 1400 5039 900"/><path fill="none" stroke="#F22E62" stroke-width="100" stroke-linecap="round" d="M4935.6 -5.4L4905 -223.3"/><path fill="none" stroke="#FFC700" stroke-width="100" stroke-linecap="round" d="M5211.4 28.6L5312.2 -178.1"/><path fill="none" stroke="#FF7A00" stroke-width="100" stroke-linecap="round" d="M5403.9 217.9L5575.3 114.9"/></svg></div><div class="cap"><b>Color · fondo claro</b><a href="svg/mesawow-logo-color.svg" target="_blank" rel="noopener">Abrir SVG</a></div></div>
+        <div class="tile dark"><div class="art"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 -268.1 5665.3 1522.1" role="img" aria-label="mesawow"><defs><linearGradient id="mwnegativo-wow" x1="2919" y1="0" x2="5301" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF7A00"/></linearGradient><linearGradient id="mwnegativo-smile" x1="3181" y1="0" x2="5039" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF4F48"/></linearGradient></defs><path fill="#FFFFFF" d="M1056 433V760H860V459Q860 414 835 389Q810 364 767 364Q724 364 699 389Q674 414 674 459V760H478V459Q478 414 453.5 389Q429 364 386 364Q342 364 317 389Q292 414 292 459V760H96V199H292V273Q318 237 359.5 215.5Q401 194 455 194Q517 194 565.5 221Q614 248 642 297Q672 251 721 222.5Q770 194 829 194Q935 194 995.5 258Q1056 322 1056 433ZM1684 519H1313Q1316 565 1338.5 587.5Q1361 610 1396 610Q1445 610 1466 566H1675Q1662 624 1624.5 669.5Q1587 715 1530 741Q1473 767 1404 767Q1321 767 1256.5 732Q1192 697 1155.5 632Q1119 567 1119 479Q1119 391 1155 326.5Q1191 262 1255.5 227Q1320 192 1404 192Q1487 192 1551 226Q1615 260 1651 323.5Q1687 387 1687 473Q1687 496 1684 519ZM1487 424Q1487 388 1463 367.5Q1439 347 1403 347Q1367 347 1344 366.5Q1321 386 1314 424ZM1726 571H1916Q1920 598 1941 613Q1962 628 1993 628Q2017 628 2031 618Q2045 608 2045 592Q2045 571 2022 561Q1999 551 1946 539Q1886 527 1846 512Q1806 497 1776.5 463Q1747 429 1747 371Q1747 321 1774 280.5Q1801 240 1853.5 216Q1906 192 1980 192Q2090 192 2153 246Q2216 300 2226 388H2049Q2044 361 2025.5 346.5Q2007 332 1976 332Q1952 332 1939.5 341Q1927 350 1927 366Q1927 386 1950 396.5Q1973 407 2024 418Q2085 431 2125.5 447Q2166 463 2196.5 498.5Q2227 534 2227 595Q2227 644 2198.5 683Q2170 722 2117.5 744.5Q2065 767 1994 767Q1918 767 1858.5 741.5Q1799 716 1764.5 671.5Q1730 627 1726 571ZM2518 192Q2576 192 2618 215Q2660 238 2683 277V199H2879V760H2683V682Q2660 721 2617.5 744Q2575 767 2518 767Q2451 767 2396.5 732Q2342 697 2310.5 631.5Q2279 566 2279 479Q2279 392 2310.5 327Q2342 262 2396.5 227Q2451 192 2518 192ZM2581 363Q2537 363 2508 393.5Q2479 424 2479 479Q2479 533 2508 564.5Q2537 596 2581 596Q2624 596 2653.5 565Q2683 534 2683 479Q2683 425 2653.5 394Q2624 363 2581 363Z"/><path fill="url(#mwnegativo-wow)" d="M3804 199 3661 760H3441L3363 420L3282 760H3063L2921 199H3116L3179 571L3262 199H3472L3558 572L3620 199ZM3816 479Q3816 392 3854.5 327Q3893 262 3959.5 227Q4026 192 4110 192Q4194 192 4260.5 227Q4327 262 4365.5 327Q4404 392 4404 479Q4404 566 4365.5 631.5Q4327 697 4260 732Q4193 767 4109 767Q4025 767 3958.5 732Q3892 697 3854 632Q3816 567 3816 479ZM4205 479Q4205 422 4177.5 392Q4150 362 4110 362Q4070 362 4043 392Q4016 422 4016 479Q4016 537 4042 567Q4068 597 4109 597Q4150 597 4177.5 566.5Q4205 536 4205 479ZM5301 199 5158 760H4938L4860 420L4779 760H4560L4418 199H4613L4676 571L4759 199H4969L5055 572L5117 199Z"/><path fill="none" stroke="url(#mwnegativo-smile)" stroke-width="128" stroke-linecap="round" d="M3181 900Q4110 1400 5039 900"/><path fill="none" stroke="#F22E62" stroke-width="100" stroke-linecap="round" d="M4935.6 -5.4L4905 -223.3"/><path fill="none" stroke="#FFFF00" stroke-width="100" stroke-linecap="round" d="M5211.4 28.6L5312.2 -178.1"/><path fill="none" stroke="#FF7A00" stroke-width="100" stroke-linecap="round" d="M5403.9 217.9L5575.3 114.9"/></svg></div><div class="cap"><b>Negativo · fondo azul noche</b><a href="svg/mesawow-logo-negativo.svg" target="_blank" rel="noopener">Abrir SVG</a></div></div>
+        <div class="tile white"><div class="art"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 -268.1 5665.3 1522.1" role="img" aria-label="mesawow"><path fill="#0F1B3D" d="M1056 433V760H860V459Q860 414 835 389Q810 364 767 364Q724 364 699 389Q674 414 674 459V760H478V459Q478 414 453.5 389Q429 364 386 364Q342 364 317 389Q292 414 292 459V760H96V199H292V273Q318 237 359.5 215.5Q401 194 455 194Q517 194 565.5 221Q614 248 642 297Q672 251 721 222.5Q770 194 829 194Q935 194 995.5 258Q1056 322 1056 433ZM1684 519H1313Q1316 565 1338.5 587.5Q1361 610 1396 610Q1445 610 1466 566H1675Q1662 624 1624.5 669.5Q1587 715 1530 741Q1473 767 1404 767Q1321 767 1256.5 732Q1192 697 1155.5 632Q1119 567 1119 479Q1119 391 1155 326.5Q1191 262 1255.5 227Q1320 192 1404 192Q1487 192 1551 226Q1615 260 1651 323.5Q1687 387 1687 473Q1687 496 1684 519ZM1487 424Q1487 388 1463 367.5Q1439 347 1403 347Q1367 347 1344 366.5Q1321 386 1314 424ZM1726 571H1916Q1920 598 1941 613Q1962 628 1993 628Q2017 628 2031 618Q2045 608 2045 592Q2045 571 2022 561Q1999 551 1946 539Q1886 527 1846 512Q1806 497 1776.5 463Q1747 429 1747 371Q1747 321 1774 280.5Q1801 240 1853.5 216Q1906 192 1980 192Q2090 192 2153 246Q2216 300 2226 388H2049Q2044 361 2025.5 346.5Q2007 332 1976 332Q1952 332 1939.5 341Q1927 350 1927 366Q1927 386 1950 396.5Q1973 407 2024 418Q2085 431 2125.5 447Q2166 463 2196.5 498.5Q2227 534 2227 595Q2227 644 2198.5 683Q2170 722 2117.5 744.5Q2065 767 1994 767Q1918 767 1858.5 741.5Q1799 716 1764.5 671.5Q1730 627 1726 571ZM2518 192Q2576 192 2618 215Q2660 238 2683 277V199H2879V760H2683V682Q2660 721 2617.5 744Q2575 767 2518 767Q2451 767 2396.5 732Q2342 697 2310.5 631.5Q2279 566 2279 479Q2279 392 2310.5 327Q2342 262 2396.5 227Q2451 192 2518 192ZM2581 363Q2537 363 2508 393.5Q2479 424 2479 479Q2479 533 2508 564.5Q2537 596 2581 596Q2624 596 2653.5 565Q2683 534 2683 479Q2683 425 2653.5 394Q2624 363 2581 363Z"/><path fill="#0F1B3D" d="M3804 199 3661 760H3441L3363 420L3282 760H3063L2921 199H3116L3179 571L3262 199H3472L3558 572L3620 199ZM3816 479Q3816 392 3854.5 327Q3893 262 3959.5 227Q4026 192 4110 192Q4194 192 4260.5 227Q4327 262 4365.5 327Q4404 392 4404 479Q4404 566 4365.5 631.5Q4327 697 4260 732Q4193 767 4109 767Q4025 767 3958.5 732Q3892 697 3854 632Q3816 567 3816 479ZM4205 479Q4205 422 4177.5 392Q4150 362 4110 362Q4070 362 4043 392Q4016 422 4016 479Q4016 537 4042 567Q4068 597 4109 597Q4150 597 4177.5 566.5Q4205 536 4205 479ZM5301 199 5158 760H4938L4860 420L4779 760H4560L4418 199H4613L4676 571L4759 199H4969L5055 572L5117 199Z"/><path fill="none" stroke="#0F1B3D" stroke-width="128" stroke-linecap="round" d="M3181 900Q4110 1400 5039 900"/><path fill="none" stroke="#0F1B3D" stroke-width="100" stroke-linecap="round" d="M4935.6 -5.4L4905 -223.3"/><path fill="none" stroke="#0F1B3D" stroke-width="100" stroke-linecap="round" d="M5211.4 28.6L5312.2 -178.1"/><path fill="none" stroke="#0F1B3D" stroke-width="100" stroke-linecap="round" d="M5403.9 217.9L5575.3 114.9"/></svg></div><div class="cap"><b>Monocromático azul noche</b><a href="svg/mesawow-logo-mono-navy.svg" target="_blank" rel="noopener">Abrir SVG</a></div></div>
+        <div class="tile grad"><div class="art"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 -268.1 5665.3 1522.1" role="img" aria-label="mesawow"><path fill="#FFFFFF" d="M1056 433V760H860V459Q860 414 835 389Q810 364 767 364Q724 364 699 389Q674 414 674 459V760H478V459Q478 414 453.5 389Q429 364 386 364Q342 364 317 389Q292 414 292 459V760H96V199H292V273Q318 237 359.5 215.5Q401 194 455 194Q517 194 565.5 221Q614 248 642 297Q672 251 721 222.5Q770 194 829 194Q935 194 995.5 258Q1056 322 1056 433ZM1684 519H1313Q1316 565 1338.5 587.5Q1361 610 1396 610Q1445 610 1466 566H1675Q1662 624 1624.5 669.5Q1587 715 1530 741Q1473 767 1404 767Q1321 767 1256.5 732Q1192 697 1155.5 632Q1119 567 1119 479Q1119 391 1155 326.5Q1191 262 1255.5 227Q1320 192 1404 192Q1487 192 1551 226Q1615 260 1651 323.5Q1687 387 1687 473Q1687 496 1684 519ZM1487 424Q1487 388 1463 367.5Q1439 347 1403 347Q1367 347 1344 366.5Q1321 386 1314 424ZM1726 571H1916Q1920 598 1941 613Q1962 628 1993 628Q2017 628 2031 618Q2045 608 2045 592Q2045 571 2022 561Q1999 551 1946 539Q1886 527 1846 512Q1806 497 1776.5 463Q1747 429 1747 371Q1747 321 1774 280.5Q1801 240 1853.5 216Q1906 192 1980 192Q2090 192 2153 246Q2216 300 2226 388H2049Q2044 361 2025.5 346.5Q2007 332 1976 332Q1952 332 1939.5 341Q1927 350 1927 366Q1927 386 1950 396.5Q1973 407 2024 418Q2085 431 2125.5 447Q2166 463 2196.5 498.5Q2227 534 2227 595Q2227 644 2198.5 683Q2170 722 2117.5 744.5Q2065 767 1994 767Q1918 767 1858.5 741.5Q1799 716 1764.5 671.5Q1730 627 1726 571ZM2518 192Q2576 192 2618 215Q2660 238 2683 277V199H2879V760H2683V682Q2660 721 2617.5 744Q2575 767 2518 767Q2451 767 2396.5 732Q2342 697 2310.5 631.5Q2279 566 2279 479Q2279 392 2310.5 327Q2342 262 2396.5 227Q2451 192 2518 192ZM2581 363Q2537 363 2508 393.5Q2479 424 2479 479Q2479 533 2508 564.5Q2537 596 2581 596Q2624 596 2653.5 565Q2683 534 2683 479Q2683 425 2653.5 394Q2624 363 2581 363Z"/><path fill="#FFFFFF" d="M3804 199 3661 760H3441L3363 420L3282 760H3063L2921 199H3116L3179 571L3262 199H3472L3558 572L3620 199ZM3816 479Q3816 392 3854.5 327Q3893 262 3959.5 227Q4026 192 4110 192Q4194 192 4260.5 227Q4327 262 4365.5 327Q4404 392 4404 479Q4404 566 4365.5 631.5Q4327 697 4260 732Q4193 767 4109 767Q4025 767 3958.5 732Q3892 697 3854 632Q3816 567 3816 479ZM4205 479Q4205 422 4177.5 392Q4150 362 4110 362Q4070 362 4043 392Q4016 422 4016 479Q4016 537 4042 567Q4068 597 4109 597Q4150 597 4177.5 566.5Q4205 536 4205 479ZM5301 199 5158 760H4938L4860 420L4779 760H4560L4418 199H4613L4676 571L4759 199H4969L5055 572L5117 199Z"/><path fill="none" stroke="#FFFFFF" stroke-width="128" stroke-linecap="round" d="M3181 900Q4110 1400 5039 900"/><path fill="none" stroke="#FFFFFF" stroke-width="100" stroke-linecap="round" d="M4935.6 -5.4L4905 -223.3"/><path fill="none" stroke="#FFFFFF" stroke-width="100" stroke-linecap="round" d="M5211.4 28.6L5312.2 -178.1"/><path fill="none" stroke="#FFFFFF" stroke-width="100" stroke-linecap="round" d="M5403.9 217.9L5575.3 114.9"/></svg></div><div class="cap"><b>Monocromático blanco · sobre degradado o foto</b><a href="svg/mesawow-logo-mono-blanco.svg" target="_blank" rel="noopener">Abrir SVG</a></div></div>
+      </div>
+      <div class="tile white" style="min-height:0"><div class="art" style="justify-content:flex-start"><div style="width:min(100%,300px)"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 80 5329 1104" role="img" aria-label="mesawow"><defs><linearGradient id="mwred-wow" x1="2919" y1="0" x2="5301" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF7A00"/></linearGradient><linearGradient id="mwred-smile" x1="3181" y1="0" x2="5039" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF4F48"/></linearGradient></defs><path fill="#0F1B3D" d="M1056 433V760H860V459Q860 414 835 389Q810 364 767 364Q724 364 699 389Q674 414 674 459V760H478V459Q478 414 453.5 389Q429 364 386 364Q342 364 317 389Q292 414 292 459V760H96V199H292V273Q318 237 359.5 215.5Q401 194 455 194Q517 194 565.5 221Q614 248 642 297Q672 251 721 222.5Q770 194 829 194Q935 194 995.5 258Q1056 322 1056 433ZM1684 519H1313Q1316 565 1338.5 587.5Q1361 610 1396 610Q1445 610 1466 566H1675Q1662 624 1624.5 669.5Q1587 715 1530 741Q1473 767 1404 767Q1321 767 1256.5 732Q1192 697 1155.5 632Q1119 567 1119 479Q1119 391 1155 326.5Q1191 262 1255.5 227Q1320 192 1404 192Q1487 192 1551 226Q1615 260 1651 323.5Q1687 387 1687 473Q1687 496 1684 519ZM1487 424Q1487 388 1463 367.5Q1439 347 1403 347Q1367 347 1344 366.5Q1321 386 1314 424ZM1726 571H1916Q1920 598 1941 613Q1962 628 1993 628Q2017 628 2031 618Q2045 608 2045 592Q2045 571 2022 561Q1999 551 1946 539Q1886 527 1846 512Q1806 497 1776.5 463Q1747 429 1747 371Q1747 321 1774 280.5Q1801 240 1853.5 216Q1906 192 1980 192Q2090 192 2153 246Q2216 300 2226 388H2049Q2044 361 2025.5 346.5Q2007 332 1976 332Q1952 332 1939.5 341Q1927 350 1927 366Q1927 386 1950 396.5Q1973 407 2024 418Q2085 431 2125.5 447Q2166 463 2196.5 498.5Q2227 534 2227 595Q2227 644 2198.5 683Q2170 722 2117.5 744.5Q2065 767 1994 767Q1918 767 1858.5 741.5Q1799 716 1764.5 671.5Q1730 627 1726 571ZM2518 192Q2576 192 2618 215Q2660 238 2683 277V199H2879V760H2683V682Q2660 721 2617.5 744Q2575 767 2518 767Q2451 767 2396.5 732Q2342 697 2310.5 631.5Q2279 566 2279 479Q2279 392 2310.5 327Q2342 262 2396.5 227Q2451 192 2518 192ZM2581 363Q2537 363 2508 393.5Q2479 424 2479 479Q2479 533 2508 564.5Q2537 596 2581 596Q2624 596 2653.5 565Q2683 534 2683 479Q2683 425 2653.5 394Q2624 363 2581 363Z"/><path fill="url(#mwred-wow)" d="M3804 199 3661 760H3441L3363 420L3282 760H3063L2921 199H3116L3179 571L3262 199H3472L3558 572L3620 199ZM3816 479Q3816 392 3854.5 327Q3893 262 3959.5 227Q4026 192 4110 192Q4194 192 4260.5 227Q4327 262 4365.5 327Q4404 392 4404 479Q4404 566 4365.5 631.5Q4327 697 4260 732Q4193 767 4109 767Q4025 767 3958.5 732Q3892 697 3854 632Q3816 567 3816 479ZM4205 479Q4205 422 4177.5 392Q4150 362 4110 362Q4070 362 4043 392Q4016 422 4016 479Q4016 537 4042 567Q4068 597 4109 597Q4150 597 4177.5 566.5Q4205 536 4205 479ZM5301 199 5158 760H4938L4860 420L4779 760H4560L4418 199H4613L4676 571L4759 199H4969L5055 572L5117 199Z"/><path fill="none" stroke="url(#mwred-smile)" stroke-width="128" stroke-linecap="round" d="M3181 900Q4110 1400 5039 900"/></svg></div></div><div class="cap"><b>Versión reducida · sin rayos, para tamaños entre 72 y 120 px</b><a href="svg/mesawow-logo-reducido-color.svg" target="_blank" rel="noopener">Abrir SVG</a></div></div>
+    </section>
+
+    <!-- ISOTIPO -->
+    <section class="sheet" id="isotipo">
+      <div class="sheet-head">
+        <span class="eyebrow">04 · Isotipo</span>
+        <h2>Isotipo mw!</h2>
+        <p class="lead">La forma corta de la marca para el ícono de la app, los avatares de la cuenta y las redes sociales. Mantiene la sonrisa, así que se reconoce incluso a 16 px.</p>
+      </div>
+      <div class="g3">
+        <div class="tile light"><div class="art"><div style="width:160px"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" role="img" aria-label="mesawow isotipo"><defs><linearGradient id="isog" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF7A00"/></linearGradient><radialGradient id="isor" cx="0.08" cy="0.05" r="0.75"><stop offset="0" stop-color="#9B5CFF" stop-opacity="0.85"/><stop offset="1" stop-color="#9B5CFF" stop-opacity="0"/></radialGradient></defs><rect width="1000" height="1000" rx="230" fill="url(#isog)"/><rect width="1000" height="1000" rx="230" fill="url(#isor)"/><path fill="#FFFFFF" d="M454.1 412.1V520H389.4V420.7Q389.4 405.8 381.2 397.6Q372.9 389.3 358.8 389.3Q344.6 389.3 336.3 397.6Q328.1 405.8 328.1 420.7V520H263.4V420.7Q263.4 405.8 255.3 397.6Q247.2 389.3 233 389.3Q218.5 389.3 210.3 397.6Q202 405.8 202 420.7V520H137.3V334.9H202V359.3Q210.6 347.4 224.3 340.3Q238 333.2 255.8 333.2Q276.3 333.2 292.3 342.1Q308.3 351 317.5 367.2Q327.4 352 343.6 342.6Q359.8 333.2 379.2 333.2Q414.2 333.2 434.2 354.3Q454.1 375.5 454.1 412.1ZM759 334.9 711.9 520H639.3L613.5 407.8L586.8 520H514.5L467.7 334.9H532L552.8 457.6L580.2 334.9H649.5L677.9 458L698.3 334.9ZM860 275.5 852.4 432.9H797.3L789.7 275.5ZM787.1 489.3Q787.1 474.8 797.5 465.2Q807.9 455.6 825.1 455.6Q841.9 455.6 852.3 465.2Q862.7 474.8 862.7 489.3Q862.7 503.5 852.3 513.1Q841.9 522.6 825.1 522.6Q807.9 522.6 797.5 513.2Q787.1 503.8 787.1 489.3Z"/><path fill="none" stroke="#FFFFFF" stroke-width="64" stroke-linecap="round" d="M270 620Q500 870 730 620"/></svg></div></div><div class="cap"><b>Color</b><a href="svg/mesawow-isotipo-color.svg" target="_blank" rel="noopener">Abrir SVG</a></div></div>
+        <div class="tile white"><div class="art"><div style="width:160px"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" role="img" aria-label="mesawow isotipo"><rect width="1000" height="1000" rx="230" fill="#0F1B3D"/><path fill="#FFFFFF" d="M454.1 412.1V520H389.4V420.7Q389.4 405.8 381.2 397.6Q372.9 389.3 358.8 389.3Q344.6 389.3 336.3 397.6Q328.1 405.8 328.1 420.7V520H263.4V420.7Q263.4 405.8 255.3 397.6Q247.2 389.3 233 389.3Q218.5 389.3 210.3 397.6Q202 405.8 202 420.7V520H137.3V334.9H202V359.3Q210.6 347.4 224.3 340.3Q238 333.2 255.8 333.2Q276.3 333.2 292.3 342.1Q308.3 351 317.5 367.2Q327.4 352 343.6 342.6Q359.8 333.2 379.2 333.2Q414.2 333.2 434.2 354.3Q454.1 375.5 454.1 412.1ZM759 334.9 711.9 520H639.3L613.5 407.8L586.8 520H514.5L467.7 334.9H532L552.8 457.6L580.2 334.9H649.5L677.9 458L698.3 334.9ZM860 275.5 852.4 432.9H797.3L789.7 275.5ZM787.1 489.3Q787.1 474.8 797.5 465.2Q807.9 455.6 825.1 455.6Q841.9 455.6 852.3 465.2Q862.7 474.8 862.7 489.3Q862.7 503.5 852.3 513.1Q841.9 522.6 825.1 522.6Q807.9 522.6 797.5 513.2Q787.1 503.8 787.1 489.3Z"/><path fill="none" stroke="#FFFFFF" stroke-width="64" stroke-linecap="round" d="M270 620Q500 870 730 620"/></svg></div></div><div class="cap"><b>Monocromático azul noche</b><a href="svg/mesawow-isotipo-mono-navy.svg" target="_blank" rel="noopener">Abrir SVG</a></div></div>
+        <div class="tile dark"><div class="art"><div style="width:160px"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" role="img" aria-label="mesawow isotipo"><rect width="1000" height="1000" rx="230" fill="#FFFFFF"/><path fill="#0F1B3D" d="M454.1 412.1V520H389.4V420.7Q389.4 405.8 381.2 397.6Q372.9 389.3 358.8 389.3Q344.6 389.3 336.3 397.6Q328.1 405.8 328.1 420.7V520H263.4V420.7Q263.4 405.8 255.3 397.6Q247.2 389.3 233 389.3Q218.5 389.3 210.3 397.6Q202 405.8 202 420.7V520H137.3V334.9H202V359.3Q210.6 347.4 224.3 340.3Q238 333.2 255.8 333.2Q276.3 333.2 292.3 342.1Q308.3 351 317.5 367.2Q327.4 352 343.6 342.6Q359.8 333.2 379.2 333.2Q414.2 333.2 434.2 354.3Q454.1 375.5 454.1 412.1ZM759 334.9 711.9 520H639.3L613.5 407.8L586.8 520H514.5L467.7 334.9H532L552.8 457.6L580.2 334.9H649.5L677.9 458L698.3 334.9ZM860 275.5 852.4 432.9H797.3L789.7 275.5ZM787.1 489.3Q787.1 474.8 797.5 465.2Q807.9 455.6 825.1 455.6Q841.9 455.6 852.3 465.2Q862.7 474.8 862.7 489.3Q862.7 503.5 852.3 513.1Q841.9 522.6 825.1 522.6Q807.9 522.6 797.5 513.2Q787.1 503.8 787.1 489.3Z"/><path fill="none" stroke="#0F1B3D" stroke-width="64" stroke-linecap="round" d="M270 620Q500 870 730 620"/></svg></div></div><div class="cap"><b>Monocromático blanco</b><a href="svg/mesawow-isotipo-mono-blanco.svg" target="_blank" rel="noopener">Abrir SVG</a></div></div>
+      </div>
+      <div class="sizes" aria-label="Tamaños del isotipo">
+        <figure><div style="width:128px"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" role="img" aria-label="mesawow isotipo"><defs><linearGradient id="isog" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF7A00"/></linearGradient><radialGradient id="isor" cx="0.08" cy="0.05" r="0.75"><stop offset="0" stop-color="#9B5CFF" stop-opacity="0.85"/><stop offset="1" stop-color="#9B5CFF" stop-opacity="0"/></radialGradient></defs><rect width="1000" height="1000" rx="230" fill="url(#isog)"/><rect width="1000" height="1000" rx="230" fill="url(#isor)"/><path fill="#FFFFFF" d="M454.1 412.1V520H389.4V420.7Q389.4 405.8 381.2 397.6Q372.9 389.3 358.8 389.3Q344.6 389.3 336.3 397.6Q328.1 405.8 328.1 420.7V520H263.4V420.7Q263.4 405.8 255.3 397.6Q247.2 389.3 233 389.3Q218.5 389.3 210.3 397.6Q202 405.8 202 420.7V520H137.3V334.9H202V359.3Q210.6 347.4 224.3 340.3Q238 333.2 255.8 333.2Q276.3 333.2 292.3 342.1Q308.3 351 317.5 367.2Q327.4 352 343.6 342.6Q359.8 333.2 379.2 333.2Q414.2 333.2 434.2 354.3Q454.1 375.5 454.1 412.1ZM759 334.9 711.9 520H639.3L613.5 407.8L586.8 520H514.5L467.7 334.9H532L552.8 457.6L580.2 334.9H649.5L677.9 458L698.3 334.9ZM860 275.5 852.4 432.9H797.3L789.7 275.5ZM787.1 489.3Q787.1 474.8 797.5 465.2Q807.9 455.6 825.1 455.6Q841.9 455.6 852.3 465.2Q862.7 474.8 862.7 489.3Q862.7 503.5 852.3 513.1Q841.9 522.6 825.1 522.6Q807.9 522.6 797.5 513.2Q787.1 503.8 787.1 489.3Z"/><path fill="none" stroke="#FFFFFF" stroke-width="64" stroke-linecap="round" d="M270 620Q500 870 730 620"/></svg></div><figcaption>128 px · app</figcaption></figure>
+        <figure><div style="width:64px"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" role="img" aria-label="mesawow isotipo"><defs><linearGradient id="isog" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF7A00"/></linearGradient><radialGradient id="isor" cx="0.08" cy="0.05" r="0.75"><stop offset="0" stop-color="#9B5CFF" stop-opacity="0.85"/><stop offset="1" stop-color="#9B5CFF" stop-opacity="0"/></radialGradient></defs><rect width="1000" height="1000" rx="230" fill="url(#isog)"/><rect width="1000" height="1000" rx="230" fill="url(#isor)"/><path fill="#FFFFFF" d="M454.1 412.1V520H389.4V420.7Q389.4 405.8 381.2 397.6Q372.9 389.3 358.8 389.3Q344.6 389.3 336.3 397.6Q328.1 405.8 328.1 420.7V520H263.4V420.7Q263.4 405.8 255.3 397.6Q247.2 389.3 233 389.3Q218.5 389.3 210.3 397.6Q202 405.8 202 420.7V520H137.3V334.9H202V359.3Q210.6 347.4 224.3 340.3Q238 333.2 255.8 333.2Q276.3 333.2 292.3 342.1Q308.3 351 317.5 367.2Q327.4 352 343.6 342.6Q359.8 333.2 379.2 333.2Q414.2 333.2 434.2 354.3Q454.1 375.5 454.1 412.1ZM759 334.9 711.9 520H639.3L613.5 407.8L586.8 520H514.5L467.7 334.9H532L552.8 457.6L580.2 334.9H649.5L677.9 458L698.3 334.9ZM860 275.5 852.4 432.9H797.3L789.7 275.5ZM787.1 489.3Q787.1 474.8 797.5 465.2Q807.9 455.6 825.1 455.6Q841.9 455.6 852.3 465.2Q862.7 474.8 862.7 489.3Q862.7 503.5 852.3 513.1Q841.9 522.6 825.1 522.6Q807.9 522.6 797.5 513.2Q787.1 503.8 787.1 489.3Z"/><path fill="none" stroke="#FFFFFF" stroke-width="64" stroke-linecap="round" d="M270 620Q500 870 730 620"/></svg></div><figcaption>64 px</figcaption></figure>
+        <figure><div style="width:32px"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" role="img" aria-label="mesawow isotipo"><defs><linearGradient id="isog" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF7A00"/></linearGradient><radialGradient id="isor" cx="0.08" cy="0.05" r="0.75"><stop offset="0" stop-color="#9B5CFF" stop-opacity="0.85"/><stop offset="1" stop-color="#9B5CFF" stop-opacity="0"/></radialGradient></defs><rect width="1000" height="1000" rx="230" fill="url(#isog)"/><rect width="1000" height="1000" rx="230" fill="url(#isor)"/><path fill="#FFFFFF" d="M454.1 412.1V520H389.4V420.7Q389.4 405.8 381.2 397.6Q372.9 389.3 358.8 389.3Q344.6 389.3 336.3 397.6Q328.1 405.8 328.1 420.7V520H263.4V420.7Q263.4 405.8 255.3 397.6Q247.2 389.3 233 389.3Q218.5 389.3 210.3 397.6Q202 405.8 202 420.7V520H137.3V334.9H202V359.3Q210.6 347.4 224.3 340.3Q238 333.2 255.8 333.2Q276.3 333.2 292.3 342.1Q308.3 351 317.5 367.2Q327.4 352 343.6 342.6Q359.8 333.2 379.2 333.2Q414.2 333.2 434.2 354.3Q454.1 375.5 454.1 412.1ZM759 334.9 711.9 520H639.3L613.5 407.8L586.8 520H514.5L467.7 334.9H532L552.8 457.6L580.2 334.9H649.5L677.9 458L698.3 334.9ZM860 275.5 852.4 432.9H797.3L789.7 275.5ZM787.1 489.3Q787.1 474.8 797.5 465.2Q807.9 455.6 825.1 455.6Q841.9 455.6 852.3 465.2Q862.7 474.8 862.7 489.3Q862.7 503.5 852.3 513.1Q841.9 522.6 825.1 522.6Q807.9 522.6 797.5 513.2Q787.1 503.8 787.1 489.3Z"/><path fill="none" stroke="#FFFFFF" stroke-width="64" stroke-linecap="round" d="M270 620Q500 870 730 620"/></svg></div><figcaption>32 px</figcaption></figure>
+        <figure><div style="width:16px"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" role="img" aria-label="mesawow isotipo"><defs><linearGradient id="isog" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF7A00"/></linearGradient><radialGradient id="isor" cx="0.08" cy="0.05" r="0.75"><stop offset="0" stop-color="#9B5CFF" stop-opacity="0.85"/><stop offset="1" stop-color="#9B5CFF" stop-opacity="0"/></radialGradient></defs><rect width="1000" height="1000" rx="230" fill="url(#isog)"/><rect width="1000" height="1000" rx="230" fill="url(#isor)"/><path fill="#FFFFFF" d="M454.1 412.1V520H389.4V420.7Q389.4 405.8 381.2 397.6Q372.9 389.3 358.8 389.3Q344.6 389.3 336.3 397.6Q328.1 405.8 328.1 420.7V520H263.4V420.7Q263.4 405.8 255.3 397.6Q247.2 389.3 233 389.3Q218.5 389.3 210.3 397.6Q202 405.8 202 420.7V520H137.3V334.9H202V359.3Q210.6 347.4 224.3 340.3Q238 333.2 255.8 333.2Q276.3 333.2 292.3 342.1Q308.3 351 317.5 367.2Q327.4 352 343.6 342.6Q359.8 333.2 379.2 333.2Q414.2 333.2 434.2 354.3Q454.1 375.5 454.1 412.1ZM759 334.9 711.9 520H639.3L613.5 407.8L586.8 520H514.5L467.7 334.9H532L552.8 457.6L580.2 334.9H649.5L677.9 458L698.3 334.9ZM860 275.5 852.4 432.9H797.3L789.7 275.5ZM787.1 489.3Q787.1 474.8 797.5 465.2Q807.9 455.6 825.1 455.6Q841.9 455.6 852.3 465.2Q862.7 474.8 862.7 489.3Q862.7 503.5 852.3 513.1Q841.9 522.6 825.1 522.6Q807.9 522.6 797.5 513.2Q787.1 503.8 787.1 489.3Z"/><path fill="none" stroke="#FFFFFF" stroke-width="64" stroke-linecap="round" d="M270 620Q500 870 730 620"/></svg></div><figcaption>16 px · mínimo</figcaption></figure>
+      </div>
+    </section>
+
+    <!-- SONRISA -->
+    <section class="sheet" id="sonrisa">
+      <div class="sheet-head">
+        <span class="eyebrow">05 · Símbolo</span>
+        <h2>La sonrisa WOW</h2>
+        <p class="lead">La sonrisa es el símbolo de reconocimiento de mesawow. Aparece cuando alguien completa algo, cuando el equipo celebra y cuando la plataforma dice “bien hecho”. Por eso se reserva para eso: nunca como adorno de relleno.</p>
+      </div>
+      <div class="g3">
+        <div class="tile light"><div class="art"><div style="width:150px"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="80 80 840 840" role="img" aria-label="Sonrisa WOW"><defs><linearGradient id="sg" x1="200" y1="0" x2="800" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF4F48"/></linearGradient></defs><path fill="none" stroke="url(#sg)" stroke-width="96" stroke-linecap="round" d="M200 600Q500 900 800 600"/><path fill="none" stroke="#F22E62" stroke-width="80" stroke-linecap="round" d="M307.2 380.2L197.9 250"/><path fill="none" stroke="#FFC700" stroke-width="80" stroke-linecap="round" d="M500 310L500 120"/><path fill="none" stroke="#FF7A00" stroke-width="80" stroke-linecap="round" d="M692.8 380.2L802.1 250"/></svg></div></div><div class="cap"><b>Color</b><a href="svg/mesawow-sonrisa-color.svg" target="_blank" rel="noopener">Abrir SVG</a></div></div>
+        <div class="tile white"><div class="art"><div style="width:150px"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="80 80 840 840" role="img" aria-label="Sonrisa WOW"><path fill="none" stroke="#0F1B3D" stroke-width="96" stroke-linecap="round" d="M200 600Q500 900 800 600"/><path fill="none" stroke="#0F1B3D" stroke-width="80" stroke-linecap="round" d="M307.2 380.2L197.9 250"/><path fill="none" stroke="#0F1B3D" stroke-width="80" stroke-linecap="round" d="M500 310L500 120"/><path fill="none" stroke="#0F1B3D" stroke-width="80" stroke-linecap="round" d="M692.8 380.2L802.1 250"/></svg></div></div><div class="cap"><b>Azul noche</b><a href="svg/mesawow-sonrisa-mono-navy.svg" target="_blank" rel="noopener">Abrir SVG</a></div></div>
+        <div class="tile grad"><div class="art"><div style="width:150px"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="80 80 840 840" role="img" aria-label="Sonrisa WOW"><path fill="none" stroke="#FFFFFF" stroke-width="96" stroke-linecap="round" d="M200 600Q500 900 800 600"/><path fill="none" stroke="#FFFFFF" stroke-width="80" stroke-linecap="round" d="M307.2 380.2L197.9 250"/><path fill="none" stroke="#FFFFFF" stroke-width="80" stroke-linecap="round" d="M500 310L500 120"/><path fill="none" stroke="#FFFFFF" stroke-width="80" stroke-linecap="round" d="M692.8 380.2L802.1 250"/></svg></div></div><div class="cap"><b>Blanco</b><a href="svg/mesawow-sonrisa-mono-blanco.svg" target="_blank" rel="noopener">Abrir SVG</a></div></div>
+      </div>
+      <div class="rules">
+        <div class="rule"><span class="n">Logros</span><p>Acompaña cada logro publicado, en la insignia y en la tarjeta del muro.</p></div>
+        <div class="rule"><span class="n">Rayos</span><p>Los tres rayos solo aparecen en reconocimientos y Momentos WOW. Sin rayos, la sonrisa es un “listo”.</p></div>
+        <div class="rule"><span class="n">Favicon</span><p>La sonrisa con sus rayos es el favicon de mesawow, con trazos más gruesos para leerse a 16 px. Archivos en la carpeta favicon.</p></div>
+        <div class="rule"><span class="n">Movimiento</span><p>En un Momento WOW los rayos se expanden y vuelven a su lugar en 0,7 s. Una vez, nunca en bucle.</p></div>
+      </div>
+    </section>
+
+    <!-- INCORRECTOS -->
+    <section class="sheet" id="incorrectos">
+      <div class="sheet-head">
+        <span class="eyebrow">06 · Cuidados</span>
+        <h2>Usos incorrectos</h2>
+        <p class="lead">El logotipo se usa siempre desde los archivos SVG originales, sin redibujarlo ni modificarlo.</p>
+      </div>
+      <div class="g4">
+        <div class="dont"><span class="x" aria-hidden="true">×</span><div class="art"><div style="width:80%;transform:scaleX(1.45) scaleY(.8)"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 -268.1 5665.3 1522.1" role="img" aria-label="mesawow"><defs><linearGradient id="mwcolor-wow" x1="2919" y1="0" x2="5301" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF7A00"/></linearGradient><linearGradient id="mwcolor-smile" x1="3181" y1="0" x2="5039" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF4F48"/></linearGradient></defs><path fill="#0F1B3D" d="M1056 433V760H860V459Q860 414 835 389Q810 364 767 364Q724 364 699 389Q674 414 674 459V760H478V459Q478 414 453.5 389Q429 364 386 364Q342 364 317 389Q292 414 292 459V760H96V199H292V273Q318 237 359.5 215.5Q401 194 455 194Q517 194 565.5 221Q614 248 642 297Q672 251 721 222.5Q770 194 829 194Q935 194 995.5 258Q1056 322 1056 433ZM1684 519H1313Q1316 565 1338.5 587.5Q1361 610 1396 610Q1445 610 1466 566H1675Q1662 624 1624.5 669.5Q1587 715 1530 741Q1473 767 1404 767Q1321 767 1256.5 732Q1192 697 1155.5 632Q1119 567 1119 479Q1119 391 1155 326.5Q1191 262 1255.5 227Q1320 192 1404 192Q1487 192 1551 226Q1615 260 1651 323.5Q1687 387 1687 473Q1687 496 1684 519ZM1487 424Q1487 388 1463 367.5Q1439 347 1403 347Q1367 347 1344 366.5Q1321 386 1314 424ZM1726 571H1916Q1920 598 1941 613Q1962 628 1993 628Q2017 628 2031 618Q2045 608 2045 592Q2045 571 2022 561Q1999 551 1946 539Q1886 527 1846 512Q1806 497 1776.5 463Q1747 429 1747 371Q1747 321 1774 280.5Q1801 240 1853.5 216Q1906 192 1980 192Q2090 192 2153 246Q2216 300 2226 388H2049Q2044 361 2025.5 346.5Q2007 332 1976 332Q1952 332 1939.5 341Q1927 350 1927 366Q1927 386 1950 396.5Q1973 407 2024 418Q2085 431 2125.5 447Q2166 463 2196.5 498.5Q2227 534 2227 595Q2227 644 2198.5 683Q2170 722 2117.5 744.5Q2065 767 1994 767Q1918 767 1858.5 741.5Q1799 716 1764.5 671.5Q1730 627 1726 571ZM2518 192Q2576 192 2618 215Q2660 238 2683 277V199H2879V760H2683V682Q2660 721 2617.5 744Q2575 767 2518 767Q2451 767 2396.5 732Q2342 697 2310.5 631.5Q2279 566 2279 479Q2279 392 2310.5 327Q2342 262 2396.5 227Q2451 192 2518 192ZM2581 363Q2537 363 2508 393.5Q2479 424 2479 479Q2479 533 2508 564.5Q2537 596 2581 596Q2624 596 2653.5 565Q2683 534 2683 479Q2683 425 2653.5 394Q2624 363 2581 363Z"/><path fill="url(#mwcolor-wow)" d="M3804 199 3661 760H3441L3363 420L3282 760H3063L2921 199H3116L3179 571L3262 199H3472L3558 572L3620 199ZM3816 479Q3816 392 3854.5 327Q3893 262 3959.5 227Q4026 192 4110 192Q4194 192 4260.5 227Q4327 262 4365.5 327Q4404 392 4404 479Q4404 566 4365.5 631.5Q4327 697 4260 732Q4193 767 4109 767Q4025 767 3958.5 732Q3892 697 3854 632Q3816 567 3816 479ZM4205 479Q4205 422 4177.5 392Q4150 362 4110 362Q4070 362 4043 392Q4016 422 4016 479Q4016 537 4042 567Q4068 597 4109 597Q4150 597 4177.5 566.5Q4205 536 4205 479ZM5301 199 5158 760H4938L4860 420L4779 760H4560L4418 199H4613L4676 571L4759 199H4969L5055 572L5117 199Z"/><path fill="none" stroke="url(#mwcolor-smile)" stroke-width="128" stroke-linecap="round" d="M3181 900Q4110 1400 5039 900"/><path fill="none" stroke="#F22E62" stroke-width="100" stroke-linecap="round" d="M4935.6 -5.4L4905 -223.3"/><path fill="none" stroke="#FFC700" stroke-width="100" stroke-linecap="round" d="M5211.4 28.6L5312.2 -178.1"/><path fill="none" stroke="#FF7A00" stroke-width="100" stroke-linecap="round" d="M5403.9 217.9L5575.3 114.9"/></svg></div></div><p>No deformar ni cambiar proporciones.</p></div>
+        <div class="dont"><span class="x" aria-hidden="true">×</span><div class="art"><div style="width:80%"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 -268.1 5665.3 1522.1" role="img" aria-label="mesawow"><defs><linearGradient id="mwwrong-wow" x1="2919" y1="0" x2="5301" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#00A2AF"/><stop offset="1" stop-color="#9B5CFF"/></linearGradient><linearGradient id="mwwrong-smile" x1="3181" y1="0" x2="5039" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#00A2AF"/><stop offset="1" stop-color="#9B5CFF"/></linearGradient></defs><path fill="#FF7A00" d="M1056 433V760H860V459Q860 414 835 389Q810 364 767 364Q724 364 699 389Q674 414 674 459V760H478V459Q478 414 453.5 389Q429 364 386 364Q342 364 317 389Q292 414 292 459V760H96V199H292V273Q318 237 359.5 215.5Q401 194 455 194Q517 194 565.5 221Q614 248 642 297Q672 251 721 222.5Q770 194 829 194Q935 194 995.5 258Q1056 322 1056 433ZM1684 519H1313Q1316 565 1338.5 587.5Q1361 610 1396 610Q1445 610 1466 566H1675Q1662 624 1624.5 669.5Q1587 715 1530 741Q1473 767 1404 767Q1321 767 1256.5 732Q1192 697 1155.5 632Q1119 567 1119 479Q1119 391 1155 326.5Q1191 262 1255.5 227Q1320 192 1404 192Q1487 192 1551 226Q1615 260 1651 323.5Q1687 387 1687 473Q1687 496 1684 519ZM1487 424Q1487 388 1463 367.5Q1439 347 1403 347Q1367 347 1344 366.5Q1321 386 1314 424ZM1726 571H1916Q1920 598 1941 613Q1962 628 1993 628Q2017 628 2031 618Q2045 608 2045 592Q2045 571 2022 561Q1999 551 1946 539Q1886 527 1846 512Q1806 497 1776.5 463Q1747 429 1747 371Q1747 321 1774 280.5Q1801 240 1853.5 216Q1906 192 1980 192Q2090 192 2153 246Q2216 300 2226 388H2049Q2044 361 2025.5 346.5Q2007 332 1976 332Q1952 332 1939.5 341Q1927 350 1927 366Q1927 386 1950 396.5Q1973 407 2024 418Q2085 431 2125.5 447Q2166 463 2196.5 498.5Q2227 534 2227 595Q2227 644 2198.5 683Q2170 722 2117.5 744.5Q2065 767 1994 767Q1918 767 1858.5 741.5Q1799 716 1764.5 671.5Q1730 627 1726 571ZM2518 192Q2576 192 2618 215Q2660 238 2683 277V199H2879V760H2683V682Q2660 721 2617.5 744Q2575 767 2518 767Q2451 767 2396.5 732Q2342 697 2310.5 631.5Q2279 566 2279 479Q2279 392 2310.5 327Q2342 262 2396.5 227Q2451 192 2518 192ZM2581 363Q2537 363 2508 393.5Q2479 424 2479 479Q2479 533 2508 564.5Q2537 596 2581 596Q2624 596 2653.5 565Q2683 534 2683 479Q2683 425 2653.5 394Q2624 363 2581 363Z"/><path fill="url(#mwwrong-wow)" d="M3804 199 3661 760H3441L3363 420L3282 760H3063L2921 199H3116L3179 571L3262 199H3472L3558 572L3620 199ZM3816 479Q3816 392 3854.5 327Q3893 262 3959.5 227Q4026 192 4110 192Q4194 192 4260.5 227Q4327 262 4365.5 327Q4404 392 4404 479Q4404 566 4365.5 631.5Q4327 697 4260 732Q4193 767 4109 767Q4025 767 3958.5 732Q3892 697 3854 632Q3816 567 3816 479ZM4205 479Q4205 422 4177.5 392Q4150 362 4110 362Q4070 362 4043 392Q4016 422 4016 479Q4016 537 4042 567Q4068 597 4109 597Q4150 597 4177.5 566.5Q4205 536 4205 479ZM5301 199 5158 760H4938L4860 420L4779 760H4560L4418 199H4613L4676 571L4759 199H4969L5055 572L5117 199Z"/><path fill="none" stroke="url(#mwwrong-smile)" stroke-width="128" stroke-linecap="round" d="M3181 900Q4110 1400 5039 900"/><path fill="none" stroke="#00A2AF" stroke-width="100" stroke-linecap="round" d="M4935.6 -5.4L4905 -223.3"/><path fill="none" stroke="#FFC700" stroke-width="100" stroke-linecap="round" d="M5211.4 28.6L5312.2 -178.1"/><path fill="none" stroke="#9B5CFF" stroke-width="100" stroke-linecap="round" d="M5403.9 217.9L5575.3 114.9"/></svg></div></div><p>No cambiar los colores ni el degradado.</p></div>
+        <div class="dont"><span class="x" aria-hidden="true">×</span><div class="art"><div style="width:80%;transform:rotate(-12deg)"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 -268.1 5665.3 1522.1" role="img" aria-label="mesawow"><defs><linearGradient id="mwcolor-wow" x1="2919" y1="0" x2="5301" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF7A00"/></linearGradient><linearGradient id="mwcolor-smile" x1="3181" y1="0" x2="5039" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF4F48"/></linearGradient></defs><path fill="#0F1B3D" d="M1056 433V760H860V459Q860 414 835 389Q810 364 767 364Q724 364 699 389Q674 414 674 459V760H478V459Q478 414 453.5 389Q429 364 386 364Q342 364 317 389Q292 414 292 459V760H96V199H292V273Q318 237 359.5 215.5Q401 194 455 194Q517 194 565.5 221Q614 248 642 297Q672 251 721 222.5Q770 194 829 194Q935 194 995.5 258Q1056 322 1056 433ZM1684 519H1313Q1316 565 1338.5 587.5Q1361 610 1396 610Q1445 610 1466 566H1675Q1662 624 1624.5 669.5Q1587 715 1530 741Q1473 767 1404 767Q1321 767 1256.5 732Q1192 697 1155.5 632Q1119 567 1119 479Q1119 391 1155 326.5Q1191 262 1255.5 227Q1320 192 1404 192Q1487 192 1551 226Q1615 260 1651 323.5Q1687 387 1687 473Q1687 496 1684 519ZM1487 424Q1487 388 1463 367.5Q1439 347 1403 347Q1367 347 1344 366.5Q1321 386 1314 424ZM1726 571H1916Q1920 598 1941 613Q1962 628 1993 628Q2017 628 2031 618Q2045 608 2045 592Q2045 571 2022 561Q1999 551 1946 539Q1886 527 1846 512Q1806 497 1776.5 463Q1747 429 1747 371Q1747 321 1774 280.5Q1801 240 1853.5 216Q1906 192 1980 192Q2090 192 2153 246Q2216 300 2226 388H2049Q2044 361 2025.5 346.5Q2007 332 1976 332Q1952 332 1939.5 341Q1927 350 1927 366Q1927 386 1950 396.5Q1973 407 2024 418Q2085 431 2125.5 447Q2166 463 2196.5 498.5Q2227 534 2227 595Q2227 644 2198.5 683Q2170 722 2117.5 744.5Q2065 767 1994 767Q1918 767 1858.5 741.5Q1799 716 1764.5 671.5Q1730 627 1726 571ZM2518 192Q2576 192 2618 215Q2660 238 2683 277V199H2879V760H2683V682Q2660 721 2617.5 744Q2575 767 2518 767Q2451 767 2396.5 732Q2342 697 2310.5 631.5Q2279 566 2279 479Q2279 392 2310.5 327Q2342 262 2396.5 227Q2451 192 2518 192ZM2581 363Q2537 363 2508 393.5Q2479 424 2479 479Q2479 533 2508 564.5Q2537 596 2581 596Q2624 596 2653.5 565Q2683 534 2683 479Q2683 425 2653.5 394Q2624 363 2581 363Z"/><path fill="url(#mwcolor-wow)" d="M3804 199 3661 760H3441L3363 420L3282 760H3063L2921 199H3116L3179 571L3262 199H3472L3558 572L3620 199ZM3816 479Q3816 392 3854.5 327Q3893 262 3959.5 227Q4026 192 4110 192Q4194 192 4260.5 227Q4327 262 4365.5 327Q4404 392 4404 479Q4404 566 4365.5 631.5Q4327 697 4260 732Q4193 767 4109 767Q4025 767 3958.5 732Q3892 697 3854 632Q3816 567 3816 479ZM4205 479Q4205 422 4177.5 392Q4150 362 4110 362Q4070 362 4043 392Q4016 422 4016 479Q4016 537 4042 567Q4068 597 4109 597Q4150 597 4177.5 566.5Q4205 536 4205 479ZM5301 199 5158 760H4938L4860 420L4779 760H4560L4418 199H4613L4676 571L4759 199H4969L5055 572L5117 199Z"/><path fill="none" stroke="url(#mwcolor-smile)" stroke-width="128" stroke-linecap="round" d="M3181 900Q4110 1400 5039 900"/><path fill="none" stroke="#F22E62" stroke-width="100" stroke-linecap="round" d="M4935.6 -5.4L4905 -223.3"/><path fill="none" stroke="#FFC700" stroke-width="100" stroke-linecap="round" d="M5211.4 28.6L5312.2 -178.1"/><path fill="none" stroke="#FF7A00" stroke-width="100" stroke-linecap="round" d="M5403.9 217.9L5575.3 114.9"/></svg></div></div><p>No rotar ni inclinar.</p></div>
+        <div class="dont"><span class="x" aria-hidden="true">×</span><div class="art" style="background:var(--naranja);border-radius:10px"><div style="width:80%"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 -268.1 5665.3 1522.1" role="img" aria-label="mesawow"><defs><linearGradient id="mwcolor-wow" x1="2919" y1="0" x2="5301" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF7A00"/></linearGradient><linearGradient id="mwcolor-smile" x1="3181" y1="0" x2="5039" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF4F48"/></linearGradient></defs><path fill="#0F1B3D" d="M1056 433V760H860V459Q860 414 835 389Q810 364 767 364Q724 364 699 389Q674 414 674 459V760H478V459Q478 414 453.5 389Q429 364 386 364Q342 364 317 389Q292 414 292 459V760H96V199H292V273Q318 237 359.5 215.5Q401 194 455 194Q517 194 565.5 221Q614 248 642 297Q672 251 721 222.5Q770 194 829 194Q935 194 995.5 258Q1056 322 1056 433ZM1684 519H1313Q1316 565 1338.5 587.5Q1361 610 1396 610Q1445 610 1466 566H1675Q1662 624 1624.5 669.5Q1587 715 1530 741Q1473 767 1404 767Q1321 767 1256.5 732Q1192 697 1155.5 632Q1119 567 1119 479Q1119 391 1155 326.5Q1191 262 1255.5 227Q1320 192 1404 192Q1487 192 1551 226Q1615 260 1651 323.5Q1687 387 1687 473Q1687 496 1684 519ZM1487 424Q1487 388 1463 367.5Q1439 347 1403 347Q1367 347 1344 366.5Q1321 386 1314 424ZM1726 571H1916Q1920 598 1941 613Q1962 628 1993 628Q2017 628 2031 618Q2045 608 2045 592Q2045 571 2022 561Q1999 551 1946 539Q1886 527 1846 512Q1806 497 1776.5 463Q1747 429 1747 371Q1747 321 1774 280.5Q1801 240 1853.5 216Q1906 192 1980 192Q2090 192 2153 246Q2216 300 2226 388H2049Q2044 361 2025.5 346.5Q2007 332 1976 332Q1952 332 1939.5 341Q1927 350 1927 366Q1927 386 1950 396.5Q1973 407 2024 418Q2085 431 2125.5 447Q2166 463 2196.5 498.5Q2227 534 2227 595Q2227 644 2198.5 683Q2170 722 2117.5 744.5Q2065 767 1994 767Q1918 767 1858.5 741.5Q1799 716 1764.5 671.5Q1730 627 1726 571ZM2518 192Q2576 192 2618 215Q2660 238 2683 277V199H2879V760H2683V682Q2660 721 2617.5 744Q2575 767 2518 767Q2451 767 2396.5 732Q2342 697 2310.5 631.5Q2279 566 2279 479Q2279 392 2310.5 327Q2342 262 2396.5 227Q2451 192 2518 192ZM2581 363Q2537 363 2508 393.5Q2479 424 2479 479Q2479 533 2508 564.5Q2537 596 2581 596Q2624 596 2653.5 565Q2683 534 2683 479Q2683 425 2653.5 394Q2624 363 2581 363Z"/><path fill="url(#mwcolor-wow)" d="M3804 199 3661 760H3441L3363 420L3282 760H3063L2921 199H3116L3179 571L3262 199H3472L3558 572L3620 199ZM3816 479Q3816 392 3854.5 327Q3893 262 3959.5 227Q4026 192 4110 192Q4194 192 4260.5 227Q4327 262 4365.5 327Q4404 392 4404 479Q4404 566 4365.5 631.5Q4327 697 4260 732Q4193 767 4109 767Q4025 767 3958.5 732Q3892 697 3854 632Q3816 567 3816 479ZM4205 479Q4205 422 4177.5 392Q4150 362 4110 362Q4070 362 4043 392Q4016 422 4016 479Q4016 537 4042 567Q4068 597 4109 597Q4150 597 4177.5 566.5Q4205 536 4205 479ZM5301 199 5158 760H4938L4860 420L4779 760H4560L4418 199H4613L4676 571L4759 199H4969L5055 572L5117 199Z"/><path fill="none" stroke="url(#mwcolor-smile)" stroke-width="128" stroke-linecap="round" d="M3181 900Q4110 1400 5039 900"/><path fill="none" stroke="#F22E62" stroke-width="100" stroke-linecap="round" d="M4935.6 -5.4L4905 -223.3"/><path fill="none" stroke="#FFC700" stroke-width="100" stroke-linecap="round" d="M5211.4 28.6L5312.2 -178.1"/><path fill="none" stroke="#FF7A00" stroke-width="100" stroke-linecap="round" d="M5403.9 217.9L5575.3 114.9"/></svg></div></div><p>No poner la versión color sobre naranja, rosa o fotos con poco contraste.</p></div>
+        <div class="dont"><span class="x" aria-hidden="true">×</span><div class="art"><div style="width:80%"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 -268.1 5665.3 1522.1" role="img" aria-label="mesawow"><defs><linearGradient id="mwns-wow" x1="2919" y1="0" x2="5301" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF7A00"/></linearGradient><linearGradient id="mwns-smile" x1="3181" y1="0" x2="5039" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF4F48"/></linearGradient></defs><path fill="#0F1B3D" d="M1056 433V760H860V459Q860 414 835 389Q810 364 767 364Q724 364 699 389Q674 414 674 459V760H478V459Q478 414 453.5 389Q429 364 386 364Q342 364 317 389Q292 414 292 459V760H96V199H292V273Q318 237 359.5 215.5Q401 194 455 194Q517 194 565.5 221Q614 248 642 297Q672 251 721 222.5Q770 194 829 194Q935 194 995.5 258Q1056 322 1056 433ZM1684 519H1313Q1316 565 1338.5 587.5Q1361 610 1396 610Q1445 610 1466 566H1675Q1662 624 1624.5 669.5Q1587 715 1530 741Q1473 767 1404 767Q1321 767 1256.5 732Q1192 697 1155.5 632Q1119 567 1119 479Q1119 391 1155 326.5Q1191 262 1255.5 227Q1320 192 1404 192Q1487 192 1551 226Q1615 260 1651 323.5Q1687 387 1687 473Q1687 496 1684 519ZM1487 424Q1487 388 1463 367.5Q1439 347 1403 347Q1367 347 1344 366.5Q1321 386 1314 424ZM1726 571H1916Q1920 598 1941 613Q1962 628 1993 628Q2017 628 2031 618Q2045 608 2045 592Q2045 571 2022 561Q1999 551 1946 539Q1886 527 1846 512Q1806 497 1776.5 463Q1747 429 1747 371Q1747 321 1774 280.5Q1801 240 1853.5 216Q1906 192 1980 192Q2090 192 2153 246Q2216 300 2226 388H2049Q2044 361 2025.5 346.5Q2007 332 1976 332Q1952 332 1939.5 341Q1927 350 1927 366Q1927 386 1950 396.5Q1973 407 2024 418Q2085 431 2125.5 447Q2166 463 2196.5 498.5Q2227 534 2227 595Q2227 644 2198.5 683Q2170 722 2117.5 744.5Q2065 767 1994 767Q1918 767 1858.5 741.5Q1799 716 1764.5 671.5Q1730 627 1726 571ZM2518 192Q2576 192 2618 215Q2660 238 2683 277V199H2879V760H2683V682Q2660 721 2617.5 744Q2575 767 2518 767Q2451 767 2396.5 732Q2342 697 2310.5 631.5Q2279 566 2279 479Q2279 392 2310.5 327Q2342 262 2396.5 227Q2451 192 2518 192ZM2581 363Q2537 363 2508 393.5Q2479 424 2479 479Q2479 533 2508 564.5Q2537 596 2581 596Q2624 596 2653.5 565Q2683 534 2683 479Q2683 425 2653.5 394Q2624 363 2581 363Z"/><path fill="url(#mwns-wow)" d="M3804 199 3661 760H3441L3363 420L3282 760H3063L2921 199H3116L3179 571L3262 199H3472L3558 572L3620 199ZM3816 479Q3816 392 3854.5 327Q3893 262 3959.5 227Q4026 192 4110 192Q4194 192 4260.5 227Q4327 262 4365.5 327Q4404 392 4404 479Q4404 566 4365.5 631.5Q4327 697 4260 732Q4193 767 4109 767Q4025 767 3958.5 732Q3892 697 3854 632Q3816 567 3816 479ZM4205 479Q4205 422 4177.5 392Q4150 362 4110 362Q4070 362 4043 392Q4016 422 4016 479Q4016 537 4042 567Q4068 597 4109 597Q4150 597 4177.5 566.5Q4205 536 4205 479ZM5301 199 5158 760H4938L4860 420L4779 760H4560L4418 199H4613L4676 571L4759 199H4969L5055 572L5117 199Z"/><path fill="none" stroke="#F22E62" stroke-width="100" stroke-linecap="round" d="M4935.6 -5.4L4905 -223.3"/><path fill="none" stroke="#FFC700" stroke-width="100" stroke-linecap="round" d="M5211.4 28.6L5312.2 -178.1"/><path fill="none" stroke="#FF7A00" stroke-width="100" stroke-linecap="round" d="M5403.9 217.9L5575.3 114.9"/></svg></div></div><p>No quitar la sonrisa. Sin sonrisa no hay mesawow.</p></div>
+        <div class="dont"><span class="x" aria-hidden="true">×</span><div class="art"><div style="width:80%;filter:drop-shadow(6px 8px 4px rgba(0,0,0,.45))"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 -268.1 5665.3 1522.1" role="img" aria-label="mesawow"><defs><linearGradient id="mwcolor-wow" x1="2919" y1="0" x2="5301" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF7A00"/></linearGradient><linearGradient id="mwcolor-smile" x1="3181" y1="0" x2="5039" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF4F48"/></linearGradient></defs><path fill="#0F1B3D" d="M1056 433V760H860V459Q860 414 835 389Q810 364 767 364Q724 364 699 389Q674 414 674 459V760H478V459Q478 414 453.5 389Q429 364 386 364Q342 364 317 389Q292 414 292 459V760H96V199H292V273Q318 237 359.5 215.5Q401 194 455 194Q517 194 565.5 221Q614 248 642 297Q672 251 721 222.5Q770 194 829 194Q935 194 995.5 258Q1056 322 1056 433ZM1684 519H1313Q1316 565 1338.5 587.5Q1361 610 1396 610Q1445 610 1466 566H1675Q1662 624 1624.5 669.5Q1587 715 1530 741Q1473 767 1404 767Q1321 767 1256.5 732Q1192 697 1155.5 632Q1119 567 1119 479Q1119 391 1155 326.5Q1191 262 1255.5 227Q1320 192 1404 192Q1487 192 1551 226Q1615 260 1651 323.5Q1687 387 1687 473Q1687 496 1684 519ZM1487 424Q1487 388 1463 367.5Q1439 347 1403 347Q1367 347 1344 366.5Q1321 386 1314 424ZM1726 571H1916Q1920 598 1941 613Q1962 628 1993 628Q2017 628 2031 618Q2045 608 2045 592Q2045 571 2022 561Q1999 551 1946 539Q1886 527 1846 512Q1806 497 1776.5 463Q1747 429 1747 371Q1747 321 1774 280.5Q1801 240 1853.5 216Q1906 192 1980 192Q2090 192 2153 246Q2216 300 2226 388H2049Q2044 361 2025.5 346.5Q2007 332 1976 332Q1952 332 1939.5 341Q1927 350 1927 366Q1927 386 1950 396.5Q1973 407 2024 418Q2085 431 2125.5 447Q2166 463 2196.5 498.5Q2227 534 2227 595Q2227 644 2198.5 683Q2170 722 2117.5 744.5Q2065 767 1994 767Q1918 767 1858.5 741.5Q1799 716 1764.5 671.5Q1730 627 1726 571ZM2518 192Q2576 192 2618 215Q2660 238 2683 277V199H2879V760H2683V682Q2660 721 2617.5 744Q2575 767 2518 767Q2451 767 2396.5 732Q2342 697 2310.5 631.5Q2279 566 2279 479Q2279 392 2310.5 327Q2342 262 2396.5 227Q2451 192 2518 192ZM2581 363Q2537 363 2508 393.5Q2479 424 2479 479Q2479 533 2508 564.5Q2537 596 2581 596Q2624 596 2653.5 565Q2683 534 2683 479Q2683 425 2653.5 394Q2624 363 2581 363Z"/><path fill="url(#mwcolor-wow)" d="M3804 199 3661 760H3441L3363 420L3282 760H3063L2921 199H3116L3179 571L3262 199H3472L3558 572L3620 199ZM3816 479Q3816 392 3854.5 327Q3893 262 3959.5 227Q4026 192 4110 192Q4194 192 4260.5 227Q4327 262 4365.5 327Q4404 392 4404 479Q4404 566 4365.5 631.5Q4327 697 4260 732Q4193 767 4109 767Q4025 767 3958.5 732Q3892 697 3854 632Q3816 567 3816 479ZM4205 479Q4205 422 4177.5 392Q4150 362 4110 362Q4070 362 4043 392Q4016 422 4016 479Q4016 537 4042 567Q4068 597 4109 597Q4150 597 4177.5 566.5Q4205 536 4205 479ZM5301 199 5158 760H4938L4860 420L4779 760H4560L4418 199H4613L4676 571L4759 199H4969L5055 572L5117 199Z"/><path fill="none" stroke="url(#mwcolor-smile)" stroke-width="128" stroke-linecap="round" d="M3181 900Q4110 1400 5039 900"/><path fill="none" stroke="#F22E62" stroke-width="100" stroke-linecap="round" d="M4935.6 -5.4L4905 -223.3"/><path fill="none" stroke="#FFC700" stroke-width="100" stroke-linecap="round" d="M5211.4 28.6L5312.2 -178.1"/><path fill="none" stroke="#FF7A00" stroke-width="100" stroke-linecap="round" d="M5403.9 217.9L5575.3 114.9"/></svg></div></div><p>No agregar sombras, biseles ni contornos.</p></div>
+        <div class="dont"><span class="x" aria-hidden="true">×</span><div class="art" style="font:800 32px var(--display);color:var(--navy);gap:2px">MESA<span style="color:var(--rosa)">WOW</span></div><p>No escribirlo en mayúsculas ni con otra tipografía.</p></div>
+        <div class="dont"><span class="x" aria-hidden="true">×</span><div class="art"><div style="width:80%;opacity:.35"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 -268.1 5665.3 1522.1" role="img" aria-label="mesawow"><defs><linearGradient id="mwcolor-wow" x1="2919" y1="0" x2="5301" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF7A00"/></linearGradient><linearGradient id="mwcolor-smile" x1="3181" y1="0" x2="5039" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF4F48"/></linearGradient></defs><path fill="#0F1B3D" d="M1056 433V760H860V459Q860 414 835 389Q810 364 767 364Q724 364 699 389Q674 414 674 459V760H478V459Q478 414 453.5 389Q429 364 386 364Q342 364 317 389Q292 414 292 459V760H96V199H292V273Q318 237 359.5 215.5Q401 194 455 194Q517 194 565.5 221Q614 248 642 297Q672 251 721 222.5Q770 194 829 194Q935 194 995.5 258Q1056 322 1056 433ZM1684 519H1313Q1316 565 1338.5 587.5Q1361 610 1396 610Q1445 610 1466 566H1675Q1662 624 1624.5 669.5Q1587 715 1530 741Q1473 767 1404 767Q1321 767 1256.5 732Q1192 697 1155.5 632Q1119 567 1119 479Q1119 391 1155 326.5Q1191 262 1255.5 227Q1320 192 1404 192Q1487 192 1551 226Q1615 260 1651 323.5Q1687 387 1687 473Q1687 496 1684 519ZM1487 424Q1487 388 1463 367.5Q1439 347 1403 347Q1367 347 1344 366.5Q1321 386 1314 424ZM1726 571H1916Q1920 598 1941 613Q1962 628 1993 628Q2017 628 2031 618Q2045 608 2045 592Q2045 571 2022 561Q1999 551 1946 539Q1886 527 1846 512Q1806 497 1776.5 463Q1747 429 1747 371Q1747 321 1774 280.5Q1801 240 1853.5 216Q1906 192 1980 192Q2090 192 2153 246Q2216 300 2226 388H2049Q2044 361 2025.5 346.5Q2007 332 1976 332Q1952 332 1939.5 341Q1927 350 1927 366Q1927 386 1950 396.5Q1973 407 2024 418Q2085 431 2125.5 447Q2166 463 2196.5 498.5Q2227 534 2227 595Q2227 644 2198.5 683Q2170 722 2117.5 744.5Q2065 767 1994 767Q1918 767 1858.5 741.5Q1799 716 1764.5 671.5Q1730 627 1726 571ZM2518 192Q2576 192 2618 215Q2660 238 2683 277V199H2879V760H2683V682Q2660 721 2617.5 744Q2575 767 2518 767Q2451 767 2396.5 732Q2342 697 2310.5 631.5Q2279 566 2279 479Q2279 392 2310.5 327Q2342 262 2396.5 227Q2451 192 2518 192ZM2581 363Q2537 363 2508 393.5Q2479 424 2479 479Q2479 533 2508 564.5Q2537 596 2581 596Q2624 596 2653.5 565Q2683 534 2683 479Q2683 425 2653.5 394Q2624 363 2581 363Z"/><path fill="url(#mwcolor-wow)" d="M3804 199 3661 760H3441L3363 420L3282 760H3063L2921 199H3116L3179 571L3262 199H3472L3558 572L3620 199ZM3816 479Q3816 392 3854.5 327Q3893 262 3959.5 227Q4026 192 4110 192Q4194 192 4260.5 227Q4327 262 4365.5 327Q4404 392 4404 479Q4404 566 4365.5 631.5Q4327 697 4260 732Q4193 767 4109 767Q4025 767 3958.5 732Q3892 697 3854 632Q3816 567 3816 479ZM4205 479Q4205 422 4177.5 392Q4150 362 4110 362Q4070 362 4043 392Q4016 422 4016 479Q4016 537 4042 567Q4068 597 4109 597Q4150 597 4177.5 566.5Q4205 536 4205 479ZM5301 199 5158 760H4938L4860 420L4779 760H4560L4418 199H4613L4676 571L4759 199H4969L5055 572L5117 199Z"/><path fill="none" stroke="url(#mwcolor-smile)" stroke-width="128" stroke-linecap="round" d="M3181 900Q4110 1400 5039 900"/><path fill="none" stroke="#F22E62" stroke-width="100" stroke-linecap="round" d="M4935.6 -5.4L4905 -223.3"/><path fill="none" stroke="#FFC700" stroke-width="100" stroke-linecap="round" d="M5211.4 28.6L5312.2 -178.1"/><path fill="none" stroke="#FF7A00" stroke-width="100" stroke-linecap="round" d="M5403.9 217.9L5575.3 114.9"/></svg></div></div><p>No aplicar transparencias.</p></div>
+      </div>
+    </section>
+
+    <!-- COLOR -->
+    <section class="sheet" id="color">
+      <div class="sheet-head">
+        <span class="eyebrow">07 · Color</span>
+        <h2>Paleta de color</h2>
+        <p class="lead">Azul noche es la base de lectura. Rosa y naranja forman el degradado WOW, la firma de la marca. Violeta, turquesa y amarillo dan vida a categorías, estados y celebraciones.</p>
+      </div>
+      <div class="swatches">
+        <div class="sw"><div class="chip" style="background:#F22E62;color:#fff">Rosa WOW</div><div class="info"><div class="codes"><button class="copy" data-copy="#F22E62">#F22E62</button><span class="mono">RGB 242 46 98</span></div>Degradado, acciones principales, sonrisa, Sprints.</div></div>
+        <div class="sw"><div class="chip" style="background:#FF7A00;color:#fff">Naranja energía</div><div class="info"><div class="codes"><button class="copy" data-copy="#FF7A00">#FF7A00</button><span class="mono">RGB 255 122 0</span></div>Degradado, Proyectos, Logros, estado en progreso.</div></div>
+        <div class="sw"><div class="chip" style="background:#FFFF00;color:#0F1B3D">Amarillo destello</div><div class="info"><div class="codes"><button class="copy" data-copy="#FFFF00">#FFFF00</button><span class="mono">RGB 255 255 0</span></div>Rayos sobre fondo oscuro, confeti, resaltados. Nunca texto sobre blanco.</div></div>
+        <div class="sw"><div class="chip" style="background:#9B5CFF;color:#fff">Violeta comunidad</div><div class="info"><div class="codes"><button class="copy" data-copy="#9B5CFF">#9B5CFF</button><span class="mono">RGB 155 92 255</span></div>Equipos y Comunidad, elementos nuevos, foco de teclado.</div></div>
+        <div class="sw"><div class="chip" style="background:#00A2AF;color:#fff">Turquesa logro</div><div class="info"><div class="codes"><button class="copy" data-copy="#00A2AF">#00A2AF</button><span class="mono">RGB 0 162 175</span></div>Completado, éxito, confirmaciones.</div></div>
+        <div class="sw"><div class="chip" style="background:#0F1B3D;color:#fff">Azul noche</div><div class="info"><div class="codes"><button class="copy" data-copy="#0F1B3D">#0F1B3D</button><span class="mono">RGB 15 27 61</span></div>Texto, “mesa” del logotipo, menú lateral, fondos oscuros.</div></div>
+      </div>
+      <div class="gradbar"><span>Degradado WOW · 90°</span><span class="mono">#F22E62 → #FF7A00</span></div>
+      <div class="sheet-head"><h3>Proporción de uso</h3><p class="lead" style="font-size:15px">Una pantalla típica es mayormente blanca y azul noche. El degradado aparece en pocos puntos, y por eso llama la atención.</p></div>
+      <div class="ratio" role="img" aria-label="Proporción: 55% blanco, 20% azul noche, 12% degradado WOW, 6% violeta, 5% turquesa, 2% amarillo">
+        <div style="flex:55;background:#fff;box-shadow:inset 0 0 0 1px var(--line);color:var(--ink-2)">Blanco 55%</div>
+        <div style="flex:20;background:#0F1B3D;color:#fff">Azul noche 20%</div>
+        <div style="flex:12;background:var(--wow);color:#fff">WOW 12%</div>
+        <div style="flex:6;background:#9B5CFF;color:#fff">6%</div>
+        <div style="flex:5;background:#00A2AF;color:#fff">5%</div>
+        <div style="flex:2;background:#FFFF00"></div>
+      </div>
+      <div class="sheet-head"><h3>Contraste para texto</h3><p class="lead" style="font-size:15px">Para textos pequeños sobre fondos claros usa estos tonos de lectura, derivados de la paleta.</p></div>
+      <div class="scroll">
+        <table class="contrast">
+          <thead><tr><th>Combinación</th><th>Contraste</th><th>Uso</th></tr></thead>
+          <tbody>
+            <tr><td>Azul noche sobre blanco</td><td class="mono">16,9 : 1</td><td><span class="pill-ok">Todo texto</span></td></tr>
+            <tr><td>Blanco sobre azul noche</td><td class="mono">16,9 : 1</td><td><span class="pill-ok">Todo texto</span></td></tr>
+            <tr><td>Blanco sobre rosa #F22E62</td><td class="mono">3,9 : 1</td><td><span class="pill-ok">Botones y títulos ≥ 18 px</span></td></tr>
+            <tr><td>Rosa #F22E62 sobre blanco</td><td class="mono">3,9 : 1</td><td><span class="pill-ok">Enlaces y títulos ≥ 18 px</span></td></tr>
+            <tr><td>Blanco sobre naranja #FF7A00</td><td class="mono">2,6 : 1</td><td><span class="pill-no">Solo íconos o decoración</span></td></tr>
+            <tr><td>Amarillo #FFFF00 sobre blanco</td><td class="mono">1,1 : 1</td><td><span class="pill-no">Nunca</span></td></tr>
+            <tr><td>Amarillo #FFFF00 sobre azul noche</td><td class="mono">15,7 : 1</td><td><span class="pill-ok">Destellos y rayos</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:13px;color:var(--ink-3)">En los rayos sobre fondo blanco, el amarillo se ajusta a <span class="mono">#FFC700</span> para que se vea. Sobre fondos oscuros se usa el amarillo puro.</p>
+    </section>
+
+    <!-- TIPOGRAFÍA -->
+    <section class="sheet" id="tipografia">
+      <div class="sheet-head">
+        <span class="eyebrow">08 · Tipografía</span>
+        <h2>Poppins</h2>
+        <p class="lead">Una geométrica redonda y amable, gratuita en Google Fonts. Es la misma letra del logotipo, así que la interfaz y la marca suenan igual.</p>
+      </div>
+      <div class="type-hero">
+        <div class="big">Aa<span style="background:var(--wow);-webkit-background-clip:text;background-clip:text;color:transparent">Ww</span></div>
+        <div class="glyphs">Aa Bb Cc Dd Ee Ff Gg Hh Ii Jj Kk Ll Mm Nn Ññ Oo Pp Qq Rr Ss Tt Uu Vv Ww Xx Yy Zz<br>0123456789 ¡! ¿? @ # %</div>
+      </div>
+      <div class="scale">
+        <div class="row"><span class="lbl">Display · 800 · 48/52</span><span class="s" style="font-size:clamp(30px,5vw,48px);font-weight:800;line-height:1.08">¡Sprint completado!</span></div>
+        <div class="row"><span class="lbl">Título · 700 · 28/34</span><span class="s" style="font-size:28px;font-weight:700">¡Hola, equipo!</span></div>
+        <div class="row"><span class="lbl">Subtítulo · 600 · 20/28</span><span class="s" style="font-size:20px;font-weight:600">Actividad del equipo</span></div>
+        <div class="row"><span class="lbl">Cuerpo · 400 · 15/24</span><span class="s" style="font-size:15px">El equipo de SeSubasta logró su objetivo con 100% de avance.</span></div>
+        <div class="row"><span class="lbl">Botón · 600 · 15/20</span><span class="s" style="font-size:15px;font-weight:600">Celebrar logro</span></div>
+        <div class="row"><span class="lbl">Etiqueta · 500 · 13/18</span><span class="s" style="font-size:13px;font-weight:500;color:var(--ink-2)">Hace 5 minutos · Sprint 14</span></div>
+      </div>
+      <p style="font-size:13px;color:var(--ink-3)">Respaldo cuando Poppins no carga: <span class="mono">'Segoe UI', system-ui, sans-serif</span>. Números en tablas y métricas con cifras tabulares.</p>
+    </section>
+
+    <!-- ICONOS -->
+    <section class="sheet" id="iconos">
+      <div class="sheet-head">
+        <span class="eyebrow">09 · Iconografía</span>
+        <h2>Sistema de íconos</h2>
+        <p class="lead">Íconos de línea con trazo de 2 px, puntas y uniones redondeadas, sobre una grilla de 24 px. Cada sección tiene su color para que se reconozca de un vistazo.</p>
+      </div>
+      <div class="icons">
+        <div class="icon"><svg style="color:#F22E62"><use href="#i-home"/></svg>Inicio</div>
+        <div class="icon"><svg style="color:#9B5CFF"><use href="#i-layers"/></svg>Mesas</div>
+        <div class="icon"><svg style="color:#FF7A00"><use href="#i-check"/></svg>Tareas</div>
+        <div class="icon"><svg style="color:#9B5CFF"><use href="#i-chat"/></svg>Comentarios</div>
+        <div class="icon"><svg style="color:#9B5CFF"><use href="#i-users"/></svg>Equipos</div>
+        <div class="icon"><svg style="color:#FF7A00"><use href="#i-trophy"/></svg>Logros</div>
+        <div class="icon"><svg style="color:#F22E62"><use href="#i-rocket"/></svg>Sprints</div>
+      </div>
+    </section>
+
+    <!-- COMPONENTES -->
+    <section class="sheet" id="componentes">
+      <div class="sheet-head">
+        <span class="eyebrow">10 · Interfaz</span>
+        <h2>Componentes de interfaz</h2>
+        <p class="lead">Las piezas base para el muro, el panel y la app móvil. Formas redondeadas, sombras suaves y el degradado WOW solo donde hay una acción o una celebración.</p>
+      </div>
+
+      <div class="demo">
+        <span class="demo-label">Botones</span>
+        <div class="row">
+          <button class="btn btn-primary" type="button"><svg width="18" height="18"><use href="#i-sparkle"/></svg>Celebrar logro</button>
+          <button class="btn btn-secondary" type="button">Ver sprint</button>
+          <button class="btn btn-dark" type="button">Nueva tarea</button>
+          <button class="btn btn-ghost" type="button">Comentar</button>
+        </div>
+        <span class="demo-label">Categorías</span>
+        <div class="row">
+          <span class="chip c-or"><svg style="color:#FF7A00"><use href="#i-bolt"/></svg>Proyectos</span>
+          <span class="chip c-pk"><svg style="color:#F22E62"><use href="#i-target"/></svg>Sprints</span>
+          <span class="chip c-vi"><svg style="color:#9B5CFF"><use href="#i-users"/></svg>Equipos</span>
+          <span class="chip c-or"><svg style="color:#FF7A00"><use href="#i-trophy"/></svg>Logros</span>
+        </div>
+        <span class="demo-label">Estados</span>
+        <div class="row">
+          <span class="badge b-ok">Completada</span><span class="badge b-prog">En progreso</span><span class="badge b-new">Nuevo</span><span class="badge b-wow">Momento WOW</span>
+        </div>
+      </div>
+
+      <div class="demo">
+        <span class="demo-label">Métricas del panel</span>
+        <div class="stats">
+          <div class="stat s1"><span class="l">Mis tareas</span><span class="v"><svg style="color:#9B5CFF"><use href="#i-layers"/></svg>8</span></div>
+          <div class="stat s2"><span class="l">En progreso</span><span class="v"><svg style="color:#F22E62"><use href="#i-rocket"/></svg>5</span></div>
+          <div class="stat s3"><span class="l">Completadas</span><span class="v"><svg style="color:#00A2AF"><use href="#i-check"/></svg>12</span></div>
+        </div>
+      </div>
+
+      <div class="comp-cols">
+        <div class="demo">
+          <span class="demo-label">Tarjeta Momento WOW · nivel 3</span>
+          <article class="wowcard" id="wowcard">
+            <div class="confetti" id="confetti"></div>
+            <span class="tab"><svg width="18" height="18"><use href="#i-sparkle"/></svg>Momento WOW</span>
+            <div class="rays"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="140 80 720 560" role="img" aria-label="Sonrisa WOW"><defs><linearGradient id="sg" x1="200" y1="0" x2="800" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF4F48"/></linearGradient></defs><path fill="none" stroke="#F22E62" stroke-width="80" stroke-linecap="round" d="M307.2 380.2L197.9 250"/><path fill="none" stroke="#FFC700" stroke-width="80" stroke-linecap="round" d="M500 310L500 120"/><path fill="none" stroke="#FF7A00" stroke-width="80" stroke-linecap="round" d="M692.8 380.2L802.1 250"/></svg></div>
+            <div class="body">
+              <h3>¡Sprint completado!</h3>
+              <p>El equipo de SeSubasta logró su objetivo con 100% de avance.</p>
+              <div class="reacts">
+                <button class="react" type="button" aria-pressed="false" data-n="24"><svg style="color:#FF7A00"><use href="#i-clap"/></svg><span>24</span></button>
+                <button class="react" type="button" aria-pressed="false" data-n="18"><svg style="color:#F22E62"><use href="#i-heart"/></svg><span>18</span></button>
+                <button class="react" type="button" aria-pressed="false" data-n="6"><svg style="color:#9B5CFF"><use href="#i-rocket"/></svg><span>6</span></button>
+              </div>
+            </div>
+          </article>
+          <div class="row"><button class="btn btn-primary" type="button" id="party"><svg width="18" height="18"><use href="#i-sparkle"/></svg>Probar celebración</button></div>
+        </div>
+        <div class="demo">
+          <span class="demo-label">Actividad del equipo · nivel 1</span>
+          <div class="feed">
+            <h3>Actividad del equipo</h3>
+            <ul>
+              <li><span class="ic" style="background:#FFF3E6;color:#FF7A00"><svg><use href="#i-users"/></svg></span>Nueva tarea asignada<time>5 min</time></li>
+              <li><span class="ic" style="background:#F1EAFF;color:#9B5CFF"><svg><use href="#i-chat"/></svg></span>Comentario en proyecto<time>12 min</time></li>
+              <li><span class="ic" style="background:#FFEAF0;color:#F22E62"><svg viewBox="0 0 24 24"><path d="M5 13.5Q12 20 19 13.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M12 4v3.5M7 6l1.6 2.6M17 6l-1.6 2.6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span>Logro publicado<time>1 h</time></li>
+              <li><span class="ic" style="background:#E3F6F7;color:#00A2AF"><svg><use href="#i-target"/></svg></span>Sprint actualizado<time>2 h</time></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="comp-cols">
+        <div class="demo">
+          <span class="demo-label">Menú lateral</span>
+          <div class="navdemo">
+            <div class="nl"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 -268.1 5665.3 1522.1" role="img" aria-label="mesawow"><defs><linearGradient id="mwnegativo-wow" x1="2919" y1="0" x2="5301" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF7A00"/></linearGradient><linearGradient id="mwnegativo-smile" x1="3181" y1="0" x2="5039" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF4F48"/></linearGradient></defs><path fill="#FFFFFF" d="M1056 433V760H860V459Q860 414 835 389Q810 364 767 364Q724 364 699 389Q674 414 674 459V760H478V459Q478 414 453.5 389Q429 364 386 364Q342 364 317 389Q292 414 292 459V760H96V199H292V273Q318 237 359.5 215.5Q401 194 455 194Q517 194 565.5 221Q614 248 642 297Q672 251 721 222.5Q770 194 829 194Q935 194 995.5 258Q1056 322 1056 433ZM1684 519H1313Q1316 565 1338.5 587.5Q1361 610 1396 610Q1445 610 1466 566H1675Q1662 624 1624.5 669.5Q1587 715 1530 741Q1473 767 1404 767Q1321 767 1256.5 732Q1192 697 1155.5 632Q1119 567 1119 479Q1119 391 1155 326.5Q1191 262 1255.5 227Q1320 192 1404 192Q1487 192 1551 226Q1615 260 1651 323.5Q1687 387 1687 473Q1687 496 1684 519ZM1487 424Q1487 388 1463 367.5Q1439 347 1403 347Q1367 347 1344 366.5Q1321 386 1314 424ZM1726 571H1916Q1920 598 1941 613Q1962 628 1993 628Q2017 628 2031 618Q2045 608 2045 592Q2045 571 2022 561Q1999 551 1946 539Q1886 527 1846 512Q1806 497 1776.5 463Q1747 429 1747 371Q1747 321 1774 280.5Q1801 240 1853.5 216Q1906 192 1980 192Q2090 192 2153 246Q2216 300 2226 388H2049Q2044 361 2025.5 346.5Q2007 332 1976 332Q1952 332 1939.5 341Q1927 350 1927 366Q1927 386 1950 396.5Q1973 407 2024 418Q2085 431 2125.5 447Q2166 463 2196.5 498.5Q2227 534 2227 595Q2227 644 2198.5 683Q2170 722 2117.5 744.5Q2065 767 1994 767Q1918 767 1858.5 741.5Q1799 716 1764.5 671.5Q1730 627 1726 571ZM2518 192Q2576 192 2618 215Q2660 238 2683 277V199H2879V760H2683V682Q2660 721 2617.5 744Q2575 767 2518 767Q2451 767 2396.5 732Q2342 697 2310.5 631.5Q2279 566 2279 479Q2279 392 2310.5 327Q2342 262 2396.5 227Q2451 192 2518 192ZM2581 363Q2537 363 2508 393.5Q2479 424 2479 479Q2479 533 2508 564.5Q2537 596 2581 596Q2624 596 2653.5 565Q2683 534 2683 479Q2683 425 2653.5 394Q2624 363 2581 363Z"/><path fill="url(#mwnegativo-wow)" d="M3804 199 3661 760H3441L3363 420L3282 760H3063L2921 199H3116L3179 571L3262 199H3472L3558 572L3620 199ZM3816 479Q3816 392 3854.5 327Q3893 262 3959.5 227Q4026 192 4110 192Q4194 192 4260.5 227Q4327 262 4365.5 327Q4404 392 4404 479Q4404 566 4365.5 631.5Q4327 697 4260 732Q4193 767 4109 767Q4025 767 3958.5 732Q3892 697 3854 632Q3816 567 3816 479ZM4205 479Q4205 422 4177.5 392Q4150 362 4110 362Q4070 362 4043 392Q4016 422 4016 479Q4016 537 4042 567Q4068 597 4109 597Q4150 597 4177.5 566.5Q4205 536 4205 479ZM5301 199 5158 760H4938L4860 420L4779 760H4560L4418 199H4613L4676 571L4759 199H4969L5055 572L5117 199Z"/><path fill="none" stroke="url(#mwnegativo-smile)" stroke-width="128" stroke-linecap="round" d="M3181 900Q4110 1400 5039 900"/><path fill="none" stroke="#F22E62" stroke-width="100" stroke-linecap="round" d="M4935.6 -5.4L4905 -223.3"/><path fill="none" stroke="#FFFF00" stroke-width="100" stroke-linecap="round" d="M5211.4 28.6L5312.2 -178.1"/><path fill="none" stroke="#FF7A00" stroke-width="100" stroke-linecap="round" d="M5403.9 217.9L5575.3 114.9"/></svg></div>
+            <a href="#componentes" class="on"><svg><use href="#i-home"/></svg>Inicio</a>
+            <a href="#componentes"><svg><use href="#i-layers"/></svg>Mesas</a>
+            <a href="#componentes"><svg><use href="#i-check"/></svg>Proyectos</a>
+            <a href="#componentes"><svg><use href="#i-target"/></svg>Sprints</a>
+            <a href="#componentes"><svg><use href="#i-users"/></svg>Comunidad</a>
+            <a href="#componentes"><svg><use href="#i-trophy"/></svg>Logros</a>
+          </div>
+        </div>
+        <div class="demo">
+          <span class="demo-label">Publicar en el muro</span>
+          <label class="composer" for="composer-input"><span class="avatar">E</span><input id="composer-input" type="text" placeholder="Celebra, comparte o comenta…"><button class="btn btn-primary" type="button" style="padding:9px 16px">Publicar</button></label>
+          <span class="demo-label">Notificación de reconocimiento · nivel 2</span>
+          <div class="toast" role="status"><div class="sm"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="80 80 840 840" role="img" aria-label="Sonrisa WOW"><defs><linearGradient id="sgn" x1="200" y1="0" x2="800" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F22E62"/><stop offset="1" stop-color="#FF4F48"/></linearGradient></defs><path fill="none" stroke="url(#sgn)" stroke-width="96" stroke-linecap="round" d="M200 600Q500 900 800 600"/><path fill="none" stroke="#F22E62" stroke-width="80" stroke-linecap="round" d="M307.2 380.2L197.9 250"/><path fill="none" stroke="#FFFF00" stroke-width="80" stroke-linecap="round" d="M500 310L500 120"/><path fill="none" stroke="#FF7A00" stroke-width="80" stroke-linecap="round" d="M692.8 380.2L802.1 250"/></svg></div><div><b>¡Erika te reconoció!</b><span>“Gracias por destrabar el deploy del viernes.”</span></div></div>
+        </div>
+      </div>
+
+      <div class="sheet-head"><h3>Tokens para desarrollo</h3><p class="lead" style="font-size:15px">Variables CSS listas para el prototipo del muro y cualquier pantalla nueva.</p></div>
+      <div class="tokens"><button class="copy" type="button" id="copy-tokens">Copiar</button><pre id="tokens-src">:root {
+  /* Color */
+  --mw-rosa: #F22E62;
+  --mw-naranja: #FF7A00;
+  --mw-amarillo: #FFFF00;
+  --mw-violeta: #9B5CFF;
+  --mw-turquesa: #00A2AF;
+  --mw-navy: #0F1B3D;
+  --mw-wow: linear-gradient(90deg, #F22E62, #FF7A00);
+
+  /* Tipografía */
+  --mw-font: 'Poppins', 'Segoe UI', system-ui, sans-serif;
+
+  /* Formas */
+  --mw-radio-s: 10px;
+  --mw-radio-m: 16px;
+  --mw-radio-l: 24px;
+  --mw-radio-pill: 999px;
+  --mw-sombra: 0 10px 30px rgba(15, 27, 61, .08);
+}</pre></div>
+    </section>
+
+    <!-- ARCHIVOS -->
+    <section class="sheet" id="archivos">
+      <div class="sheet-head">
+        <span class="eyebrow">11 · Archivos</span>
+        <h2>Archivos vectoriales</h2>
+        <p class="lead">Todos los logotipos están trazados en curvas (no dependen de tener Poppins instalada) y escalan sin perder calidad. También están en la carpeta del proyecto, en <span class="mono">mesawow/marca/svg</span>.</p>
+      </div>
+      <div class="files">
+        <a href="svg/mesawow-logo-color.svg" target="_blank" rel="noopener"><span>Logotipo color</span><span>SVG</span></a>
+        <a href="svg/mesawow-logo-negativo.svg" target="_blank" rel="noopener"><span>Logotipo negativo</span><span>SVG</span></a>
+        <a href="svg/mesawow-logo-mono-navy.svg" target="_blank" rel="noopener"><span>Logotipo azul noche</span><span>SVG</span></a>
+        <a href="svg/mesawow-logo-mono-blanco.svg" target="_blank" rel="noopener"><span>Logotipo blanco</span><span>SVG</span></a>
+        <a href="svg/mesawow-logo-reducido-color.svg" target="_blank" rel="noopener"><span>Logotipo reducido</span><span>SVG</span></a>
+        <a href="svg/mesawow-isotipo-color.svg" target="_blank" rel="noopener"><span>Isotipo mw! color</span><span>SVG</span></a>
+        <a href="svg/mesawow-isotipo-mono-navy.svg" target="_blank" rel="noopener"><span>Isotipo azul noche</span><span>SVG</span></a>
+        <a href="svg/mesawow-isotipo-mono-blanco.svg" target="_blank" rel="noopener"><span>Isotipo blanco</span><span>SVG</span></a>
+        <a href="svg/mesawow-sonrisa-color.svg" target="_blank" rel="noopener"><span>Sonrisa WOW color</span><span>SVG</span></a>
+        <a href="svg/mesawow-sonrisa-mono-navy.svg" target="_blank" rel="noopener"><span>Sonrisa azul noche</span><span>SVG</span></a>
+        <a href="svg/mesawow-sonrisa-mono-blanco.svg" target="_blank" rel="noopener"><span>Sonrisa blanco</span><span>SVG</span></a>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+(function(){
+  function copyText(text, btn){
+    var done=function(){var o=btn.textContent;btn.textContent='Copiado';setTimeout(function(){btn.textContent=o},1200)};
+    try{navigator.clipboard.writeText(text).then(done,function(){sel(btn)})}catch(e){sel(btn)}
+  }
+  function sel(btn){var t=btn.closest('.tokens')?document.getElementById('tokens-src'):btn;var r=document.createRange();r.selectNodeContents(t);var s=window.getSelection();s.removeAllRanges();s.addRange(r)}
+  document.querySelectorAll('.copy[data-copy]').forEach(function(b){b.addEventListener('click',function(){copyText(b.dataset.copy,b)})});
+  document.getElementById('copy-tokens').addEventListener('click',function(e){copyText(document.getElementById('tokens-src').textContent,e.currentTarget)});
+  document.querySelectorAll('.react').forEach(function(b){b.addEventListener('click',function(){
+    var on=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',on);
+    b.querySelector('span').textContent=+b.dataset.n+(on?1:0);
+  })});
+  var card=document.getElementById('wowcard'),box=document.getElementById('confetti');
+  var colors=['#F22E62','#FF7A00','#FFFF00','#9B5CFF','#00A2AF'];
+  document.getElementById('party').addEventListener('click',function(){
+    card.classList.remove('party');void card.offsetWidth;card.classList.add('party');
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    box.innerHTML='';
+    for(var i=0;i<46;i++){var p=document.createElement('i');var a=Math.random()*Math.PI*2,d=90+Math.random()*170;
+      p.style.background=colors[i%colors.length];p.style.setProperty('--dx',Math.cos(a)*d+'px');p.style.setProperty('--dy',(Math.sin(a)*d-40)+'px');
+      p.style.setProperty('--rot',(Math.random()*720-360)+'deg');p.style.animation='pop '+(0.9+Math.random()*0.6)+'s cubic-bezier(.2,.7,.3,1) forwards';box.appendChild(p)}
+  });
+})();
+</script>
