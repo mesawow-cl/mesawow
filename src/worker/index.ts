@@ -1,6 +1,7 @@
 // mesawow · Worker: API REST /api/v1 (la app estática la sirve Workers Assets).
 import { Hono } from 'hono';
 import { agenda, recalcularAgenda, sincronizarFeriados } from './agenda';
+import { campanas } from './campanas';
 import { equipo, invitacionPropia } from './equipo';
 import { cuerpoError, ErrorApi } from './errores';
 import { esLocal, requiereIdentidad, requiereSesion, type Entorno } from './identidad';
@@ -53,6 +54,7 @@ api.route('/', tareas);
 api.route('/', organizacion);
 api.route('/', agenda);
 api.route('/', sprints);
+api.route('/', campanas);
 
 const conSesion = new Hono<Entorno>();
 
