@@ -1,18 +1,9 @@
-import { createExecutionContext, waitOnExecutionContext } from 'cloudflare:test';
 import { env } from 'cloudflare:workers';
 import { beforeEach, describe, expect, it } from 'vitest';
-import worker from '../src/worker';
+import { llamar as llamarApi } from './cliente';
 import { cargarSemilla } from './utilidades';
 
-const llamar = async (ruta: string, correo?: string, entorno: Env = env) => {
-  const ctx = createExecutionContext();
-  const r = await worker.fetch(
-    new Request(`https://app.mesawow.test/api/v1${ruta}`, { headers: correo ? { 'x-mesawow-dev': correo } : {} }),
-    entorno, ctx,
-  );
-  await waitOnExecutionContext(ctx);
-  return { status: r.status, cuerpo: (await r.json()) as any };
-};
+const llamar = (ruta: string, como?: string, entorno?: Env) => llamarApi(ruta, { como, entorno });
 
 describe('API /api/v1', () => {
   beforeEach(cargarSemilla);
@@ -72,10 +63,10 @@ describe('API /api/v1', () => {
   describe('fuera de local (staging y production)', () => {
     const produccion = { ...env, ENTORNO: 'production' } as Env;
 
-    it('ignora la identidad de desarrollo y exige Cloudflare Access', async () => {
+    it('sin Access configurado no deja entrar a nadie, ni con la identidad de desarrollo', async () => {
       const r = await llamar('/me', 'ana@mesawow.test', produccion);
-      expect(r.status).toBe(401);
-      expect(r.cuerpo.error.code).toBe('acceso_pendiente');
+      expect(r.status).toBe(503);
+      expect(r.cuerpo.error.code).toBe('acceso_sin_configurar');
     });
 
     it('el selector "Entrar como" no existe', async () => {
