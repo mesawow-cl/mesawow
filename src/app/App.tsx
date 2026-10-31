@@ -7,6 +7,7 @@ import { logoColor } from './marca';
 import { alHacerClicEnEnlace, ir, useUbicacion } from './rutas';
 import { EntrarComo } from './vistas/EntrarComo';
 import { Equipo } from './vistas/Equipo';
+import { MiMesa } from './vistas/MiMesa';
 import { Marcas, Mesas } from './vistas/Organizacion';
 import { Tareas } from './vistas/Tareas';
 import { Perfil } from './vistas/Perfil';
@@ -106,6 +107,7 @@ export const App = () => {
       case 'team': return <Equipo actorId={actor.id} aviso={setAviso} />;
       case 'tasks': return <Tareas persona={persona} aviso={setAviso} crear={crearTarea && !viendoOtra} alCrear={setCrearTarea} />;
       case 'mesas': return <Mesas persona={persona} aviso={setAviso} />;
+      case 'agenda': return <MiMesa persona={persona} aviso={setAviso} />;
       case 'brands': return <Marcas persona={persona} aviso={setAviso} />;
       case 'profile': return <Perfil personaId={idPerfil} soloLectura={viendoOtra || actor.permisos.soloLectura && idPerfil !== actor.id} aviso={setAviso} />;
       default: return <EnConstruccion vista={vistaFinal} />;
