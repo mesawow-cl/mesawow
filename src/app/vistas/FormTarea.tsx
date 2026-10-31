@@ -8,7 +8,7 @@ import { Dialogo } from '../componentes/Dialogo';
 import { marcas as cargarMarcas, mesas as cargarMesas, personas as cargarPersonas, type Marca, type Mesa, type PersonaDirectorio } from '../datos';
 
 interface Datos {
-  titulo: string; marcaId: string; mesaId: string; descripcion: string; entregable: string; criterio: string;
+  titulo: string; marcaId: string; campanaId: string; mesaId: string; descripcion: string; entregable: string; criterio: string;
   responsableId: string; revisorId: string; colaboradores: string[]; aprobadores: string[];
   inicio: string; plazo: string; horas: string; complejidad: string; prioridad: string; dependencias: string[]; version?: number;
 }
@@ -16,7 +16,7 @@ interface Datos {
 const vacio = (): Datos => {
   const hoy = hoySantiago();
   return {
-    titulo: '', marcaId: '', mesaId: '', descripcion: '', entregable: '', criterio: '', responsableId: '', revisorId: '',
+    titulo: '', marcaId: '', campanaId: '', mesaId: '', descripcion: '', entregable: '', criterio: '', responsableId: '', revisorId: '',
     colaboradores: [], aprobadores: [], inicio: hoy, plazo: hoy, horas: '', complejidad: 'Baja', prioridad: 'Media', dependencias: [],
   };
 };
@@ -48,6 +48,7 @@ export const FormTarea = ({ tareaId, alCerrar, alGuardar }: { tareaId?: string; 
   const [marcas, setMarcas] = useState<Marca[]>([]);
   const [mesas, setMesas] = useState<Mesa[]>([]);
   const [gente, setGente] = useState<PersonaDirectorio[]>([]);
+  const [campanas, setCampanas] = useState<{ id: string; name: string; brand_id: string }[]>([]);
   const [tareasMarca, setTareasMarca] = useState<{ id: string; title: string; status: string }[]>([]);
   const [masEquipo, setMasEquipo] = useState(false);
   const [masPlazos, setMasPlazos] = useState(false);
@@ -59,10 +60,11 @@ export const FormTarea = ({ tareaId, alCerrar, alGuardar }: { tareaId?: string; 
     cargarMarcas().then((m) => { setMarcas(m); if (!tareaId && m.length === 1) cambiar({ marcaId: m[0]!.id }); });
     cargarMesas().then((m) => setMesas(m.filter((x) => x.active)));
     cargarPersonas().then(setGente);
+    pedir<{ campanas: { id: string; name: string; brand_id: string }[] }>('/campanas').then((r) => setCampanas(r.campanas)).catch(() => setCampanas([]));
     if (tareaId) {
       pedir<{ tarea: any }>(`/tareas/${tareaId}`).then(({ tarea: t }) => {
         setD({
-          titulo: t.title, marcaId: t.brand_id, mesaId: t.mesa_id ?? '', descripcion: t.description, entregable: t.deliverable, criterio: t.acceptance,
+          titulo: t.title, marcaId: t.brand_id, campanaId: t.campaign_id ?? '', mesaId: t.mesa_id ?? '', descripcion: t.description, entregable: t.deliverable, criterio: t.acceptance,
           responsableId: t.owner_id ?? '', revisorId: t.reviewer_id ?? '', colaboradores: t.colaboradores.map((x: any) => x.id),
           aprobadores: t.aprobadores.map((x: any) => x.id), inicio: t.start_date, plazo: t.due, horas: t.estimated_hours ? String(t.estimated_hours) : '',
           complejidad: t.complexity, prioridad: t.priority, dependencias: t.necesita.map((x: any) => x.id), version: t.version,
@@ -88,7 +90,7 @@ export const FormTarea = ({ tareaId, alCerrar, alGuardar }: { tareaId?: string; 
     setError('');
     setEnviando(true);
     const cuerpo = {
-      titulo: d.titulo, marcaId: d.marcaId, mesaId: d.mesaId || null, descripcion: d.descripcion, entregable: d.entregable, criterio: d.criterio,
+      titulo: d.titulo, marcaId: d.marcaId, campanaId: d.campanaId || null, mesaId: d.mesaId || null, descripcion: d.descripcion, entregable: d.entregable, criterio: d.criterio,
       responsableId: d.responsableId, revisorId: d.revisorId || null, colaboradores: d.colaboradores, aprobadores: d.aprobadores,
       inicio: d.inicio, plazo: d.plazo, horas: d.horas ? Number(d.horas) : undefined, complejidad: d.complejidad, prioridad: d.prioridad,
       dependencias: d.dependencias, version: d.version,
@@ -109,7 +111,7 @@ export const FormTarea = ({ tareaId, alCerrar, alGuardar }: { tareaId?: string; 
           <label>Título<input required minLength={3} maxLength={200} value={d.titulo} onInput={(e) => cambiar({ titulo: valor(e) })} /></label>
           <div class="dos">
             <label>Marca
-              <select required value={d.marcaId} onChange={(e) => cambiar({ marcaId: valor(e), responsableId: '', revisorId: '', colaboradores: [], aprobadores: [], dependencias: [] })}>
+              <select required value={d.marcaId} onChange={(e) => cambiar({ marcaId: valor(e), campanaId: '', responsableId: '', revisorId: '', colaboradores: [], aprobadores: [], dependencias: [] })}>
                 <option value="">Elige una marca</option>
                 {marcas.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}
               </select>
@@ -121,6 +123,12 @@ export const FormTarea = ({ tareaId, alCerrar, alGuardar }: { tareaId?: string; 
               </select>
             </label>
           </div>
+          <label>Campaña
+            <select value={d.campanaId} onChange={(e) => cambiar({ campanaId: valor(e) })}>
+              <option value="">Sin campaña</option>
+              {campanas.filter((x) => x.brand_id === d.marcaId).map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}
+            </select>
+          </label>
           <label>Qué hay que hacer<textarea required rows={4} maxLength={5000} value={d.descripcion} onInput={(e) => cambiar({ descripcion: valor(e) })} /></label>
           <label>Entregable<input required maxLength={1000} placeholder="Ej.: correo HTML aprobado, PDF de 10 láminas" value={d.entregable} onInput={(e) => cambiar({ entregable: valor(e) })} /></label>
         </>

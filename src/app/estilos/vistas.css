@@ -252,3 +252,9 @@
   .tabla-simple [role="row"] { grid-template-columns: 1fr 1fr; }
   .tabla-simple [role="row"] > :first-child { grid-column: 1 / -1; }
 }
+
+/* ── Campañas */
+.vista-correo { display: block; width: 100%; height: 520px; margin-top: 10px; border: 1px solid var(--linea); border-radius: 12px; background: #fff; }
+.vista-correo.movil { width: 360px; max-width: 100%; }
+.codigo { font-family: ui-monospace, monospace; font-size: 13px; }
+label.primario { color: #fff; border: 0; cursor: pointer; }

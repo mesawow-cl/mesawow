@@ -11,6 +11,7 @@ import { MiMesa } from './vistas/MiMesa';
 import { Marcas, Mesas } from './vistas/Organizacion';
 import { Tareas } from './vistas/Tareas';
 import { Perfil } from './vistas/Perfil';
+import { Bases, Entregables, Proyectos } from './vistas/Proyectos';
 import { Registro } from './vistas/Registro';
 import { Sprints } from './vistas/Sprints';
 import { EnConstruccion, Inicio, Mas } from './vistas/Vistas';
@@ -110,6 +111,9 @@ export const App = () => {
       case 'mesas': return <Mesas persona={persona} aviso={setAviso} />;
       case 'agenda': return <MiMesa persona={persona} aviso={setAviso} />;
       case 'scrum': return <Sprints persona={persona} aviso={setAviso} />;
+      case 'campaigns': return <Proyectos persona={persona} aviso={setAviso} />;
+      case 'library': return <Entregables aviso={setAviso} />;
+      case 'bases': return <Bases persona={persona} aviso={setAviso} />;
       case 'brands': return <Marcas persona={persona} aviso={setAviso} />;
       case 'profile': return <Perfil personaId={idPerfil} soloLectura={viendoOtra || actor.permisos.soloLectura && idPerfil !== actor.id} aviso={setAviso} />;
       default: return <EnConstruccion vista={vistaFinal} />;
