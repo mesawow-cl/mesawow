@@ -12,6 +12,7 @@ import { Marcas, Mesas } from './vistas/Organizacion';
 import { Tareas } from './vistas/Tareas';
 import { Perfil } from './vistas/Perfil';
 import { Registro } from './vistas/Registro';
+import { Sprints } from './vistas/Sprints';
 import { EnConstruccion, Inicio, Mas } from './vistas/Vistas';
 
 type Estado =
@@ -108,6 +109,7 @@ export const App = () => {
       case 'tasks': return <Tareas persona={persona} aviso={setAviso} crear={crearTarea && !viendoOtra} alCrear={setCrearTarea} />;
       case 'mesas': return <Mesas persona={persona} aviso={setAviso} />;
       case 'agenda': return <MiMesa persona={persona} aviso={setAviso} />;
+      case 'scrum': return <Sprints persona={persona} aviso={setAviso} />;
       case 'brands': return <Marcas persona={persona} aviso={setAviso} />;
       case 'profile': return <Perfil personaId={idPerfil} soloLectura={viendoOtra || actor.permisos.soloLectura && idPerfil !== actor.id} aviso={setAviso} />;
       default: return <EnConstruccion vista={vistaFinal} />;

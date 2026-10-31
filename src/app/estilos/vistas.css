@@ -231,3 +231,24 @@
 }
 .solo-telefono { display: none; }
 @media (max-width: 760px) { .solo-telefono { display: inline; } }
+
+/* ── Sprints */
+.pestanas-vista { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 18px 0 14px; }
+.pestanas-vista button { flex: none; }
+.pestanas-vista button[aria-pressed="true"] { background: var(--noche); color: #fff; border-color: var(--noche); }
+.tablero { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-top: 16px; }
+.columna-tablero { background: #F6F2F8; border-radius: var(--radio-m); padding: 12px; display: grid; gap: 10px; align-content: start; min-height: 160px; }
+.columna-tablero h3 { display: flex; justify-content: space-between; font-size: 14px; }
+.tarjeta-tarea { background: #fff; border: 1px solid var(--linea); border-radius: 12px; padding: 12px; display: grid; gap: 6px; font-size: 13px; min-width: 0; }
+.tarjeta-tarea a { color: var(--tinta); text-decoration: none; overflow-wrap: anywhere; }
+.tarjeta-tarea a:hover { text-decoration: underline; }
+.tabla-simple { display: grid; gap: 6px; }
+.tabla-simple [role="row"] { display: grid; grid-template-columns: 1.4fr 1fr .8fr .8fr .9fr 1fr; gap: 10px; align-items: center; padding: 12px 14px; background: #fff; border: 1px solid var(--linea); border-radius: 12px; }
+.tabla-simple .cabeza { background: transparent; border: 0; padding-block: 0; font-size: 12px; font-weight: 600; color: var(--tinta-2); text-transform: uppercase; letter-spacing: .6px; }
+@media (max-width: 1050px) { .tablero { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 760px) {
+  .tablero { grid-template-columns: minmax(0, 1fr); }
+  .tabla-simple .cabeza { display: none; }
+  .tabla-simple [role="row"] { grid-template-columns: 1fr 1fr; }
+  .tabla-simple [role="row"] > :first-child { grid-column: 1 / -1; }
+}

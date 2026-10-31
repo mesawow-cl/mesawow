@@ -34,6 +34,8 @@ export const Tareas = ({ persona, aviso, crear, alCrear }: { persona: Persona; a
     if (q.trim()) p.set('q', q.trim());
     if (estado) p.set('estado', estado);
     if (quien) p.set('persona', quien);
+    const sprint = parametro('sprint');
+    if (sprint) p.set('sprint', sprint);
     pedir<{ tareas: Fila[] }>(`/tareas?${p}`).then((r) => setFilas(r.tareas)).catch((e: Error) => aviso(e.message));
   };
   useEffect(() => { cargarPersonas().then(setGente).catch(() => setGente([])); }, []);
