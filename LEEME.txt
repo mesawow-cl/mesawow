@@ -1,0 +1,14 @@
+mesawow · paquete de marca v1.0 (31-10-2026)
+
+mesawow.html          Prototipo del muro con la identidad aplicada. Favicon: la sonrisa WOW.
+manualdemarca-mesawow.html  Manual de marca. Ábrelo junto a la carpeta svg/ para que funcionen los enlaces.
+svg/                  Logotipos vectoriales (texto convertido a curvas), isotipo mw!, sonrisa y favicon.
+png/                  Las mismas versiones en PNG con fondo transparente.
+                      Logotipos: 600, 1200 y 2400 px de ancho. Isotipo y sonrisa: 256, 512 y 1024 px.
+favicon/              favicon.svg, favicon.ico (16/32/48), PNG 16, 32, 48, 192 y 512,
+                      y apple-touch-icon.png (180 px, fondo blanco).
+
+Para usar el favicon en otra página:
+  <link rel="icon" href="favicon/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="favicon/apple-touch-icon.png">
