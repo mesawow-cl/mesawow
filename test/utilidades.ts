@@ -12,6 +12,8 @@ export const ejecutar = (sentencias: string[]) =>
 export const cargarSemilla = () => ejecutar([
   'DELETE FROM sprints',
   'DELETE FROM campaigns',
+  'DELETE FROM jobs',
+  "DELETE FROM service_templates WHERE builtin = 0",
   'DELETE FROM contact_bases',
   'DELETE FROM segments',
   'DELETE FROM task_events',
