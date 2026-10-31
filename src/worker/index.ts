@@ -3,7 +3,9 @@ import { Hono } from 'hono';
 import { equipo, invitacionPropia } from './equipo';
 import { cuerpoError, ErrorApi } from './errores';
 import { esLocal, requiereIdentidad, requiereSesion, type Entorno } from './identidad';
+import { organizacion } from './organizacion';
 import { perfil } from './perfil';
+import { tareas } from './tareas';
 
 const api = new Hono<Entorno>().basePath('/api/v1');
 
@@ -45,6 +47,8 @@ api.use('*', (c, next) => {
 api.route('/', invitacionPropia);
 api.route('/', equipo);
 api.route('/', perfil);
+api.route('/', tareas);
+api.route('/', organizacion);
 
 const conSesion = new Hono<Entorno>();
 
@@ -58,10 +62,12 @@ conSesion.get('/me', (c) => {
 conSesion.get('/personas', async (c) => {
   if (!c.get('actor').permisos.esEquipo) throw new ErrorApi(403, 'sin_permiso', 'Esta sección es solo para el equipo.');
   const { results } = await c.env.DB
-    .prepare(`SELECT p.id, p.name, p.role, m.name AS mesa FROM people p LEFT JOIN mesas m ON m.id = p.mesa_id
+    .prepare(`SELECT p.id, p.name, p.role, m.name AS mesa,
+                     (SELECT json_group_array(brand_id) FROM person_brands WHERE person_id = p.id) AS marcas
+                FROM people p LEFT JOIN mesas m ON m.id = p.mesa_id
                WHERE p.active = 1 ORDER BY p.name`)
-    .all();
-  return c.json({ personas: results });
+    .all<Record<string, unknown>>();
+  return c.json({ personas: results.map((p) => ({ ...p, marcas: JSON.parse(p.marcas as string) })) });
 });
 
 conSesion.get('/marcas', async (c) => {
@@ -73,11 +79,6 @@ conSesion.get('/marcas', async (c) => {
     .bind(...persona.marcas)
     .all();
   return c.json({ marcas: results });
-});
-
-conSesion.get('/mesas', async (c) => {
-  const { results } = await c.env.DB.prepare('SELECT id, name FROM mesas WHERE active = 1 ORDER BY name').all();
-  return c.json({ mesas: results });
 });
 
 api.route('/', conSesion);
