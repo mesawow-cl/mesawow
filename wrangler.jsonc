@@ -12,7 +12,11 @@
   },
   "observability": { "enabled": true },
   "vars": {
-    "ENTORNO": "local"
+    "ENTORNO": "local",
+    "APP_URL": "http://localhost:5173",
+    // Cloudflare Access (Zero Trust). Vacíos en local: se usa "Entrar como".
+    "ACCESS_EQUIPO": "",
+    "ACCESS_AUD": ""
   },
   "d1_databases": [
     {
@@ -28,7 +32,7 @@
   "env": {
     "staging": {
       "name": "mesawow-staging",
-      "vars": { "ENTORNO": "staging" },
+      "vars": { "ENTORNO": "staging", "APP_URL": "https://staging.mesawow.cl", "ACCESS_EQUIPO": "", "ACCESS_AUD": "" },
       "d1_databases": [
         {
           "binding": "DB",
@@ -43,7 +47,7 @@
     },
     "production": {
       "name": "mesawow",
-      "vars": { "ENTORNO": "production" },
+      "vars": { "ENTORNO": "production", "APP_URL": "https://app.mesawow.cl", "ACCESS_EQUIPO": "", "ACCESS_AUD": "" },
       "d1_databases": [
         {
           "binding": "DB",
