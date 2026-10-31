@@ -1,9 +1,11 @@
 // mesawow · Worker: API REST /api/v1 (la app estática la sirve Workers Assets).
 import { Hono } from 'hono';
+import { equipo, invitacionPropia } from './equipo';
 import { cuerpoError, ErrorApi } from './errores';
-import { esLocal, requiereSesion, type Variables } from './identidad';
+import { esLocal, requiereIdentidad, requiereSesion, type Entorno } from './identidad';
+import { perfil } from './perfil';
 
-const api = new Hono<{ Bindings: Env; Variables: Variables }>().basePath('/api/v1');
+const api = new Hono<Entorno>().basePath('/api/v1');
 
 api.onError((err, c) => {
   if (err instanceof ErrorApi) return c.json(cuerpoError(err.code, err.message), err.status);
@@ -12,6 +14,12 @@ api.onError((err, c) => {
 });
 
 api.notFound((c) => c.json(cuerpoError('no_encontrado', 'Esa ruta no existe.'), 404));
+
+// Respuestas de la API nunca se guardan en cachés compartidos.
+api.use('*', async (c, next) => {
+  await next();
+  c.header('cache-control', c.res.headers.get('cache-control') ?? 'no-store');
+});
 
 api.get('/salud', (c) => c.json({ ok: true, entorno: c.env.ENTORNO }));
 
@@ -25,13 +33,30 @@ api.get('/dev/personas', async (c) => {
   return c.json({ personas: results });
 });
 
-api.use('*', requiereSesion);
+// Una sola puerta: sin sesión (salud y desarrollo), solo correo verificado (aceptar invitación) o sesión completa.
+const SIN_SESION = new Set(['/api/v1/salud', '/api/v1/dev/personas']);
+const SOLO_IDENTIDAD = new Set(['/api/v1/invitaciones/mia', '/api/v1/invitaciones/aceptar']);
+api.use('*', (c, next) => {
+  if (SIN_SESION.has(c.req.path)) return next();
+  if (SOLO_IDENTIDAD.has(c.req.path)) return requiereIdentidad(c, next);
+  return requiereSesion(c, next);
+});
 
-api.get('/me', (c) => c.json({ persona: c.get('persona') }));
+api.route('/', invitacionPropia);
+api.route('/', equipo);
+api.route('/', perfil);
+
+const conSesion = new Hono<Entorno>();
+
+conSesion.get('/me', (c) => {
+  const persona = c.get('persona');
+  const actor = c.get('actor');
+  return c.json({ persona, actor: actor.id === persona.id ? undefined : actor });
+});
 
 // Directorio del equipo (perfiles y "Ver la app como"). Solo para el equipo.
-api.get('/personas', async (c) => {
-  if (!c.get('persona').permisos.esEquipo) throw new ErrorApi(403, 'sin_permiso', 'Esta sección es solo para el equipo.');
+conSesion.get('/personas', async (c) => {
+  if (!c.get('actor').permisos.esEquipo) throw new ErrorApi(403, 'sin_permiso', 'Esta sección es solo para el equipo.');
   const { results } = await c.env.DB
     .prepare(`SELECT p.id, p.name, p.role, m.name AS mesa FROM people p LEFT JOIN mesas m ON m.id = p.mesa_id
                WHERE p.active = 1 ORDER BY p.name`)
@@ -39,7 +64,7 @@ api.get('/personas', async (c) => {
   return c.json({ personas: results });
 });
 
-api.get('/marcas', async (c) => {
+conSesion.get('/marcas', async (c) => {
   const persona = c.get('persona');
   if (!persona.marcas.length) return c.json({ marcas: [] });
   const marcadores = persona.marcas.map((_, i) => `?${i + 1}`).join(',');
@@ -49,6 +74,13 @@ api.get('/marcas', async (c) => {
     .all();
   return c.json({ marcas: results });
 });
+
+conSesion.get('/mesas', async (c) => {
+  const { results } = await c.env.DB.prepare('SELECT id, name FROM mesas WHERE active = 1 ORDER BY name').all();
+  return c.json({ mesas: results });
+});
+
+api.route('/', conSesion);
 
 export default {
   fetch: api.fetch,
