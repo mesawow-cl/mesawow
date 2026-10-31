@@ -10,6 +10,10 @@ export const ejecutar = (sentencias: string[]) =>
 
 /** Deja la base con los datos de ejemplo, quitando lo que otras pruebas del mismo archivo hayan creado. */
 export const cargarSemilla = () => ejecutar([
+  'DELETE FROM work_plans',
+  'DELETE FROM meetings',
+  'DELETE FROM holidays',
+  'DELETE FROM plan_changes',
   "DELETE FROM tasks WHERE id NOT LIKE 'demo-%'",
   'DELETE FROM task_comments',
   'DELETE FROM task_results',
