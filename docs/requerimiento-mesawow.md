@@ -16,6 +16,7 @@
 | D4 (P20) | **Google Calendar entra en la V1**: cada persona conecta su Google Calendar (OAuth); mesawow lee sus reuniones y escribe sus bloques de trabajo. Una reunión nueva o movida en Google **recalcula** las tareas afectadas y avisa del nuevo término. |
 | D5 | **Vista semanal tipo horario escolar** (ver §4.7 bis). |
 | D6 | **Jornada 09:00–14:00 y 15:00–18:00**, lunes a viernes (colación 14:00–15:00). Reemplaza el 09–13 / 14–18 del prototipo en agenda, sprints, capacidad, propuesta semanal y vista semanal. |
+| D7 | **Ingreso**: Cloudflare Access verifica el correo (código de un solo uso o Google) y deja pasar a cualquiera que lo verifique; **mesawow autoriza**: solo personas activas o con invitación vigente. Invitar y dar de baja se hace solo en mesawow. Guía: `docs/acceso-cloudflare.md`. "Ver la app como" es solo lectura y se audita con la identidad real. |
 
 ---
 

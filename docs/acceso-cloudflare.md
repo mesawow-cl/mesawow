@@ -1,0 +1,35 @@
+# Activar el ingreso con Cloudflare Access
+
+Cómo funciona el ingreso a mesawow:
+
+1. **Cloudflare Access** pide el correo y comprueba que es de quien dice ser: envía un código de un solo uso al correo o permite entrar con Google.
+2. **mesawow** decide quién entra. Entran las personas activas del equipo y quienes tienen una invitación vigente. Cualquier otro correo ve "Aún no tienes acceso a mesawow".
+
+Así, invitar o dar de baja a alguien se hace solo dentro de mesawow, sin tocar Cloudflare.
+
+Plan necesario: Cloudflare Zero Trust **Free**, que permite hasta 50 usuarios.
+
+## Pasos (una vez por entorno: primero staging, después production)
+
+1. Entra a <https://one.dash.cloudflare.com> con la cuenta de Cloudflare donde está `mesawow.cl`.
+2. Si es la primera vez, elige el **nombre del equipo**, por ejemplo `mesawow`, y el plan **Free**.
+   Tu dominio de equipo quedará como `mesawow.cloudflareaccess.com`.
+3. En **Settings → Authentication → Login methods**, deja activo **One-time PIN**.
+   Si el equipo usa Gmail o Google Workspace, agrega también **Google**.
+4. En **Access → Applications → Add an application → Self-hosted**, completa:
+   - **Application name:** `mesawow staging` (o `mesawow` para production).
+   - **Domain:** `staging.mesawow.cl` (o `app.mesawow.cl`).
+   - **Session duration:** 1 month, para no pedir el código a cada rato en el teléfono.
+5. En **Policies → Add a policy**, completa:
+   - **Policy name:** `Equipo mesawow`.
+   - **Action:** Allow.
+   - **Include:** Everyone. mesawow filtra después quién entra.
+6. Guarda. En la ficha de la aplicación, copia el **Application Audience (AUD) Tag**.
+7. Pásale a Claude dos datos: el **dominio del equipo** (`xxxx.cloudflareaccess.com`) y el **AUD Tag**.
+   Van en `wrangler.jsonc` como `ACCESS_EQUIPO` y `ACCESS_AUD`. No son secretos, pero no hace falta publicarlos.
+
+`mesawow.cl`, la vista pública de mandantes, **no** va detrás de Access.
+
+## Cerrar sesión
+
+El botón "Cerrar sesión" de mesawow usa `/cdn-cgi/access/logout`, que cierra la sesión de Access en ese dispositivo.
