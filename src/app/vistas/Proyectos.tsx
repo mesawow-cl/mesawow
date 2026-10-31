@@ -4,6 +4,7 @@ import { hoySantiago } from '../../shared/fechas';
 import { abrirArchivo, pedir, type Persona } from '../api';
 import { Dialogo } from '../componentes/Dialogo';
 import { fechaCorta, marcas as cargarMarcas, TONO_ESTADO, type Marca } from '../datos';
+import { CentroPlanificacion, PropuestaSemanal } from './Planificacion';
 
 type Fila = Record<string, any>;
 const valor = (e: Event) => (e.target as HTMLInputElement).value;
@@ -32,6 +33,8 @@ export const Proyectos = ({ persona, aviso }: { persona: Persona; aviso: (m: str
   const [det, setDet] = useState<Fila | null>(null);
   const [pestana, setPestana] = useState<(typeof PESTANAS)[number][0]>('brief');
   const [nueva, setNueva] = useState(false);
+  const [centro, setCentro] = useState(false);
+  const [propuesta, setPropuesta] = useState<string[] | null>(null);
   const coordina = persona.permisos.coordina && !persona.permisos.soloLectura;
 
   const cargarLista = () => pedir<{ campanas: Fila[] }>('/campanas').then((r) => { setLista(r.campanas); setElegida((e) => e || r.campanas[0]?.id || ''); });
@@ -50,7 +53,12 @@ export const Proyectos = ({ persona, aviso }: { persona: Persona; aviso: (m: str
       <div class="encabezado">
         <div><p class="ceja">Mesas</p><h1 id="titulo-vista">Construye tu campaña</h1>
           <p>Brief, audiencia, contenido, revisión y programación. Cada cambio crea una versión nueva que vuelve a revisión.</p></div>
-        {coordina && <button type="button" class="primario" onClick={() => setNueva(true)}>＋ Nueva campaña</button>}
+        {coordina && (
+          <div class="persona-acciones">
+            <button type="button" onClick={() => setNueva(true)}>＋ Campaña de correo</button>
+            <button type="button" class="primario" onClick={() => setCentro(true)}>＋ Campaña 360, webinar o catálogo</button>
+          </div>
+        )}
       </div>
       {!lista ? <p>Cargando…</p> : !lista.length ? <div class="pronto"><strong>Aún no hay campañas.</strong><p>Crea la primera con ＋ Nueva campaña.</p></div> : (
         <>
@@ -91,6 +99,14 @@ export const Proyectos = ({ persona, aviso }: { persona: Persona; aviso: (m: str
                   </div>
                 )}
                 {pestana === 'programacion' && <Programacion c={c} editable={coordina} guardar={guardar} />}
+                {pestana === 'protocolo' && coordina && det!.tareas.length > 0 && (
+                  <div class="acciones" style={{ justifyContent: 'flex-start', marginBottom: '12px' }}>
+                    <button type="button" onClick={async () => {
+                      if (!confirm('¿Los inputs de esta campaña están disponibles y validados? Esta confirmación se registrará.')) return;
+                      try { const r = await pedir<{ tareas: string[] }>(`/campanas/${c.id}/validar-inputs`, { method: 'POST' }); setPropuesta(r.tareas); } catch (e) { aviso((e as Error).message); }
+                    }}>Validar inputs y planificar</button>
+                  </div>
+                )}
                 {pestana === 'protocolo' && (
                   !det!.tareas.length ? <p class="apagado">Esta campaña no tiene tareas. Créalas desde Mis encargos eligiendo la campaña, o con el protocolo 360 o webinar.</p> : (
                     <>
@@ -108,6 +124,8 @@ export const Proyectos = ({ persona, aviso }: { persona: Persona; aviso: (m: str
           )}
         </>
       )}
+      {centro && <CentroPlanificacion alCerrar={() => { setCentro(false); cargarLista(); cargar(); }} aviso={aviso} alCrear={(id) => { if (id) setElegida(id); cargarLista(); }} />}
+      {propuesta && <PropuestaSemanal tareas={propuesta} desde={hoySantiago()} alCerrar={() => { setPropuesta(null); cargar(); }} aviso={aviso} />}
       {nueva && <NuevaCampana alCerrar={() => setNueva(false)} alCrear={(id) => { setNueva(false); aviso('Campaña creada en borrador.'); setElegida(id); cargarLista(); }} />}
     </section>
   );
@@ -226,7 +244,6 @@ const NuevaCampana = ({ alCerrar, alCrear }: { alCerrar: () => void; alCrear: (i
       <form class="formulario" onSubmit={async (e) => { e.preventDefault(); try { alCrear((await pedir<{ id: string }>('/campanas', { method: 'POST', json: d })).id); } catch (err) { setError((err as Error).message); } }}>
         <label>Nombre<input required minLength={3} value={d.nombre} onInput={(e) => setD({ ...d, nombre: valor(e) })} /></label>
         <label>Marca<select required value={d.marcaId} onChange={(e) => setD({ ...d, marcaId: valor(e) })}><option value="">Elige</option>{marcas.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}</select></label>
-        <p class="ayuda">Las campañas 360 de tres meses y los webinars, con su protocolo de tareas, llegan en el siguiente bloque de esta fase.</p>
         {error && <p class="error-form" role="alert">{error}</p>}
         <div class="acciones"><button type="button" onClick={alCerrar}>Cancelar</button><button type="submit" class="primario">Crear borrador</button></div>
       </form>
