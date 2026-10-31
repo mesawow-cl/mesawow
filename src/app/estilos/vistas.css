@@ -79,3 +79,52 @@
 @media (max-width: 760px) {
   .aviso-flotante { bottom: calc(var(--alto-barra-inferior) + 24px + env(safe-area-inset-bottom)); }
 }
+
+/* ── Formularios */
+.formulario { display: grid; gap: 14px; }
+.formulario label, .formulario fieldset { display: grid; gap: 6px; font-weight: 600; font-size: 14px; }
+.formulario fieldset { border: 1px solid var(--linea); border-radius: 12px; padding: 12px 14px; margin: 0; }
+.formulario legend { padding: 0 6px; }
+.formulario .ayuda { font-weight: 400; color: var(--apagado); font-size: 13px; }
+.formulario .dos { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.casillas { display: flex; flex-wrap: wrap; gap: 8px; }
+.casilla { display: inline-flex; align-items: center; gap: 8px; min-height: var(--tactil); padding: 0 12px; border: 1px solid var(--linea); border-radius: 999px; font-weight: 500; cursor: pointer; }
+.casilla input { width: 20px; height: 20px; min-height: 0; accent-color: var(--rosa); }
+.acciones { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; margin-top: 6px; }
+.error-form { color: var(--rojo); font-weight: 600; }
+.enlace-copiable { display: flex; gap: 8px; }
+.enlace-copiable input { flex: 1; min-width: 0; font-size: 13px; }
+
+/* ── Equipo */
+.buscador { width: min(360px, 100%); }
+.tarjetas-equipo { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; }
+.persona-tarjeta { display: grid; gap: 12px; align-content: start; }
+.persona-tarjeta.inactiva { opacity: .75; }
+.persona-cabeza { display: flex; gap: 12px; align-items: center; min-width: 0; }
+.persona-cabeza div { min-width: 0; }
+.persona-cabeza strong { display: block; overflow-wrap: anywhere; }
+.avatar { width: 48px; height: 48px; flex: none; border-radius: 50%; display: grid; place-items: center; font-weight: 700; color: #fff; background: var(--wow-diagonal); overflow: hidden; }
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+.avatar.grande { width: 96px; height: 96px; font-size: 30px; }
+.contacto { font-size: 13px; color: var(--tinta-2); overflow-wrap: anywhere; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; background: #F4F0F7; font-size: 12px; font-weight: 600; }
+.chip i { width: 8px; height: 8px; border-radius: 50%; }
+.persona-acciones { display: flex; flex-wrap: wrap; gap: 8px; }
+.persona-acciones button { min-height: 40px; padding: 0 14px; font-size: 13px; }
+.insignia.verde { background: #E2F4EC; color: var(--verde); }
+.insignia.gris { background: #EEEDF2; color: var(--tinta-2); }
+.insignia.ambar { background: #FFF3DC; color: var(--ambar); }
+.insignia.roja { background: #FCE5EA; color: var(--rojo); }
+.lista-invitaciones { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.lista-invitaciones li { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 14px; border: 1px solid var(--linea); border-radius: 12px; background: #fff; }
+
+/* ── Perfil */
+.perfil-hero { display: flex; flex-wrap: wrap; gap: 20px; align-items: center; }
+.perfil-hero h1 { overflow-wrap: anywhere; }
+
+@media (max-width: 760px) {
+  .formulario .dos { grid-template-columns: 1fr; }
+  .acciones { justify-content: stretch; }
+  .acciones button { flex: 1; }
+}

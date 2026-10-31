@@ -10,7 +10,7 @@ const ETIQUETA: Partial<Record<Vista, string>> = Object.fromEntries(
   ESPACIOS.flatMap((e) => e.pestanas.map((t) => [t.vista, t.etiqueta])),
 );
 
-export const EnConstruccion = ({ vista }: { vista: Exclude<Vista, 'more'> }) => {
+export const EnConstruccion = ({ vista }: { vista: keyof typeof FASE_DE }) => {
   const { fase, detalle } = FASE_DE[vista];
   return (
     <section aria-labelledby="titulo-vista">

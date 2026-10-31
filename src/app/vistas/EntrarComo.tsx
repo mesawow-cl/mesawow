@@ -25,6 +25,14 @@ export const EntrarComo = ({ alEntrar }: { alEntrar: () => void }) => {
         {error && <p role="alert" class="peligro" style={{ marginTop: '12px' }}>{error}</p>}
         {!personas && !error && <p style={{ marginTop: '12px' }}>Cargando…</p>}
         {personas && (
+          <form class="formulario" style={{ marginTop: '16px' }}
+            onSubmit={(e) => { e.preventDefault(); const c = new FormData(e.currentTarget as HTMLFormElement).get('correo'); if (c) { entrarComo(String(c).trim().toLowerCase()); alEntrar(); } }}>
+            <label>Otro correo (para probar una invitación)
+              <span class="enlace-copiable"><input name="correo" type="email" placeholder="nueva@mesawow.test" /><button type="submit">Entrar</button></span>
+            </label>
+          </form>
+        )}
+        {personas && (
           <ul>
             {personas.map((p) => (
               <li key={p.email}>

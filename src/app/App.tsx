@@ -1,17 +1,23 @@
 import { useCallback, useEffect, useState } from 'preact/hooks';
 import { vistaPermitida, type OpcionCrear } from '../shared/navegacion';
-import { entrarComo, ErrorApi, pedir, type Persona } from './api';
+import { cerrarSesion, ErrorApi, fijarVerComo, pedir, type Persona } from './api';
 import { BarraInferior, BarraSuperior, MenuLateral, Pestanas } from './componentes/Estructura';
 import { Campana, MenuCrear, MenuCuenta, type PersonaVisible } from './componentes/Menus';
+import { logoColor } from './marca';
 import { alHacerClicEnEnlace, ir, useUbicacion } from './rutas';
 import { EntrarComo } from './vistas/EntrarComo';
+import { Equipo } from './vistas/Equipo';
+import { Perfil } from './vistas/Perfil';
+import { Registro } from './vistas/Registro';
 import { EnConstruccion, Inicio, Mas } from './vistas/Vistas';
 
 type Estado =
   | { tipo: 'cargando' }
   | { tipo: 'elegir' }
+  | { tipo: 'registro' }
+  | { tipo: 'sin_acceso'; mensaje: string }
   | { tipo: 'error'; mensaje: string }
-  | { tipo: 'listo'; persona: Persona };
+  | { tipo: 'listo'; persona: Persona; actor: Persona };
 
 const DESTINO_CREAR: Record<OpcionCrear['id'], { vista: Parameters<typeof ir>[0]; aviso: string }> = {
   tarea: { vista: 'tasks', aviso: 'El formulario de tarea por pasos llega en la Fase 3.' },
@@ -19,6 +25,17 @@ const DESTINO_CREAR: Record<OpcionCrear['id'], { vista: Parameters<typeof ir>[0]
   catalogo: { vista: 'campaigns', aviso: 'Campañas 360, webinars y catálogo llegan en la Fase 3.' },
   compromiso: { vista: 'muro', aviso: 'Los compromisos del día llegan en la Fase 7.' },
 };
+
+const Mensaje = ({ titulo, texto, salir }: { titulo: string; texto: string; salir?: boolean }) => (
+  <main class="entrar">
+    <div class="tarjeta" role="alert">
+      <img src={logoColor} alt="mesawow" width={150} height={40} />
+      <h1 style={{ marginTop: '16px', fontSize: '22px' }}>{titulo}</h1>
+      <p style={{ marginTop: '8px' }}>{texto}</p>
+      {salir && <div class="acciones"><button type="button" onClick={cerrarSesion}>Salir</button></div>}
+    </div>
+  </main>
+);
 
 export const App = () => {
   const [estado, setEstado] = useState<Estado>({ tipo: 'cargando' });
@@ -28,26 +45,28 @@ export const App = () => {
   const [aviso, setAviso] = useState('');
   const { vista, desde } = useUbicacion();
 
-  const cargar = useCallback(() => {
-    setEstado({ tipo: 'cargando' });
-    pedir<{ persona: Persona }>('/me')
-      .then(({ persona }) => setEstado({ tipo: 'listo', persona }))
+  const cargar = useCallback((silencioso = false) => {
+    if (!silencioso) setEstado({ tipo: 'cargando' });
+    pedir<{ persona: Persona; actor?: Persona }>('/me')
+      .then(({ persona, actor }) => setEstado({ tipo: 'listo', persona, actor: actor ?? persona }))
       .catch((e: Error) => {
-        if (e instanceof ErrorApi && e.code === 'sin_sesion') setEstado({ tipo: 'elegir' });
+        const code = e instanceof ErrorApi ? e.code : '';
+        if (code === 'sin_sesion' && e instanceof ErrorApi && e.message.startsWith('Elige')) setEstado({ tipo: 'elegir' });
+        else if (code === 'invitacion_pendiente') setEstado({ tipo: 'registro' });
+        else if (code === 'sin_acceso' || code === 'sin_sesion' || code === 'sesion_invalida') setEstado({ tipo: 'sin_acceso', mensaje: e.message });
         else setEstado({ tipo: 'error', mensaje: e.message });
       });
   }, []);
 
-  useEffect(cargar, [cargar]);
+  useEffect(() => cargar(), [cargar]);
   useEffect(() => {
     addEventListener('click', alHacerClicEnEnlace);
     return () => removeEventListener('click', alHacerClicEnEnlace);
   }, []);
+  const esAdminReal = estado.tipo === 'listo' && estado.actor.permisos.esAdmin;
   useEffect(() => {
-    if (estado.tipo === 'listo' && estado.persona.permisos.esAdmin) {
-      pedir<{ personas: PersonaVisible[] }>('/personas').then((r) => setPersonas(r.personas)).catch(() => setPersonas([]));
-    }
-  }, [estado]);
+    if (esAdminReal) pedir<{ personas: PersonaVisible[] }>('/personas').then((r) => setPersonas(r.personas)).catch(() => setPersonas([]));
+  }, [esAdminReal]);
   useEffect(() => {
     if (!aviso) return;
     const t = setTimeout(() => setAviso(''), 4500);
@@ -55,57 +74,60 @@ export const App = () => {
   }, [aviso]);
 
   if (estado.tipo === 'cargando') return <main class="entrar"><p>Cargando mesawow…</p></main>;
-  if (estado.tipo === 'elegir') return <EntrarComo alEntrar={cargar} />;
-  if (estado.tipo === 'error') {
-    return (
-      <main class="entrar">
-        <div class="tarjeta" role="alert"><h1 style={{ fontSize: '22px' }}>No pudimos abrir mesawow</h1><p style={{ marginTop: '8px' }}>{estado.mensaje}</p></div>
-      </main>
-    );
-  }
+  if (estado.tipo === 'elegir') return <EntrarComo alEntrar={() => cargar()} />;
+  if (estado.tipo === 'registro') return <Registro alEntrar={() => cargar()} />;
+  if (estado.tipo === 'sin_acceso') return <Mensaje titulo="Aún no tienes acceso a mesawow" texto={estado.mensaje} salir />;
+  if (estado.tipo === 'error') return <Mensaje titulo="No pudimos abrir mesawow" texto={estado.mensaje} />;
 
-  const { persona } = estado;
+  const { persona, actor } = estado;
   const { permisos } = persona;
+  const viendoOtra = actor.id !== persona.id;
   // Roles externos no usan el Inicio del equipo (prototipo: van a Mi mesa). Ver §14-P2.
   const vistaFinal = !permisos.esEquipo && vista === 'muro' ? 'agenda' : vista;
   const permitida = vistaPermitida(vistaFinal, permisos);
-  const persVista = personas.find((p) => p.id === viendoComo);
+  const idPerfil = new URLSearchParams(location.search).get('id') ?? persona.id;
 
-  const salir = () => { entrarComo(null); setAbierto(null); setViendoComo(''); history.replaceState(null, '', '/'); cargar(); };
+  const verComo = (id: string) => {
+    setViendoComo(id);
+    fijarVerComo(id);
+    setAbierto(null);
+    cargar(true);
+    ir(id ? 'tasks' : 'muro');
+  };
+
+  const contenido = () => {
+    if (!permitida) return <div class="pronto" role="alert"><strong>No tienes acceso a esta sección.</strong><p>Si crees que deberías verla, pídelo a coordinación.</p></div>;
+    switch (vistaFinal) {
+      case 'muro': return <Inicio persona={persona} />;
+      case 'more': return <Mas persona={persona} alAbrirCuenta={() => setAbierto('cuenta')} />;
+      case 'team': return <Equipo actorId={actor.id} aviso={setAviso} />;
+      case 'profile': return <Perfil personaId={idPerfil} soloLectura={viendoOtra || actor.permisos.soloLectura && idPerfil !== actor.id} aviso={setAviso} />;
+      default: return <EnConstruccion vista={vistaFinal} />;
+    }
+  };
 
   return (
     <div class="app">
       <a class="saltar" href="#contenido">Saltar al contenido</a>
       <MenuLateral vista={vistaFinal} desde={desde} permisos={permisos} />
       <div class="columna">
-        <BarraSuperior nombre={persona.name} alertas={0}
+        <BarraSuperior nombre={actor.name} alertas={0}
           alAbrirCampana={() => setAbierto('campana')} alAbrirCuenta={() => setAbierto('cuenta')} />
-        {persVista && (
+        {viendoOtra && (
           <div class="viendo-como" role="status">
-            <span>Estás viendo el espacio de {persVista.name} (solo lectura).</span>
-            <button type="button" onClick={() => setViendoComo('')}>Volver a coordinación</button>
+            <span>Estás viendo el espacio de {persona.name} (solo lectura).</span>
+            <button type="button" onClick={() => verComo('')}>Volver a coordinación</button>
           </div>
         )}
         <Pestanas vista={vistaFinal} desde={desde} permisos={permisos} />
-        <main id="contenido" class="contenido" tabIndex={-1}>
-          {!permitida ? (
-            <div class="pronto" role="alert"><strong>No tienes acceso a esta sección.</strong><p>Si crees que deberías verla, pídelo a coordinación.</p></div>
-          ) : vistaFinal === 'muro' ? (
-            <Inicio persona={persona} />
-          ) : vistaFinal === 'more' ? (
-            <Mas persona={persona} alAbrirCuenta={() => setAbierto('cuenta')} />
-          ) : (
-            <EnConstruccion vista={vistaFinal} />
-          )}
-        </main>
+        <main id="contenido" class="contenido" tabIndex={-1}>{contenido()}</main>
       </div>
       <BarraInferior vista={vistaFinal} desde={desde} permisos={permisos} alCrear={() => setAbierto('crear')} />
 
       <MenuCrear abierto={abierto === 'crear'} alCerrar={() => setAbierto(null)} persona={persona}
         alElegir={(id) => { setAbierto(null); ir(DESTINO_CREAR[id].vista); setAviso(DESTINO_CREAR[id].aviso); }} />
-      <MenuCuenta abierto={abierto === 'cuenta'} alCerrar={() => setAbierto(null)} persona={persona}
-        personas={personas} viendoComo={viendoComo}
-        alVerComo={(id) => { setViendoComo(id); setAbierto(null); if (id) ir('tasks'); }} alSalir={salir} />
+      <MenuCuenta abierto={abierto === 'cuenta'} alCerrar={() => setAbierto(null)} persona={actor}
+        personas={personas} viendoComo={viendoComo} alVerComo={verComo} alSalir={cerrarSesion} />
       <Campana abierto={abierto === 'campana'} alCerrar={() => setAbierto(null)} />
 
       <div class="aviso-flotante" role="status" aria-live="polite">{aviso}</div>

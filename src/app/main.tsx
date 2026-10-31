@@ -1,6 +1,7 @@
 import { render } from 'preact';
 import { entrarComo } from './api';
 import { App } from './App';
+import { guardarTokenDeInvitacion } from './vistas/Registro';
 import './estilos/tokens.css';
 import './estilos/base.css';
 import './estilos/shell.css';
@@ -17,4 +18,5 @@ if (import.meta.env.DEV) {
   }
 }
 
+guardarTokenDeInvitacion();
 render(<App />, document.getElementById('raiz')!);
