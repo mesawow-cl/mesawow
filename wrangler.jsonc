@@ -11,8 +11,8 @@
     "run_worker_first": ["/api/*"]
   },
   "observability": { "enabled": true },
-  // Lunes 10:00 UTC: feriados oficiales de Chile y recálculo de agendas.
-  "triggers": { "crons": ["0 10 * * 1"] },
+  // Cada 5 minutos: automatizaciones al aire. Lunes 10:00 UTC: feriados oficiales de Chile.
+  "triggers": { "crons": ["*/5 * * * *", "0 10 * * 1"] },
   "vars": {
     "ENTORNO": "local",
     "APP_URL": "http://localhost:5173",

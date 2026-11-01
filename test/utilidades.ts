@@ -18,6 +18,8 @@ export const cargarSemilla = () => ejecutar([
   'DELETE FROM contact_bases',
   'DELETE FROM segments',
   'DELETE FROM task_events',
+  'DELETE FROM air_slots',
+  'DELETE FROM air_series',
   'DELETE FROM work_plans',
   'DELETE FROM meetings',
   'DELETE FROM holidays',

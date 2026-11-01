@@ -283,6 +283,10 @@ tareas.patch('/tareas/:id', async (c) => {
     throw new ErrorApi(409, 'version', 'Otra persona cambió esta tarea mientras la editabas. Vuelve a abrirla para ver los cambios.');
   }
   const deps = await validarTarea(db, d, t.fila.id);
+  const primera = await db.prepare("SELECT min(at) AS at FROM air_slots WHERE task_id = ?1").bind(t.fila.id).first<{ at: string | null }>();
+  if (primera?.at && d.plazo > primera.at.slice(0, 10)) {
+    throw new ErrorApi(400, 'plazo_aire', 'La fecha límite de trabajo debe ser antes de la salida al aire.');
+  }
   const antes = new Set(participantes(t));
   const ahora = new Set([d.responsableId, d.revisorId, ...d.colaboradores, ...d.aprobadores].filter((x): x is string => !!x));
   await db.batch([

@@ -1,6 +1,7 @@
 // mesawow · Worker: API REST /api/v1 (la app estática la sirve Workers Assets).
 import { Hono } from 'hono';
 import { agenda, recalcularAgenda, sincronizarFeriados } from './agenda';
+import { aire, procesarAire } from './aire';
 import { campanas } from './campanas';
 import { equipo, invitacionPropia } from './equipo';
 import { estrategia, publico } from './estrategia';
@@ -53,6 +54,7 @@ api.route('/', publico);
 api.route('/', invitacionPropia);
 api.route('/', equipo);
 api.route('/', perfil);
+api.route('/', aire);
 api.route('/', tareas);
 api.route('/', organizacion);
 api.route('/', agenda);
@@ -96,13 +98,19 @@ api.route('/', conSesion);
 
 export default {
   fetch: api.fetch,
-  // Tareas programadas (Cron Triggers). Cada lunes: feriados oficiales del año y el siguiente (D3).
-  async scheduled(_evento, env, ctx) {
-    const anio = new Date().getUTCFullYear();
-    ctx.waitUntil((async () => {
-      await sincronizarFeriados(env.DB, [anio, anio + 1]);
-      await recalcularAgenda(env.DB, 'Feriados oficiales actualizados', null);
-    })());
+  // Tareas programadas (Cron Triggers):
+  //   cada 5 minutos: piezas que salen al aire solas y avisos de riesgo (A4, A5);
+  //   lunes 10:00 UTC: feriados oficiales del año y el siguiente (D3).
+  async scheduled(evento, env, ctx) {
+    if (evento.cron === '0 10 * * 1') {
+      const anio = new Date().getUTCFullYear();
+      ctx.waitUntil((async () => {
+        await sincronizarFeriados(env.DB, [anio, anio + 1]);
+        await recalcularAgenda(env.DB, 'Feriados oficiales actualizados', null);
+      })());
+      return;
+    }
+    ctx.waitUntil(procesarAire(env.DB).then(() => undefined));
   },
 } satisfies ExportedHandler<Env>;
 
