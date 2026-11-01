@@ -166,7 +166,8 @@ describe('compromisos del día (§4.4), Logros del equipo e Informes', () => {
     await tarea({ titulo: 'Atrasada', inicio: '2020-01-06', plazo: '2020-01-10' });
     expect((await llamar('/reconocimiento', { como: DIEGO })).status).toBe(403);
     const r = (await llamar('/reconocimiento', { como: COORD })).cuerpo;
-    expect(r.porMesa.find((m: any) => m.id === 'mesa-marketing')?.n ?? 0).toBeGreaterThanOrEqual(0);
+    expect(r.porMesa.find((m: any) => m.id === 'mesa-marketing').n).toBe(1);
+    expect(r.porMesa.find((m: any) => m.id === 'mesa-operaciones').n).toBe(0);
     expect(r.recientes.every((l: any) => l.detalle)).toBe(true);
     expect((await llamar('/informes', { como: DIEGO })).status).toBe(403);
     const inf = (await llamar('/informes?persona=demo-diego', { como: COORD })).cuerpo;

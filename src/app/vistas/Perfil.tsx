@@ -1,7 +1,8 @@
-// Perfil (requerimiento §4.3). Los logros del perfil llegan con la Comunidad (Fase 7).
+// Perfil (requerimiento §4.3): presentación, foto y los últimos 24 logros.
 import { useEffect, useState } from 'preact/hooks';
 import { pedir, subirArchivo } from '../api';
 import { Avatar } from '../componentes/Avatar';
+import { ListaLogros, type Logro } from './Comunidad';
 
 interface PerfilDatos {
   id: string; name: string; role: string; mesa: string | null; bio: string; active: number; departed: number;
@@ -15,11 +16,16 @@ export const Perfil = ({ personaId, soloLectura, aviso }: { personaId: string; s
   const [error, setError] = useState('');
   const [editando, setEditando] = useState(false);
   const [bio, setBio] = useState('');
+  const [logros, setLogros] = useState<Logro[] | null>(null);
 
   const cargar = () => pedir<{ perfil: PerfilDatos }>(`/personas/${personaId}/perfil`)
     .then((r) => { setPerfil(r.perfil); setBio(r.perfil.bio); })
     .catch((e: Error) => setError(e.message));
-  useEffect(() => { setPerfil(null); setEditando(false); cargar(); }, [personaId]);
+  useEffect(() => {
+    setPerfil(null); setEditando(false); setLogros(null); cargar();
+    // Últimos 24 logros (dos páginas de la Comunidad).
+    pedir<{ logros: Logro[] }>(`/logros?persona=${encodeURIComponent(personaId)}&pagina=2`).then((r) => setLogros(r.logros)).catch(() => setLogros([]));
+  }, [personaId]);
 
   const guardarBio = async (e: Event) => {
     e.preventDefault();
@@ -86,8 +92,8 @@ export const Perfil = ({ personaId, soloLectura, aviso }: { personaId: string; s
             )}
           </section>
           <section class="tarjeta" aria-labelledby="t-logros-perfil">
-            <h2 id="t-logros-perfil" style={{ marginBottom: '12px' }}>Logros</h2>
-            <p class="apagado">Los últimos logros de {perfil.propio ? 'tu trabajo' : 'esta persona'} aparecerán aquí con la Comunidad (Fase 7).</p>
+            <h2 id="t-logros-perfil" style={{ marginBottom: '12px' }}>Historial de aportes</h2>
+            {!logros ? <p class="apagado">Cargando…</p> : <ListaLogros logros={logros} aviso={aviso} alCambiar={(l) => setLogros(logros.map((x) => x.id === l.id ? l : x))} />}
           </section>
         </div>
         <div>

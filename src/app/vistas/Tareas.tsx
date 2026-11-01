@@ -4,7 +4,7 @@ import { useLatido } from '../vivo';
 import { ESTADOS_TAREA } from '../../shared/constantes';
 import { abrirArchivo, pedir, subirArchivo, type Persona } from '../api';
 import { Dialogo } from '../componentes/Dialogo';
-import { fechaCorta, personas as cargarPersonas, TONO_ESTADO, type PersonaDirectorio } from '../datos';
+import { fechaCorta, mesas as cargarMesas, personas as cargarPersonas, TONO_ESTADO, type Mesa, type PersonaDirectorio } from '../datos';
 import { SaleAlAire } from './Aire';
 import { FormTarea } from './FormTarea';
 
@@ -97,7 +97,7 @@ export const Tareas = ({ persona, aviso, crear, alCrear }: { persona: Persona; a
         </div>
       )}
 
-      {abierta && <DetalleTarea id={abierta} alCerrar={() => abrir(null)} aviso={aviso} alCambiar={cargar} alEditar={(id) => { abrir(null); setEditar(id); }} />}
+      {abierta && <DetalleTarea persona={persona} id={abierta} alCerrar={() => abrir(null)} aviso={aviso} alCambiar={cargar} alEditar={(id) => { abrir(null); setEditar(id); }} />}
       {(crear || editar) && (
         <FormTarea tareaId={editar ?? undefined} alCerrar={() => { alCrear(false); setEditar(null); }}
           alGuardar={(id, avisos) => { alCrear(false); setEditar(null); aviso([editar ? 'Tarea actualizada.' : 'Tarea creada. Avisamos a las personas asignadas.', ...(avisos ?? [])].join(' ')); cargar(); abrir(id); }} />
@@ -106,8 +106,48 @@ export const Tareas = ({ persona, aviso, crear, alCrear }: { persona: Persona; a
   );
 };
 
-export const DetalleTarea = ({ id, alCerrar, aviso, alCambiar, alEditar }: {
-  id: string; alCerrar: () => void; aviso: (m: string) => void; alCambiar: () => void; alEditar: (id: string) => void;
+/** Recepción entre áreas: coordinación la registra sobre una entrega aceptada; quien recibe la confirma. */
+const RecepcionEntreAreas = ({ t, persona, hacer, ocupado }: { t: any; persona: Persona; hacer: (ruta: string, cuerpo: unknown, mensaje: string) => Promise<void>; ocupado: boolean }) => {
+  const [abierto, setAbierto] = useState(false);
+  const [listaMesas, setMesas] = useState<Mesa[]>([]);
+  const [gente, setGente] = useState<PersonaDirectorio[]>([]);
+  const [f, setF] = useState({ mesaId: '', receptorId: '', evidencia: '' });
+  useEffect(() => { if (abierto) { cargarMesas().then(setMesas); cargarPersonas().then(setGente); } }, [abierto]);
+  const hecha = ['Aprobada', 'Completada'].includes(t.status);
+  const puedeConfirmar = t.exchange_person_id && !t.exchange_accepted_at && (t.exchange_person_id === persona.id || persona.permisos.esAdmin);
+  if (!t.exchange_person_id && !(hecha && persona.permisos.coordina)) return null;
+  const receptor = gente.find((g) => g.id === t.exchange_person_id)?.name;
+  return (
+    <section class="bloque">
+      <h4>Recepción entre áreas</h4>
+      {t.exchange_person_id && <p>{t.exchange_accepted_at ? `Recepción confirmada · ${fechaCorta(t.exchange_accepted_at.slice(0, 10))}` : `Esperando que ${receptor ?? 'quien recibe'} confirme la recepción.`}<br /><span class="apagado">{t.exchange_evidence}</span></p>}
+      <div class="acciones" style={{ justifyContent: 'flex-start' }}>
+        {puedeConfirmar && <button type="button" class="primario" disabled={ocupado} onClick={() => hacer('recepcion/confirmar', {}, 'Recepción confirmada. ¡Se publica el logro!')}>Confirmar recepción</button>}
+        {hecha && persona.permisos.coordina && !t.exchange_accepted_at && !abierto && <button type="button" onClick={() => setAbierto(true)}>{t.exchange_person_id ? 'Cambiar recepción' : 'Registrar recepción entre áreas'}</button>}
+      </div>
+      {abierto && (
+        <form class="formulario" style={{ marginTop: '10px' }} onSubmit={async (e) => { e.preventDefault(); await hacer('recepcion', f, 'Recepción registrada. Avisamos a quien recibe.'); setAbierto(false); }}>
+          <label>Área receptora
+            <select required value={f.mesaId} onChange={(e) => setF({ ...f, mesaId: (e.target as HTMLSelectElement).value })}>
+              <option value="">Elige un área</option>{listaMesas.filter((m) => m.active).map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}
+            </select>
+          </label>
+          <label>Quién recibe
+            <select required value={f.receptorId} onChange={(e) => setF({ ...f, receptorId: (e.target as HTMLSelectElement).value })}>
+              <option value="">Elige a una persona</option>{gente.filter((g) => g.marcas.includes(t.brand_id)).map((g) => <option key={g.id} value={g.id}>{g.name}</option>)}
+            </select>
+          </label>
+          <label>Evidencia de entrega<textarea rows={2} required maxLength={2000} value={f.evidencia} onInput={(e) => setF({ ...f, evidencia: (e.target as HTMLTextAreaElement).value })} /></label>
+          <p class="apagado">Quien recibe confirma con su propia cuenta.</p>
+          <div class="acciones"><button type="button" onClick={() => setAbierto(false)}>Cancelar</button><button class="primario" disabled={ocupado}>Registrar</button></div>
+        </form>
+      )}
+    </section>
+  );
+};
+
+export const DetalleTarea = ({ persona, id, alCerrar, aviso, alCambiar, alEditar }: {
+  persona: Persona; id: string; alCerrar: () => void; aviso: (m: string) => void; alCambiar: () => void; alEditar: (id: string) => void;
 }) => {
   const [t, setT] = useState<any>(null);
   const [error, setError] = useState('');
@@ -211,6 +251,8 @@ export const DetalleTarea = ({ id, alCerrar, aviso, alCambiar, alEditar }: {
               </label>
             )}
           </section>
+
+          <RecepcionEntreAreas t={t} persona={persona} hacer={hacer} ocupado={ocupado} />
 
           <section class="bloque">
             <h4>Comentarios</h4>

@@ -20,7 +20,7 @@ export const SQL_ACEPTABLE = `(t.status IN ('Aprobada','Completada') AND t.block
 export const reconciliarLogros = async (db: D1Database, ahora = new Date()) => {
   const pared = utcASantiago(ahora.toISOString()); // 'YYYY-MM-DDTHH:MM' en Santiago
   const [tareas, gente, lineas, compromisos, compTareas, sprints, registros, campanas, existentes, marketing] = await db.batch<Fila>([
-    db.prepare(`SELECT t.id, t.title, t.brand_id, t.mesa_id, t.sprint_id, t.job_id, t.campaign_id, t.execution_cycle, t.owner_id, t.reviewer_id,
+    db.prepare(`SELECT t.id, t.title, t.brand_id, coalesce(t.mesa_id, (SELECT o.mesa_id FROM people o WHERE o.id = t.owner_id)) AS mesa_id, t.sprint_id, t.job_id, t.campaign_id, t.execution_cycle, t.owner_id, t.reviewer_id,
         t.exchange_mesa_id, t.exchange_person_id, t.exchange_accepted_at, ${SQL_ACEPTABLE} AS aceptable FROM tasks t`),
     db.prepare('SELECT task_id, person_id FROM task_people'),
     db.prepare('SELECT task_id, cycle, aceptable FROM achievement_baseline'),
@@ -29,7 +29,7 @@ export const reconciliarLogros = async (db: D1Database, ahora = new Date()) => {
     db.prepare(`SELECT id, name, goal, brand_id, mesa_id, status, goal_result, goal_evidence, review FROM sprints WHERE status = 'Cerrado'`),
     db.prepare(`SELECT r.sprint_id, r.task_id, r.approved FROM sprint_closed_records r JOIN sprints s ON s.id = r.sprint_id WHERE s.status = 'Cerrado'`),
     db.prepare(`SELECT id, name, brand_id FROM campaigns WHERE launched_at IS NOT NULL OR id IN (SELECT source_id FROM achievements WHERE source = 'campaign')`),
-    db.prepare('SELECT id, key, valid FROM achievements'),
+    db.prepare('SELECT id, key, valid, mesa_id FROM achievements'),
     db.prepare(`SELECT id FROM mesas WHERE name = 'Marketing' LIMIT 1`),
   ]);
   const t = new Map(tareas!.results.map((x) => [x.id as string, x]));
@@ -82,7 +82,7 @@ export const reconciliarLogros = async (db: D1Database, ahora = new Date()) => {
     const regs = porSprint.get(s.id) ?? [];
     const ids = regs.map((r) => r.task_id as string).filter((id) => t.has(id));
     const people = [...new Set(ids.flatMap(participantes))];
-    const comun = { source: 'sprint', sourceId: s.id, brandId: s.brand_id, mesaId: s.mesa_id, sprintId: s.id, grp: `sprint:${s.id}`, day: null, people, tasks: ids };
+    const comun = { source: 'sprint', sourceId: s.id, brandId: s.brand_id, mesaId: s.mesa_id ?? (ids.length ? t.get(ids[0]!)?.mesa_id ?? null : null), sprintId: s.id, grp: `sprint:${s.id}`, day: null, people, tasks: ids };
     const completo = regs.length > 0 && regs.every((r) => r.approved) && ids.length === regs.length && ids.every(aceptable);
     if (completo || previos.has(`sprint:${s.id}`)) deseados.push({ ...comun, key: `sprint:${s.id}`, type: 'Sprint completo', title: s.name, valid: completo });
     const objetivo = s.goal_result === 'Alcanzado' && !!s.review?.trim() && !!s.goal_evidence?.trim();
@@ -117,7 +117,10 @@ export const reconciliarLogros = async (db: D1Database, ahora = new Date()) => {
       for (const x of d.tasks) sentencias.push(db.prepare('INSERT OR IGNORE INTO achievement_tasks (achievement_id, task_id) SELECT id, ?2 FROM achievements WHERE key = ?1').bind(d.key, x));
       sentencias.push(db.prepare(`INSERT INTO audit_log (id, actor_id, action, entity, entity_id, details) VALUES (?1, NULL, ?2, 'achievement', ?3, NULL)`)
         .bind(nuevoId(), `Logro publicado ${d.title}`, id));
-    } else if (!!prev.valid !== d.valid) {
+    } else if (!prev.mesa_id && d.mesaId) {
+      sentencias.push(db.prepare('UPDATE achievements SET mesa_id = ?2 WHERE id = ?1').bind(prev.id, d.mesaId));
+    }
+    if (prev && !!prev.valid !== d.valid) {
       sentencias.push(
         db.prepare('INSERT INTO achievement_history (achievement_id, at, valid) VALUES (?1, ?2, ?3)').bind(prev.id, momento, prev.valid),
         db.prepare('UPDATE achievements SET valid = ?2, updated_at = ?3 WHERE id = ?1').bind(prev.id, d.valid ? 1 : 0, momento),

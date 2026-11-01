@@ -408,3 +408,48 @@ a.boton.primario { color: #fff; }
   .tabla-avisos [role="row"], .tabla-avisos [role="row"].con-persona { grid-template-columns: 1fr auto; }
   .tabla-avisos [role="row"] > [role="cell"]:first-child { grid-column: 1 / -1; }
 }
+
+/* Comunidad y logros (Fase 7) */
+a.boton { background: var(--tarjeta); border: 1px solid var(--linea); color: var(--tinta); }
+a.boton.primario { background: var(--wow); border: 0; }
+.filtros-comunidad { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.filtros-comunidad select { flex: 1 1 160px; min-width: 0; }
+.lista-logros { display: grid; gap: 14px; }
+.logro { display: grid; gap: 8px; }
+.logro h3 { margin: 0; font-size: 18px; overflow-wrap: anywhere; }
+.logro p { margin: 0; }
+.logro .insignia { justify-self: start; }
+.logro.en-actualizacion { border-style: dashed; }
+.logro-cabeza { display: flex; gap: 12px; align-items: center; }
+.logro-personas { font-weight: 600; overflow-wrap: anywhere; }
+.chispa { color: var(--naranja); font-size: 20px; }
+.pila-avatares { display: inline-flex; }
+.pila-avatares .avatar + .avatar { margin-left: -10px; }
+.pila-avatares .avatar { border: 2px solid #fff; }
+.logro-acciones { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.felicitar.activo { background: var(--suave); border-color: #F9C6D5; color: var(--rosa-oscuro); }
+.felicitar b { margin-left: 4px; }
+.felicitar.animar span { display: inline-block; animation: sonrisa .6s ease; }
+@keyframes sonrisa { 0% { transform: scale(1); } 40% { transform: scale(1.5) rotate(-12deg); } 100% { transform: scale(1); } }
+.grupo-logros { display: grid; gap: 12px; }
+.grupo-logros summary { cursor: pointer; font-weight: 600; color: var(--tinta-2); padding: 6px 0; }
+.comentario { padding: 10px 12px; border: 1px solid var(--linea); border-radius: 12px; background: #fff; }
+.hero-comunidad h1 { font-size: clamp(24px, 4vw, 34px); }
+.hero-comunidad { display: grid; gap: 14px; }
+.wow { position: relative; overflow: hidden; background: linear-gradient(135deg, #FFF1F5, #FFF6EC); border-color: #F9C6D5; }
+.wow h2 { margin: 4px 0; font-size: 26px; }
+.wow-pestana { display: inline-block; margin-bottom: 8px; padding: 4px 12px; border-radius: 999px; background: var(--wow); color: #fff; font-size: 12px; font-weight: 700; }
+.wow-pie { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+.confeti { position: absolute; inset: 0; pointer-events: none; }
+.confeti i { position: absolute; top: -12px; left: calc(var(--i) * 2.8%); width: 8px; height: 12px; border-radius: 2px;
+  background: hsl(calc(var(--i) * 37), 90%, 60%); animation: confeti 3s ease-in forwards; animation-delay: calc(var(--i) * 40ms); }
+@keyframes confeti { to { transform: translateY(420px) rotate(540deg); opacity: 0; } }
+.grilla-mesas { margin-top: 16px; }
+.tabla-informe [role="row"] { grid-template-columns: 1.6fr 1fr .7fr 1.3fr; }
+@media (prefers-reduced-motion: reduce) {
+  .felicitar.animar span, .confeti i { animation: none; }
+}
+@media print {
+  .no-imprimir, .aviso-flotante { display: none !important; }
+  .informe .tarjeta { box-shadow: none; border: 0; }
+}

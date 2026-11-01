@@ -201,7 +201,7 @@ comunidad.get('/comunidad/inicio', async (c) => {
     db.prepare('SELECT count(*) AS n FROM mentions WHERE person_id = ?1 AND read_at IS NULL').bind(c.get('actor').id),
   ]);
   const actividad = [
-    ...ultimos.slice(0, 10).map((l) => ({ at: l.creado, persona: l.personas.map((x: Fila) => x.name).join(', ') || 'El equipo', verbo: 'logró', objeto: l.titulo, tipo: 'logro', logroId: l.id })),
+    ...ultimos.slice(0, 10).map((l) => ({ at: l.creado, persona: l.personas.map((x: Fila) => x.name).join(', ') || 'El equipo', verbo: l.personas.length > 1 ? 'lograron' : 'logró', objeto: l.titulo, tipo: 'logro', logroId: l.id })),
     ...felic!.results.map((r) => ({ at: r.at, persona: r.persona, verbo: 'reconoció a', objeto: r.detalle ? r.title : 'un aporte de otra mesa', tipo: 'reconocimiento', logroId: r.id })),
     ...coments!.results.map((k) => ({ at: k.at, persona: k.persona, verbo: 'comentó', objeto: `“${String(k.text).slice(0, 90)}”`, tipo: 'reconocimiento', logroId: k.id })),
   ];
@@ -213,7 +213,7 @@ comunidad.get('/comunidad/inicio', async (c) => {
 
 // ─────────────────────────────── Compromisos del día (§4.4)
 
-const compromisoDeHoy = async (db: D1Database, personaId: string, dia: string) => {
+const compromisoDeHoy = async (db: D1Database, personaId: string, dia: string): Promise<(Fila & { tareas: string[]; base: string[] }) | null> => {
   const c = await db.prepare('SELECT * FROM commitments WHERE person_id = ?1 AND day = ?2').bind(personaId, dia).first<Fila>();
   if (!c) return null;
   const { results } = await db.prepare('SELECT task_id, baseline FROM commitment_tasks WHERE commitment_id = ?1').bind(c.id).all<Fila>();

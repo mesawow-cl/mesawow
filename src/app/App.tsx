@@ -20,6 +20,8 @@ import { Perfil } from './vistas/Perfil';
 import { Bases, Entregables, Proyectos } from './vistas/Proyectos';
 import { Registro } from './vistas/Registro';
 import { Sprints } from './vistas/Sprints';
+import { Comunidad, LogrosEquipo, Moderacion } from './vistas/Comunidad';
+import { Informes } from './vistas/Informes';
 import { CorreoYWhatsapp, MisAvisos, Plataformas, PreferenciasAvisos } from './vistas/Avisos';
 import { EnConstruccion, Inicio, Mas } from './vistas/Vistas';
 
@@ -119,7 +121,7 @@ export const App = () => {
   const contenido = () => {
     if (!permitida) return <div class="pronto" role="alert"><strong>No tienes acceso a esta sección.</strong><p>Si crees que deberías verla, pídelo a coordinación.</p></div>;
     switch (vistaFinal) {
-      case 'muro': return <Inicio persona={persona} />;
+      case 'muro': return <Inicio persona={persona} aviso={setAviso} />;
       case 'more': return <Mas persona={persona} alAbrirCuenta={() => setAbierto('cuenta')} />;
       case 'team': return <Equipo actorId={actor.id} aviso={setAviso} />;
       case 'tasks': return <Tareas persona={persona} aviso={setAviso} crear={crearTarea && !viendoOtra} alCrear={setCrearTarea} />;
@@ -136,6 +138,10 @@ export const App = () => {
       case 'aire': return <MesaAlAire persona={persona} aviso={setAviso} />;
       case 'calendario': return <Calendarios persona={persona} />;
       case 'brands': return <Marcas persona={persona} aviso={setAviso} />;
+      case 'plaza': return <Comunidad persona={persona} aviso={setAviso} />;
+      case 'recognition': return <LogrosEquipo aviso={setAviso} />;
+      case 'moderation': return <Moderacion aviso={setAviso} />;
+      case 'reports': return <Informes />;
       case 'notifications': return <MisAvisos persona={persona} />;
       case 'preferences': return <PreferenciasAvisos aviso={setAviso} soloLectura={viendoOtra} />;
       case 'connections': return <CorreoYWhatsapp persona={persona} aviso={setAviso} />;
