@@ -28,13 +28,20 @@ export const MiMesa = ({ persona, aviso }: { persona: Persona; aviso: (m: string
   const [quien, setQuien] = useState(persona.id);
   const [gente, setGente] = useState<PersonaDirectorio[]>([]);
   const [agenda, setAgenda] = useState<Agenda | null>(null);
-  const [dialogo, setDialogo] = useState<'reunion' | 'reservar' | null>(null);
+  const [dialogo, setDialogo] = useState<'reunion' | 'reservar' | 'google' | null>(null);
 
   const lunes = lunesDe(fecha);
   const dias = useMemo(() => (modo === 'semana' ? [0, 1, 2, 3, 4].map((i) => sumarDias(lunes, i)) : [fecha]), [modo, lunes, fecha]);
   const cargar = () => pedir<Agenda>(`/agenda?persona=${quien}&desde=${dias[0]}&hasta=${dias.at(-1)}`).then(setAgenda).catch((e: Error) => aviso(e.message));
   useEffect(() => { cargar(); }, [quien, dias[0], dias.at(-1)]);
   useEffect(() => { if (persona.permisos.coordinaODirige) cargarPersonas().then(setGente); }, []);
+  // Regreso desde Google Calendar.
+  useEffect(() => {
+    const g = new URLSearchParams(location.search).get('google');
+    if (!g) return;
+    aviso(g === 'ok' ? 'Google Calendar conectado. Tus reuniones entran a mesawow y tus bloques de trabajo aparecen en Google.' : 'No se pudo conectar Google Calendar. Intenta de nuevo.');
+    history.replaceState(null, '', location.pathname);
+  }, []);
   const [piezas, setPiezas] = useState<PiezaH[]>([]);
   useEffect(() => {
     pedir<{ piezas: PiezaH[] }>(`/calendario?persona=${quien}&desde=${dias[0]}&hasta=${dias.at(-1)}`).then((r) => setPiezas(r.piezas)).catch(() => setPiezas([]));
@@ -61,6 +68,7 @@ export const MiMesa = ({ persona, aviso }: { persona: Persona; aviso: (m: string
         </div>
         {puedeEditar && (
           <div class="persona-acciones">
+            {propia && <button type="button" onClick={() => setDialogo('google')}>Google Calendar</button>}
             <button type="button" onClick={() => setDialogo('reunion')}>＋ Reunión</button>
             <button type="button" class="primario" onClick={() => setDialogo('reservar')}>＋ Reservar trabajo</button>
           </div>
@@ -129,6 +137,7 @@ export const MiMesa = ({ persona, aviso }: { persona: Persona; aviso: (m: string
       )}
 
       {dialogo === 'reunion' && <FormReunion personaId={quien} fecha={dias[0]!} alCerrar={() => setDialogo(null)} alGuardar={alGuardar} />}
+      {dialogo === 'google' && <ConexionGoogle alCerrar={() => setDialogo(null)} aviso={aviso} alSincronizar={cargar} />}
       {dialogo === 'reservar' && <FormReservar personaId={quien} fecha={dias[0]!} alCerrar={() => setDialogo(null)} alGuardar={alGuardar} />}
     </section>
   );
@@ -202,6 +211,36 @@ const FormReservar = ({ personaId, fecha, alCerrar, alGuardar }: { personaId: st
           {error && <p class="error-form" role="alert">{error}</p>}
           <div class="acciones"><button type="button" onClick={alCerrar}>Cancelar</button><button type="submit" class="primario">Calcular y reservar</button></div>
         </form>
+      )}
+    </Dialogo>
+  );
+};
+
+const ConexionGoogle = ({ alCerrar, aviso, alSincronizar }: { alCerrar: () => void; aviso: (m: string) => void; alSincronizar: () => void }) => {
+  const [e, setE] = useState<{ configurado: boolean; conectado: boolean; estado: string; ultimaSincronizacion: string | null } | null>(null);
+  const [ocupado, setOcupado] = useState(false);
+  const cargar = () => pedir<typeof e>('/google/estado').then(setE);
+  useEffect(() => { cargar(); }, []);
+  const hacer = async (f: () => Promise<unknown>, m: string) => {
+    setOcupado(true);
+    try { await f(); aviso(m); await cargar(); alSincronizar(); } catch (err) { aviso((err as Error).message); } finally { setOcupado(false); }
+  };
+  return (
+    <Dialogo titulo="Google Calendar" abierto alCerrar={alCerrar}>
+      {!e ? <p>Cargando…</p> : (
+        <div class="formulario">
+          <p>Conecta tu Google Calendar: tus reuniones entran a mesawow cada 5 minutos y, si aparece una inesperada, tus tareas se corren solas. Tus bloques de trabajo se escriben en tu Google Calendar.</p>
+          <p><strong>Estado:</strong> {e.estado}{e.ultimaSincronizacion ? ` · última sincronización ${new Date(e.ultimaSincronizacion).toLocaleString('es-CL', { timeZone: 'America/Santiago' })}` : ''}</p>
+          {!e.configurado && <p class="aviso-bloqueo">Google Calendar aún no está configurado en mesawow. La administración debe cargar las credenciales de Google.</p>}
+          <div class="acciones">
+            {e.conectado && <button type="button" disabled={ocupado} onClick={() => hacer(() => pedir('/google/desconectar', { method: 'POST' }), 'Google Calendar desconectado.')}>Desconectar</button>}
+            {e.conectado && <button type="button" disabled={ocupado} onClick={() => hacer(() => pedir('/google/sincronizar', { method: 'POST' }), 'Sincronizado con Google Calendar.')}>Sincronizar ahora</button>}
+            <button type="button" class="primario" disabled={!e.configurado || ocupado}
+              onClick={async () => { try { location.assign((await pedir<{ url: string }>('/google/conectar')).url); } catch (err) { aviso((err as Error).message); } }}>
+              {e.conectado ? 'Volver a conectar' : 'Conectar Google Calendar'}
+            </button>
+          </div>
+        </div>
       )}
     </Dialogo>
   );
