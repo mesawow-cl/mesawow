@@ -3,23 +3,23 @@
 PRAGMA defer_foreign_keys = true;
 
 INSERT OR REPLACE INTO people (id, name, email, role, mesa_id, phone) VALUES ('demo-ana', 'Ana Prueba', 'ana@mesawow.test', 'Administrador general', 'mesa-marketing', NULL);
-INSERT OR IGNORE INTO preferences (person_id) VALUES ('demo-ana');
+INSERT OR IGNORE INTO preferences (person_id, whatsapp) VALUES ('demo-ana', 1);
 INSERT OR REPLACE INTO people (id, name, email, role, mesa_id, phone) VALUES ('demo-bruno', 'Bruno Ejemplo', 'bruno@mesawow.test', 'Coordinación de Marketing', 'mesa-marketing', NULL);
-INSERT OR IGNORE INTO preferences (person_id) VALUES ('demo-bruno');
+INSERT OR IGNORE INTO preferences (person_id, whatsapp) VALUES ('demo-bruno', 1);
 INSERT OR REPLACE INTO people (id, name, email, role, mesa_id, phone) VALUES ('demo-carla', 'Carla Muestra', 'carla@mesawow.test', 'Responsable de marca o área', 'mesa-comercial-y-ventas', NULL);
-INSERT OR IGNORE INTO preferences (person_id) VALUES ('demo-carla');
+INSERT OR IGNORE INTO preferences (person_id, whatsapp) VALUES ('demo-carla', 1);
 INSERT OR REPLACE INTO people (id, name, email, role, mesa_id, phone) VALUES ('demo-diego', 'Diego Ensayo', 'diego@mesawow.test', 'Ejecutor', 'mesa-marketing', NULL);
-INSERT OR IGNORE INTO preferences (person_id) VALUES ('demo-diego');
+INSERT OR IGNORE INTO preferences (person_id, whatsapp) VALUES ('demo-diego', 1);
 INSERT OR REPLACE INTO people (id, name, email, role, mesa_id, phone) VALUES ('demo-elena', 'Elena Simulada', 'elena@mesawow.test', 'Ejecutor', 'mesa-operaciones', NULL);
-INSERT OR IGNORE INTO preferences (person_id) VALUES ('demo-elena');
+INSERT OR IGNORE INTO preferences (person_id, whatsapp) VALUES ('demo-elena', 1);
 INSERT OR REPLACE INTO people (id, name, email, role, mesa_id, phone) VALUES ('demo-fabian', 'Fabián Ficticio', 'fabian@mesawow.test', 'Revisor o aprobador', 'mesa-marketing', NULL);
-INSERT OR IGNORE INTO preferences (person_id) VALUES ('demo-fabian');
+INSERT OR IGNORE INTO preferences (person_id, whatsapp) VALUES ('demo-fabian', 1);
 INSERT OR REPLACE INTO people (id, name, email, role, mesa_id, phone) VALUES ('demo-gloria', 'Gloria Directiva', 'gloria@mesawow.test', 'Ejecutor', 'mesa-direccion', NULL);
-INSERT OR IGNORE INTO preferences (person_id) VALUES ('demo-gloria');
+INSERT OR IGNORE INTO preferences (person_id, whatsapp) VALUES ('demo-gloria', 1);
 INSERT OR REPLACE INTO people (id, name, email, role, mesa_id, phone) VALUES ('demo-hugo', 'Hugo Consulta', 'hugo@mesawow.test', 'Consulta', 'mesa-finanzas', NULL);
-INSERT OR IGNORE INTO preferences (person_id) VALUES ('demo-hugo');
+INSERT OR IGNORE INTO preferences (person_id, whatsapp) VALUES ('demo-hugo', 1);
 INSERT OR REPLACE INTO people (id, name, email, role, mesa_id, phone) VALUES ('demo-ines', 'Inés Mandante', 'ines@mesawow.test', 'Mandante', 'mesa-direccion', NULL);
-INSERT OR IGNORE INTO preferences (person_id) VALUES ('demo-ines');
+INSERT OR IGNORE INTO preferences (person_id, whatsapp) VALUES ('demo-ines', 1);
 
 INSERT OR REPLACE INTO brands (id, name, color, description, director_id) VALUES ('demo-aurora', 'Aurora Café', '#2463D4', 'Marca de ejemplo', 'demo-gloria');
 INSERT OR REPLACE INTO brand_minimums (brand_id, idx, title, state) VALUES ('demo-aurora', 0, 'Definición y propuesta de valor', 'Vigente');

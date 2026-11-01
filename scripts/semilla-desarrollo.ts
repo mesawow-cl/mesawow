@@ -38,7 +38,7 @@ export const sqlSemillaDesarrollo = () => {
   ];
   for (const p of PERSONAS_DEMO) {
     l.push(insert('people', { id: p.id, name: p.name, email: correoDemo(p.id), role: p.role, mesa_id: idMesa(p.mesa), phone: null }, 'INSERT OR REPLACE'));
-    l.push(insert('preferences', { person_id: p.id }, 'INSERT OR IGNORE'));
+    l.push(insert('preferences', { person_id: p.id, whatsapp: 1 }, 'INSERT OR IGNORE'));
   }
   l.push('');
   for (const m of MARCAS_DEMO) {

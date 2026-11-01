@@ -518,7 +518,7 @@ export const importarRespaldo = (respaldo: unknown, opciones: { ahora: string })
     if (!porId.has(pid)) continue;
     upsert('preferences', {
       person_id: pid, mentions: bool(pref?.mentions !== false), summary: de(pref?.summary, ['Diario', 'Semanal', 'Sin resumen externo'] as const, 'Semanal'),
-      email: bool(pref?.email), whatsapp: bool(pref?.whatsapp),
+      email: bool(pref?.email), whatsapp: 1, // D2: el aviso por WhatsApp de tareas listas parte activo
     }, ['person_id']);
   }
 
