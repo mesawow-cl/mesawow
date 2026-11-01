@@ -30,6 +30,15 @@ Plan necesario: Cloudflare Zero Trust **Free**, que permite hasta 50 usuarios.
 
 `mesawow.cl`, la vista pública de mandantes, **no** va detrás de Access.
 
+## Excepción para el calendario de bloques (Google Calendar por iCal)
+
+Google lee el enlace privado de bloques de trabajo de cada persona sin iniciar sesión. Ese enlace ya lleva un token secreto. Para que Google llegue a él, en la misma aplicación de Access agrega una segunda política:
+
+- **Policy name:** `Calendario iCal`.
+- **Action:** Bypass.
+- **Include:** Everyone.
+- En **Application → Overview → Additional domains / paths**, agrega la ruta `app.mesawow.cl/api/v1/ical/feed/*` (y `staging.mesawow.cl/api/v1/ical/feed/*`) asociada a esa política.
+
 ## Cerrar sesión
 
 El botón "Cerrar sesión" de mesawow usa `/cdn-cgi/access/logout`, que cierra la sesión de Access en ese dispositivo.

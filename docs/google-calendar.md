@@ -1,6 +1,17 @@
 # Conectar Google Calendar
 
-Con esta conexión, mesawow trabaja con el Google Calendar de cada integrante en los dos sentidos:
+## Opción recomendada: enlaces iCal (sin Google Cloud)
+
+Cada persona lo hace una vez en **Mi mesa → Google Calendar**:
+
+1. **Reuniones de Google → mesawow:** Google Calendar → Configuración → su calendario → **Integrar el calendario** → copiar la **Dirección secreta en formato iCal** y pegarla en mesawow. mesawow la lee cada 5 minutos: si aparece una reunión nueva o se mueve, las tareas se corren solas y se avisa del nuevo término.
+2. **Bloques de trabajo → Google:** crear su enlace privado en mesawow y agregarlo en Google Calendar con **Otros calendarios → ＋ → Desde URL**. Google actualiza esos calendarios cada algunas horas.
+
+El paso 2 funciona cuando mesawow está publicado (Google no llega a `localhost`) y requiere la excepción de Access descrita en `docs/acceso-cloudflare.md`.
+
+## Opción alternativa: OAuth con Google Cloud (sincronización inmediata)
+
+Con esta opción, mesawow trabaja con el Google Calendar de cada integrante en los dos sentidos:
 
 - Lee las reuniones cada 5 minutos. Si aparece una inesperada, las tareas se corren solas y se avisa del nuevo término.
 - Escribe los bloques de trabajo como eventos 🛠 en el calendario de cada persona.

@@ -217,29 +217,69 @@ const FormReservar = ({ personaId, fecha, alCerrar, alGuardar }: { personaId: st
 };
 
 const ConexionGoogle = ({ alCerrar, aviso, alSincronizar }: { alCerrar: () => void; aviso: (m: string) => void; alSincronizar: () => void }) => {
-  const [e, setE] = useState<{ configurado: boolean; conectado: boolean; estado: string; ultimaSincronizacion: string | null } | null>(null);
+  const [e, setE] = useState<{ disponible: boolean; fuente: boolean; enlace: boolean; estado: string; ultimaSincronizacion: string | null } | null>(null);
+  const [url, setUrl] = useState('');
+  const [enlace, setEnlace] = useState('');
   const [ocupado, setOcupado] = useState(false);
-  const cargar = () => pedir<typeof e>('/google/estado').then(setE);
+  const cargar = () => pedir<typeof e>('/ical/estado').then(setE);
   useEffect(() => { cargar(); }, []);
   const hacer = async (f: () => Promise<unknown>, m: string) => {
     setOcupado(true);
     try { await f(); aviso(m); await cargar(); alSincronizar(); } catch (err) { aviso((err as Error).message); } finally { setOcupado(false); }
   };
+  const crearEnlace = async () => {
+    if (e?.enlace && !confirm('Se creará un enlace nuevo y el anterior dejará de funcionar. ¿Seguir?')) return;
+    try { setEnlace((await pedir<{ url: string }>('/ical/enlace', { method: 'POST' })).url); cargar(); } catch (err) { aviso((err as Error).message); }
+  };
   return (
     <Dialogo titulo="Google Calendar" abierto alCerrar={alCerrar}>
       {!e ? <p>Cargando…</p> : (
         <div class="formulario">
-          <p>Conecta tu Google Calendar: tus reuniones entran a mesawow cada 5 minutos y, si aparece una inesperada, tus tareas se corren solas. Tus bloques de trabajo se escriben en tu Google Calendar.</p>
-          <p><strong>Estado:</strong> {e.estado}{e.ultimaSincronizacion ? ` · última sincronización ${new Date(e.ultimaSincronizacion).toLocaleString('es-CL', { timeZone: 'America/Santiago' })}` : ''}</p>
-          {!e.configurado && <p class="aviso-bloqueo">Google Calendar aún no está configurado en mesawow. La administración debe cargar las credenciales de Google.</p>}
-          <div class="acciones">
-            {e.conectado && <button type="button" disabled={ocupado} onClick={() => hacer(() => pedir('/google/desconectar', { method: 'POST' }), 'Google Calendar desconectado.')}>Desconectar</button>}
-            {e.conectado && <button type="button" disabled={ocupado} onClick={() => hacer(() => pedir('/google/sincronizar', { method: 'POST' }), 'Sincronizado con Google Calendar.')}>Sincronizar ahora</button>}
-            <button type="button" class="primario" disabled={!e.configurado || ocupado}
-              onClick={async () => { try { location.assign((await pedir<{ url: string }>('/google/conectar')).url); } catch (err) { aviso((err as Error).message); } }}>
-              {e.conectado ? 'Volver a conectar' : 'Conectar Google Calendar'}
-            </button>
-          </div>
+          <p><strong>Estado:</strong> {e.estado}{e.ultimaSincronizacion ? ` · última lectura ${new Date(e.ultimaSincronizacion).toLocaleString('es-CL', { timeZone: 'America/Santiago' })}` : ''}</p>
+          <fieldset>
+            <legend>1. Tus reuniones de Google → mesawow</legend>
+            <ol class="pasos-guia">
+              <li>Abre <a href="https://calendar.google.com/calendar/r/settings" target="_blank" rel="noopener noreferrer">la configuración de Google Calendar</a>.</li>
+              <li>A la izquierda, en <strong>Configuración de mis calendarios</strong>, elige tu calendario.</li>
+              <li>Baja hasta <strong>Integrar el calendario</strong> y copia la <strong>Dirección secreta en formato iCal</strong>.</li>
+              <li>Pégala aquí. mesawow lee tus reuniones cada 5 minutos y corre tus tareas si aparece una nueva.</li>
+            </ol>
+            {e.fuente ? (
+              <div class="acciones" style={{ justifyContent: 'flex-start' }}>
+                <span class="insignia verde">Conectado</span>
+                <button type="button" disabled={ocupado} onClick={() => hacer(() => pedir('/ical/sincronizar', { method: 'POST' }), 'Reuniones actualizadas.')}>Leer ahora</button>
+                <button type="button" disabled={ocupado} onClick={() => hacer(() => pedir('/ical/fuente', { method: 'DELETE' }), 'Desconectado.')}>Desconectar</button>
+              </div>
+            ) : (
+              <form class="enlace-copiable" onSubmit={(ev) => { ev.preventDefault(); hacer(() => pedir('/ical/fuente', { method: 'PUT', json: { url } }), 'Google Calendar conectado: tus reuniones ya están en Mi mesa.'); }}>
+                <label class="visualmente-oculto" for="ical-url">Dirección secreta en formato iCal</label>
+                <input id="ical-url" type="url" required placeholder="https://calendar.google.com/calendar/ical/…/private-…/basic.ics" value={url} onInput={(ev) => setUrl((ev.target as HTMLInputElement).value)} />
+                <button type="submit" class="primario" disabled={ocupado || !e.disponible}>Conectar</button>
+              </form>
+            )}
+            <span class="ayuda">Esa dirección es privada: mesawow la guarda cifrada. No la compartas con nadie más.</span>
+          </fieldset>
+          <fieldset>
+            <legend>2. Tus bloques de trabajo → Google</legend>
+            <ol class="pasos-guia">
+              <li>Crea tu enlace privado y cópialo.</li>
+              <li>En Google Calendar, a la izquierda, junto a <strong>Otros calendarios</strong>, toca <strong>＋</strong> → <strong>Desde URL</strong>.</li>
+              <li>Pega el enlace y toca <strong>Agregar calendario</strong>. Tus bloques aparecen con 🛠; Google los actualiza cada algunas horas.</li>
+            </ol>
+            {enlace ? (
+              <div class="enlace-copiable">
+                <input readOnly value={enlace} aria-label="Tu enlace privado" onFocus={(ev) => (ev.target as HTMLInputElement).select()} />
+                <button type="button" onClick={() => navigator.clipboard.writeText(enlace).then(() => aviso('Enlace copiado.'), () => aviso('Copia el enlace manualmente.'))}>Copiar</button>
+              </div>
+            ) : (
+              <div class="acciones" style={{ justifyContent: 'flex-start' }}>
+                {e.enlace && <span class="insignia verde">Enlace creado</span>}
+                <button type="button" onClick={crearEnlace}>{e.enlace ? 'Crear un enlace nuevo' : 'Crear mi enlace'}</button>
+              </div>
+            )}
+            {enlace.includes('localhost') && <span class="aviso-bloqueo">Estás en tu computador: Google no puede leer un enlace de localhost. Este paso funciona cuando mesawow esté publicado.</span>}
+            {e.enlace && !enlace && <span class="ayuda">Por seguridad el enlace solo se muestra al crearlo. Si lo perdiste, crea uno nuevo y reemplázalo en Google.</span>}
+          </fieldset>
         </div>
       )}
     </Dialogo>
