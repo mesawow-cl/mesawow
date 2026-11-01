@@ -1,5 +1,6 @@
 // Mis encargos (§4.8): lista con filtros y detalle "Tu tarea" con su ciclo de vida.
 import { useEffect, useState } from 'preact/hooks';
+import { useLatido } from '../vivo';
 import { ESTADOS_TAREA } from '../../shared/constantes';
 import { abrirArchivo, pedir, subirArchivo, type Persona } from '../api';
 import { Dialogo } from '../componentes/Dialogo';
@@ -40,7 +41,8 @@ export const Tareas = ({ persona, aviso, crear, alCrear }: { persona: Persona; a
     pedir<{ tareas: Fila[] }>(`/tareas?${p}`).then((r) => setFilas(r.tareas)).catch((e: Error) => aviso(e.message));
   };
   useEffect(() => { cargarPersonas().then(setGente).catch(() => setGente([])); }, []);
-  useEffect(() => { const t = setTimeout(cargar, q ? 250 : 0); return () => clearTimeout(t); }, [q, estado, quien]);
+  const latido = useLatido();
+  useEffect(() => { const t = setTimeout(cargar, q ? 250 : 0); return () => clearTimeout(t); }, [q, estado, quien, latido]);
 
   const abrir = (id: string | null) => { setAbierta(id); fijarParametro('tarea', id); };
 
@@ -114,7 +116,8 @@ export const DetalleTarea = ({ id, alCerrar, aviso, alCambiar, alEditar }: {
   const [ocupado, setOcupado] = useState(false);
 
   const cargar = () => pedir<{ tarea: any }>(`/tareas/${id}`).then((r) => setT(r.tarea)).catch((e: Error) => setError(e.message));
-  useEffect(() => { cargar(); }, [id]);
+  const latidoDetalle = useLatido();
+  useEffect(() => { cargar(); }, [id, latidoDetalle]);
 
   const hacer = async (ruta: string, cuerpo: unknown, mensaje: string) => {
     setOcupado(true);

@@ -1,5 +1,6 @@
 // Mi mesa (§4.6) con vista semanal tipo horario escolar (§4.7 bis, D5) y vista por día.
 import { useEffect, useMemo, useState } from 'preact/hooks';
+import { useLatido } from '../vivo';
 import { hoySantiago } from '../../shared/fechas';
 import { pedir, type Persona } from '../api';
 import { Dialogo } from '../componentes/Dialogo';
@@ -33,7 +34,8 @@ export const MiMesa = ({ persona, aviso }: { persona: Persona; aviso: (m: string
   const lunes = lunesDe(fecha);
   const dias = useMemo(() => (modo === 'semana' ? [0, 1, 2, 3, 4].map((i) => sumarDias(lunes, i)) : [fecha]), [modo, lunes, fecha]);
   const cargar = () => pedir<Agenda>(`/agenda?persona=${quien}&desde=${dias[0]}&hasta=${dias.at(-1)}`).then(setAgenda).catch((e: Error) => aviso(e.message));
-  useEffect(() => { cargar(); }, [quien, dias[0], dias.at(-1)]);
+  const latido = useLatido();
+  useEffect(() => { cargar(); }, [quien, dias[0], dias.at(-1), latido]);
   useEffect(() => { if (persona.permisos.coordinaODirige) cargarPersonas().then(setGente); }, []);
   // Regreso desde Google Calendar.
   useEffect(() => {
@@ -45,7 +47,7 @@ export const MiMesa = ({ persona, aviso }: { persona: Persona; aviso: (m: string
   const [piezas, setPiezas] = useState<PiezaH[]>([]);
   useEffect(() => {
     pedir<{ piezas: PiezaH[] }>(`/calendario?persona=${quien}&desde=${dias[0]}&hasta=${dias.at(-1)}`).then((r) => setPiezas(r.piezas)).catch(() => setPiezas([]));
-  }, [quien, dias[0], dias.at(-1)]);
+  }, [quien, dias[0], dias.at(-1), latido]);
 
   const mover = (n: number) => setFecha(sumarDias(fecha, modo === 'semana' ? n * 7 : n));
   const propia = quien === persona.id;

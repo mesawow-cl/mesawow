@@ -1,5 +1,6 @@
 // Mesa al aire (§4.19).
 import { useEffect, useState } from 'preact/hooks';
+import { useLatido } from '../vivo';
 import { CANALES_AL_AIRE } from '../../shared/constantes';
 import { hoySantiago, utcASantiago } from '../../shared/fechas';
 import { pedir, type Persona } from '../api';
@@ -19,7 +20,8 @@ export const MesaAlAire = ({ persona, aviso }: { persona: Persona; aviso: (m: st
   const [form, setForm] = useState<{ tareaId?: string } | null>(null);
   const coordina = persona.permisos.coordina && !persona.permisos.soloLectura;
   const cargar = () => pedir<typeof datos>(`/aire${canal ? `?canal=${encodeURIComponent(canal)}` : ''}`).then(setDatos).catch((e: Error) => aviso(e.message));
-  useEffect(() => { cargar(); }, [canal]);
+  const latido = useLatido();
+  useEffect(() => { cargar(); }, [canal, latido]);
 
   const ahora = utcASantiago(new Date().toISOString());
   const hoy = hoySantiago();

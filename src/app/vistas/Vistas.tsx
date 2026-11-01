@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'preact/hooks';
+import { useEstadoEnVivo, useLatido } from '../vivo';
 import { ESPACIOS, pestanasVisibles, type Vista } from '../../shared/navegacion';
 import { hoySantiago } from '../../shared/fechas';
 import { ZONA_HORARIA } from '../../shared/constantes';
@@ -62,7 +63,16 @@ export const Inicio = ({ persona }: { persona: Persona }) => {
   const nombre = persona.name.split(' ')[0];
   const [d, setD] = useState<DatosInicio | null>(null);
   const [filtro, setFiltro] = useState('todo');
-  useEffect(() => { pedir<DatosInicio>('/inicio').then(setD).catch(() => setD(null)); }, [persona.id]);
+  const latido = useLatido();
+  const enVivo = useEstadoEnVivo();
+  const [vistos, setVistos] = useState<Set<string> | null>(null);
+  useEffect(() => {
+    pedir<DatosInicio>('/inicio').then((x) => {
+      // Lo que llega después de la primera carga se resalta como nuevo.
+      setVistos((v) => v ?? new Set(x.actividad.map((e) => `${e.at}|${e.persona}|${e.objeto}`)));
+      setD(x);
+    }).catch(() => setD(null));
+  }, [persona.id, latido]);
   const hoy = hoySantiago();
   const total = d?.tuDia.tareas.length ?? 0;
   const pct = total ? Math.round(((d?.tuDia.hechas ?? 0) / total) * 100) : 0;
@@ -72,7 +82,7 @@ export const Inicio = ({ persona }: { persona: Persona }) => {
       <div class="hero">
         <div class="hero-arriba">
           <span>{fechaDeHoy()}</span>
-          <span class="en-vivo"><i aria-hidden="true" />En vivo</span>
+          <span class={`en-vivo${enVivo === 'conectado' ? '' : ' desconectado'}`}><i aria-hidden="true" />{enVivo === 'conectado' ? 'En vivo' : 'Reconectando…'}</span>
         </div>
         <h1 id="titulo-vista">¡Hola, <span>{nombre}</span>! 👋</h1>
         <p>Hoy hacemos que las cosas pasen. {d?.tuDia.tareas.length ? `Tienes ${d.tuDia.tareas.length} encargo(s) que vencen hoy.` : 'Aquí verás tu trabajo, el del equipo y lo que celebramos.'}</p>
@@ -90,7 +100,7 @@ export const Inicio = ({ persona }: { persona: Persona }) => {
             <Pronto texto="Los hitos del equipo (sprint completo, lanzamiento verificado) se celebran aquí desde la Fase 7." />
           </section>
           <section class="tarjeta" aria-labelledby="t-actividad">
-            <div class="seccion-cabeza"><h2 id="t-actividad">Actividad del equipo</h2><span class="insignia">En vivo desde la Fase 5</span></div>
+            <div class="seccion-cabeza"><h2 id="t-actividad">Actividad del equipo</h2><span class="insignia">{enVivo === 'conectado' ? 'En vivo' : 'Reconectando…'}</span></div>
             <div class="chips" role="group" aria-label="Filtrar actividad" style={{ marginBottom: '10px' }}>
               {[['todo', 'Todo'], ['entrega', 'Entregas'], ['revision', 'Revisiones'], ['logro', 'Aprobaciones'], ['sprint', 'Sprints']].map(([k, t]) => (
                 <button type="button" key={k} class="chip-filtro" aria-pressed={filtro === k} onClick={() => setFiltro(k!)}>{t}</button>
@@ -99,7 +109,7 @@ export const Inicio = ({ persona }: { persona: Persona }) => {
             {!actividad.length ? <p class="apagado">Todavía no hay actividad para mostrar.</p> : (
               <ul class="lista-simple actividad" aria-live="polite">
                 {actividad.slice(0, 12).map((e, i) => (
-                  <li key={i}><strong>{e.persona}</strong> {e.verbo} {e.tareaId ? <a href={`/encargos?tarea=${e.tareaId}`}>{e.objeto}</a> : e.objeto}
+                  <li key={i} class={vistos && !vistos.has(`${e.at}|${e.persona}|${e.objeto}`) ? 'nuevo' : ''}><strong>{e.persona}</strong> {e.verbo} {e.tareaId ? <a href={`/encargos?tarea=${e.tareaId}`}>{e.objeto}</a> : e.objeto}
                     <span class="apagado"> · {hace(e.at)}</span></li>
                 ))}
               </ul>

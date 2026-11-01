@@ -1,5 +1,6 @@
 // Dos calendarios (§4.7): trabajo (horas) y al aire (piezas), por mes o semana, y Semana del equipo.
 import { useEffect, useMemo, useState } from 'preact/hooks';
+import { useLatido } from '../vivo';
 import { hoySantiago } from '../../shared/fechas';
 import { pedir, type Persona } from '../api';
 import { Horario, Leyenda, type BloqueH, type PiezaH, type ReunionH } from '../componentes/Horario';
@@ -25,6 +26,7 @@ export const Calendarios = ({ persona }: { persona: Persona }) => {
   const [dia, setDia] = useState(inicial);
   const [gente, setGente] = useState<PersonaDirectorio[]>([]);
   const [datos, setDatos] = useState<Datos | null>(null);
+  const latido = useLatido();
   useEffect(() => { if (dirige) cargarPersonas().then(setGente); }, []);
 
   const mes = fecha.slice(0, 7);
@@ -36,9 +38,8 @@ export const Calendarios = ({ persona }: { persona: Persona }) => {
   }, [mes]);
   const rango = vista === 'mes' ? [semanas[0]![0]!, semanas.at(-1)![6]!] : [lunesDe(fecha), sumarDias(lunesDe(fecha), 4)];
   useEffect(() => {
-    setDatos(null);
-    pedir<Datos>(`/calendario?desde=${rango[0]}&hasta=${rango[1]}${quien ? `&persona=${quien}` : ''}`).then(setDatos).catch(() => setDatos(null));
-  }, [rango[0], rango[1], quien]);
+        pedir<Datos>(`/calendario?desde=${rango[0]}&hasta=${rango[1]}${quien ? `&persona=${quien}` : ''}`).then(setDatos).catch(() => setDatos(null));
+  }, [rango[0], rango[1], quien, latido]);
 
   const bloques = modo === 'aire' ? [] : datos?.bloques ?? [];
   const piezas = modo === 'trabajo' ? [] : datos?.piezas ?? [];

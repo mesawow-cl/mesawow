@@ -1,5 +1,6 @@
 // Sprints (§4.13): tablero, backlog, capacidad, avance diario y cierre.
 import { useEffect, useState } from 'preact/hooks';
+import { useLatido } from '../vivo';
 import { hoySantiago } from '../../shared/fechas';
 import { ErrorApi, pedir, type Persona } from '../api';
 import { Dialogo } from '../componentes/Dialogo';
@@ -29,7 +30,8 @@ export const Sprints = ({ persona, aviso }: { persona: Persona; aviso: (m: strin
   }).catch((e: Error) => aviso(e.message));
   const cargar = () => elegido ? pedir<Fila>(`/sprints/${elegido}`).then(setDet).catch((e: Error) => aviso(e.message)) : setDet(null);
   useEffect(() => { cargarLista(); }, []);
-  useEffect(() => { cargar(); }, [elegido]);
+  const latido = useLatido();
+  useEffect(() => { cargar(); }, [elegido, latido]);
 
   const accion = async (ruta: string, cuerpo: unknown, mensaje: string) => {
     try { await pedir(ruta, { method: 'POST', json: cuerpo }); aviso(mensaje); cargar(); cargarLista(); return true; }

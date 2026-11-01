@@ -67,12 +67,44 @@ export const MenuCuenta = ({ abierto, alCerrar, persona, personas, viendoComo, a
   );
 };
 
-export const Campana = ({ abierto, alCerrar }: { abierto: boolean; alCerrar: () => void }) => (
-  <Dialogo titulo="Alertas" abierto={abierto} alCerrar={alCerrar}>
-    <div class="campana-vacia">
-      <img src={sonrisa} alt="" width={80} height={56} />
-      <strong>No tienes alertas por ahora.</strong>
-      <p>Aquí verás tus tareas atrasadas, entregas por revisar, piezas en riesgo y menciones.</p>
-    </div>
-  </Dialogo>
-);
+export interface Alerta { clave: string; tono: string; titulo: string; detalle: string; tareaId: string | null; destino: string | null; en: string; leida: boolean }
+
+const ICONO_TONO: Record<string, NombreIcono> = { roja: 'bell', ambar: 'bell', violeta: 'check', teal: 'layers', verde: 'rocket', rosa: 'smile' };
+
+export const Campana = ({ abierto, alCerrar, alertas, alLeer }: {
+  abierto: boolean; alCerrar: () => void; alertas: Alerta[]; alLeer: (claves: string[]) => void;
+}) => {
+  const sinLeer = alertas.filter((a) => !a.leida);
+  const abrir = (a: Alerta) => {
+    if (!a.leida) alLeer([a.clave]);
+    alCerrar();
+    if (a.destino) ir(a.destino === '/comunidad' ? 'plaza' : 'muro');
+    else if (a.tareaId) { history.pushState(null, '', `/encargos?tarea=${a.tareaId}`); dispatchEvent(new PopStateEvent('popstate')); }
+  };
+  return (
+    <Dialogo titulo="Alertas" abierto={abierto} alCerrar={alCerrar}>
+      {!alertas.length ? (
+        <div class="campana-vacia">
+          <img src={sonrisa} alt="" width={80} height={56} />
+          <strong>No tienes alertas por ahora.</strong>
+          <p>Aquí verás tus tareas atrasadas, entregas por revisar, piezas en riesgo y menciones.</p>
+        </div>
+      ) : (
+        <div class="formulario">
+          {sinLeer.length > 0 && <button type="button" class="mas-opciones" onClick={() => alLeer(sinLeer.map((a) => a.clave))}>Marcar todo como leído</button>}
+          <ul class="lista-alertas">
+            {alertas.map((a) => (
+              <li key={a.clave}>
+                <button type="button" class={a.leida ? '' : 'sin-leer'} onClick={() => abrir(a)}>
+                  <span class={`ic-alerta ${a.tono}`}><Icono nombre={ICONO_TONO[a.tono] ?? 'bell'} tam={18} /></span>
+                  <span><strong>{a.titulo}</strong><small>{a.detalle}</small></span>
+                </button>
+              </li>
+            ))}
+          </ul>
+          <a href="/avisos" onClick={alCerrar}>Ver mis avisos</a>
+        </div>
+      )}
+    </Dialogo>
+  );
+};

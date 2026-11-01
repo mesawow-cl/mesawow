@@ -2,7 +2,8 @@ import { useCallback, useEffect, useState } from 'preact/hooks';
 import { vistaPermitida, type OpcionCrear } from '../shared/navegacion';
 import { cerrarSesion, ErrorApi, fijarVerComo, pedir, type Persona } from './api';
 import { BarraInferior, BarraSuperior, MenuLateral, Pestanas } from './componentes/Estructura';
-import { Campana, MenuCrear, MenuCuenta, type PersonaVisible } from './componentes/Menus';
+import { Campana, MenuCrear, MenuCuenta, type Alerta, type PersonaVisible } from './componentes/Menus';
+import { detenerEnVivo, iniciarEnVivo, useLatido } from './vivo';
 import { logoColor } from './marca';
 import { alHacerClicEnEnlace, ir, useUbicacion } from './rutas';
 import { EntrarComo } from './vistas/EntrarComo';
@@ -55,6 +56,8 @@ export const App = () => {
   const [aviso, setAviso] = useState('');
   const [crearTarea, setCrearTarea] = useState(false);
   const [planificar, setPlanificar] = useState(false);
+  const [alertas, setAlertas] = useState<{ alertas: Alerta[]; sinLeer: number }>({ alertas: [], sinLeer: 0 });
+  const latido = useLatido();
   const { vista, desde } = useUbicacion();
 
   const cargar = useCallback((silencioso = false) => {
@@ -79,6 +82,11 @@ export const App = () => {
   useEffect(() => {
     if (esAdminReal) pedir<{ personas: PersonaVisible[] }>('/personas').then((r) => setPersonas(r.personas)).catch(() => setPersonas([]));
   }, [esAdminReal]);
+  // En vivo y campana: se conectan al entrar y la campana se actualiza con cada señal.
+  const listo = estado.tipo === 'listo';
+  useEffect(() => { if (listo) iniciarEnVivo(); }, [listo]);
+  const cargarAlertas = () => pedir<{ alertas: Alerta[]; sinLeer: number }>('/alertas').then(setAlertas).catch(() => undefined);
+  useEffect(() => { if (listo) cargarAlertas(); }, [listo, latido, viendoComo]);
   useEffect(() => {
     if (!aviso) return;
     const t = setTimeout(() => setAviso(''), 4500);
@@ -137,7 +145,7 @@ export const App = () => {
       <a class="saltar" href="#contenido">Saltar al contenido</a>
       <MenuLateral vista={vistaFinal} desde={desde} permisos={permisos} />
       <div class="columna">
-        <BarraSuperior nombre={actor.name} alertas={0}
+        <BarraSuperior nombre={actor.name} alertas={alertas.sinLeer}
           alAbrirCampana={() => setAbierto('campana')} alAbrirCuenta={() => setAbierto('cuenta')} />
         {viendoOtra && (
           <div class="viendo-como" role="status">
@@ -164,8 +172,9 @@ export const App = () => {
           else setAviso(DESTINO_CREAR[id].aviso);
         }} />
       <MenuCuenta abierto={abierto === 'cuenta'} alCerrar={() => setAbierto(null)} persona={actor}
-        personas={personas} viendoComo={viendoComo} alVerComo={verComo} alSalir={cerrarSesion} />
-      <Campana abierto={abierto === 'campana'} alCerrar={() => setAbierto(null)} />
+        personas={personas} viendoComo={viendoComo} alVerComo={verComo} alSalir={() => { detenerEnVivo(); cerrarSesion(); }} />
+      <Campana abierto={abierto === 'campana'} alCerrar={() => setAbierto(null)} alertas={alertas.alertas}
+        alLeer={(claves) => pedir('/alertas/leer', { method: 'POST', json: { claves } }).then(cargarAlertas)} />
       {planificar && <CentroPlanificacion alCerrar={() => setPlanificar(false)} aviso={setAviso} />}
 
       <div class="aviso-flotante" role="status" aria-live="polite">{aviso}</div>

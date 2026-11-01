@@ -371,3 +371,16 @@ label.primario { color: #fff; border: 0; cursor: pointer; }
   .mes-puntos { display: flex; }
 }
 .pasos-guia { margin: 0 0 6px; padding-left: 20px; display: grid; gap: 4px; font-weight: 400; }
+
+/* ── Campana y en vivo */
+.lista-alertas { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.lista-alertas button { width: 100%; display: flex; gap: 12px; align-items: flex-start; text-align: left; padding: 10px 12px; min-height: 56px; border-radius: 14px; font-weight: 400; }
+.lista-alertas button.sin-leer { background: #FFF6F9; border-color: #F9C6D5; }
+.lista-alertas button.sin-leer strong::after { content: ''; display: inline-block; width: 8px; height: 8px; margin-left: 6px; border-radius: 50%; background: var(--rosa); vertical-align: middle; }
+.lista-alertas small { display: block; color: var(--tinta-2); overflow-wrap: anywhere; }
+.ic-alerta { flex: none; width: 36px; height: 36px; border-radius: 12px; display: grid; place-items: center; color: #fff; }
+.ic-alerta.roja { background: var(--rosa); } .ic-alerta.ambar { background: var(--naranja); } .ic-alerta.violeta { background: var(--violeta); }
+.ic-alerta.teal { background: var(--teal); } .ic-alerta.verde { background: #1f9d6b; } .ic-alerta.rosa { background: var(--wow-diagonal); }
+.en-vivo.desconectado i { background: #B9B5C6; animation: none; }
+.actividad li.nuevo { animation: entra .6s ease-out; background: #FFF6F9; border-radius: 8px; padding-inline: 6px; }
+@keyframes entra { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
