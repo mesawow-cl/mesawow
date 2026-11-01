@@ -11,7 +11,7 @@ export interface MensajeCola { id: string }
 
 /** Eventos que además van al teléfono como push. */
 const PUSH = new Set(['Nueva tarea asignada', 'Entrega para revisión', 'Ajustes solicitados', 'Tarea aprobada', 'Tarea reabierta', 'Bloqueo registrado',
-  'Bloqueo registrado en sprint', 'Salida al aire en riesgo', 'Tarea lista para desarrollar', 'Término recalculado por agenda', 'Tu tarea entró sola a un sprint', 'Mención']);
+  'Bloqueo registrado en sprint', 'Salida al aire en riesgo', 'Tarea lista para desarrollar', 'Término recalculado por agenda', 'Tu tarea entró sola a un sprint', 'Mención', 'Te felicitaron', 'Confirma una recepción entre áreas']);
 /** Eventos que van por correo de inmediato (el resto llega en el resumen). */
 const CORREO_INMEDIATO = new Set(['Salida al aire en riesgo']);
 const LISTA = 'Tarea lista para desarrollar';

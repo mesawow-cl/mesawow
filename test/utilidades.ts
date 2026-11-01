@@ -10,6 +10,10 @@ export const ejecutar = (sentencias: string[]) =>
 
 /** Deja la base con los datos de ejemplo, quitando lo que otras pruebas del mismo archivo hayan creado. */
 export const cargarSemilla = () => ejecutar([
+  'DELETE FROM achievements',
+  'DELETE FROM achievement_baseline',
+  'DELETE FROM commitments',
+  'DELETE FROM mentions',
   'DELETE FROM sprints',
   'DELETE FROM strategic_plans',
   'DELETE FROM campaigns',
@@ -37,7 +41,7 @@ export const cargarSemilla = () => ejecutar([
   'DELETE FROM digest_runs',
   'DELETE FROM push_subscriptions',
   'DELETE FROM email_events',
-  'UPDATE preferences SET summary = \'Semanal\', whatsapp = 1, push = 1',
+  'UPDATE preferences SET summary = \'Semanal\', whatsapp = 1, push = 1, mentions = 1',
   'DELETE FROM audit_log',
   "DELETE FROM people WHERE id NOT LIKE 'demo-%'",
   ...sqlSemillaDesarrollo().split('\n'),

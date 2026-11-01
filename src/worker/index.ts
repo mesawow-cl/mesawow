@@ -5,11 +5,13 @@ import { aire, procesarAire } from './aire';
 import { alertas } from './alertas';
 import { calendario } from './calendario';
 import { campanas } from './campanas';
+import { comunidad } from './comunidad';
 import { despachar, enviarMensaje, enviarResumenes, type MensajeCola } from './despacho';
 import { equipo, invitacionPropia } from './equipo';
 import { estrategia, publico } from './estrategia';
 import { google, googleCallback, sincronizarTodos } from './google';
 import { ical, icalPublico, sincronizarIcalTodos } from './ical';
+import { reconciliarLogros } from './logros';
 import { cuerpoError, ErrorApi } from './errores';
 import { esLocal, requiereIdentidad, requiereSesion, type Entorno } from './identidad';
 import { organizacion } from './organizacion';
@@ -42,7 +44,12 @@ api.use('*', async (c, next) => {
 api.use('*', async (c, next) => {
   await next();
   if (!['GET', 'HEAD', 'OPTIONS'].includes(c.req.method) && c.res.status < 400 && c.env.VIVO) {
-    c.executionCtx.waitUntil(Promise.all([emitir(c.env, { tipo: 'cambio', origen: c.req.path.split('/')[3] ?? '' }), despachar(c.env).catch((e) => console.error('despacho', e))]));
+    // Los logros se reconcilian antes de la señal, para que las pantallas ya los vean al refrescar.
+    const origen = c.req.path.split('/')[3] ?? '';
+    c.executionCtx.waitUntil(Promise.all([
+      reconciliarLogros(c.env.DB).catch((e) => console.error('logros', e)).then(() => emitir(c.env, { tipo: 'cambio', origen })),
+      despachar(c.env).catch((e) => console.error('despacho', e)),
+    ]));
   }
 });
 
@@ -88,6 +95,7 @@ api.route('/', sprints);
 api.route('/', planificacion);
 api.route('/', campanas);
 api.route('/', estrategia);
+api.route('/', comunidad);
 
 const conSesion = new Hono<Entorno>();
 
@@ -142,8 +150,8 @@ export default {
       return;
     }
     ctx.waitUntil((async () => {
-      const [aireR] = await Promise.all([procesarAire(env.DB), sincronizarTodos(env.DB, env), sincronizarIcalTodos(env.DB, env)]);
-      if (aireR.alAire || aireR.avisos) await emitir(env, { tipo: 'cambio', origen: 'aire' });
+      const [aireR, , , logros] = await Promise.all([procesarAire(env.DB), sincronizarTodos(env.DB, env), sincronizarIcalTodos(env.DB, env), reconciliarLogros(env.DB)]);
+      if (aireR.alAire || aireR.avisos || logros.nuevos) await emitir(env, { tipo: 'cambio', origen: 'aire' });
       await despachar(env);
     })());
   },
