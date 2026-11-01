@@ -33,6 +33,9 @@
   "r2_buckets": [
     { "binding": "ARCHIVOS", "bucket_name": "mesawow-archivos-local" }
   ],
+  // En vivo: una sala con WebSocket Hibernation para el Inicio, la campana y los calendarios.
+  "durable_objects": { "bindings": [{ "name": "VIVO", "class_name": "SalaEnVivo" }] },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["SalaEnVivo"] }],
   "env": {
     "staging": {
       "name": "mesawow-staging",
@@ -47,7 +50,8 @@
       ],
       "r2_buckets": [
         { "binding": "ARCHIVOS", "bucket_name": "mesawow-archivos-staging" }
-      ]
+      ],
+      "durable_objects": { "bindings": [{ "name": "VIVO", "class_name": "SalaEnVivo" }] }
     },
     "production": {
       "name": "mesawow",
@@ -62,7 +66,8 @@
       ],
       "r2_buckets": [
         { "binding": "ARCHIVOS", "bucket_name": "mesawow-archivos-production" }
-      ]
+      ],
+      "durable_objects": { "bindings": [{ "name": "VIVO", "class_name": "SalaEnVivo" }] }
     }
   }
 }

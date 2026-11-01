@@ -41,7 +41,8 @@ export const usarClavesDeAccessParaPruebas = (f: typeof clavesDePrueba) => { cla
 
 const correoDeLaPeticion = async (c: Ctx): Promise<string> => {
   if (esLocal(c.env)) {
-    const valor = c.req.header(CABECERA_DEV)?.trim().toLowerCase();
+    // El navegador no puede poner cabeceras en un WebSocket: en local, la conexión en vivo trae la persona por parámetro.
+    const valor = (c.req.header(CABECERA_DEV) ?? (c.req.path === '/api/v1/vivo' ? c.req.query('como') : undefined))?.trim().toLowerCase();
     if (!valor) throw new ErrorApi(401, 'sin_sesion', 'Elige con quién entrar.');
     return valor;
   }

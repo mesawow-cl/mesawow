@@ -2,6 +2,7 @@
 import { Hono } from 'hono';
 import { agenda, recalcularAgenda, sincronizarFeriados } from './agenda';
 import { aire, procesarAire } from './aire';
+import { alertas } from './alertas';
 import { calendario } from './calendario';
 import { campanas } from './campanas';
 import { equipo, invitacionPropia } from './equipo';
@@ -15,6 +16,9 @@ import { perfil } from './perfil';
 import { planificacion } from './planificacion';
 import { sprints } from './sprints';
 import { tareas } from './tareas';
+import { emitir, vivo } from './vivo';
+
+export { SalaEnVivo } from './vivo';
 
 const api = new Hono<Entorno>().basePath('/api/v1');
 
@@ -30,6 +34,14 @@ api.notFound((c) => c.json(cuerpoError('no_encontrado', 'Esa ruta no existe.'), 
 api.use('*', async (c, next) => {
   await next();
   c.header('cache-control', c.res.headers.get('cache-control') ?? 'no-store');
+});
+
+// En vivo: después de cada cambio exitoso se avisa a las pantallas abiertas (solo una señal, sin datos).
+api.use('*', async (c, next) => {
+  await next();
+  if (!['GET', 'HEAD', 'OPTIONS'].includes(c.req.method) && c.res.status < 400 && c.env.VIVO) {
+    c.executionCtx.waitUntil(emitir(c.env, { tipo: 'cambio', origen: c.req.path.split('/')[3] ?? '' }));
+  }
 });
 
 api.get('/salud', (c) => c.json({ ok: true, entorno: c.env.ENTORNO }));
@@ -63,6 +75,8 @@ api.route('/', aire);
 api.route('/', calendario);
 api.route('/', google);
 api.route('/', ical);
+api.route('/', alertas);
+api.route('/', vivo);
 api.route('/', tareas);
 api.route('/', organizacion);
 api.route('/', agenda);
@@ -118,7 +132,10 @@ export default {
       })());
       return;
     }
-    ctx.waitUntil(Promise.all([procesarAire(env.DB), sincronizarTodos(env.DB, env), sincronizarIcalTodos(env.DB, env)]).then(() => undefined));
+    ctx.waitUntil((async () => {
+      const [aireR] = await Promise.all([procesarAire(env.DB), sincronizarTodos(env.DB, env), sincronizarIcalTodos(env.DB, env)]);
+      if (aireR.alAire || aireR.avisos) await emitir(env, { tipo: 'cambio', origen: 'aire' });
+    })());
   },
 } satisfies ExportedHandler<Env>;
 
