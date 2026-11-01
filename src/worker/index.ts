@@ -7,6 +7,7 @@ import { campanas } from './campanas';
 import { equipo, invitacionPropia } from './equipo';
 import { estrategia, publico } from './estrategia';
 import { google, googleCallback, sincronizarTodos } from './google';
+import { ical, icalPublico, sincronizarIcalTodos } from './ical';
 import { cuerpoError, ErrorApi } from './errores';
 import { esLocal, requiereIdentidad, requiereSesion, type Entorno } from './identidad';
 import { organizacion } from './organizacion';
@@ -47,19 +48,21 @@ api.get('/dev/personas', async (c) => {
 const SIN_SESION = new Set(['/api/v1/salud', '/api/v1/dev/personas', '/api/v1/publico/mesa', '/api/v1/google/callback']);
 const SOLO_IDENTIDAD = new Set(['/api/v1/invitaciones/mia', '/api/v1/invitaciones/aceptar']);
 api.use('*', (c, next) => {
-  if (SIN_SESION.has(c.req.path)) return next();
+  if (SIN_SESION.has(c.req.path) || c.req.path.startsWith('/api/v1/ical/feed/')) return next();
   if (SOLO_IDENTIDAD.has(c.req.path)) return requiereIdentidad(c, next);
   return requiereSesion(c, next);
 });
 
 api.route('/', publico);
 api.route('/', googleCallback);
+api.route('/', icalPublico);
 api.route('/', invitacionPropia);
 api.route('/', equipo);
 api.route('/', perfil);
 api.route('/', aire);
 api.route('/', calendario);
 api.route('/', google);
+api.route('/', ical);
 api.route('/', tareas);
 api.route('/', organizacion);
 api.route('/', agenda);
@@ -115,7 +118,7 @@ export default {
       })());
       return;
     }
-    ctx.waitUntil(Promise.all([procesarAire(env.DB), sincronizarTodos(env.DB, env)]).then(() => undefined));
+    ctx.waitUntil(Promise.all([procesarAire(env.DB), sincronizarTodos(env.DB, env), sincronizarIcalTodos(env.DB, env)]).then(() => undefined));
   },
 } satisfies ExportedHandler<Env>;
 
