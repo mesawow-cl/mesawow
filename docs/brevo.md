@@ -12,16 +12,14 @@ Sin estas piezas mesawow funciona igual: el aviso queda en la app y en **Correo 
 
 Ninguna clave se pega en el chat ni en el código. Se cargan con `wrangler secret put` (Cloudflare) o en `.dev.vars` (tu computador, ignorado por git).
 
-## 1. Dominio y remitente del correo
+## 1. Remitente del correo
 
-Brevo ya tiene verificados `pulsoinversor.cl` y `plandesalida.cl`; `mesawow.cl` aún no está. Lo recomendado es autenticar `mesawow.cl` y enviar desde `avisos@mesawow.cl`:
+Decisión: los avisos salen desde **`mesawow.cl@gmail.com`** (nombre visible `mesawow`). Va en `wrangler.jsonc` como `BREVO_REMITENTE` (no es secreto).
 
-1. Brevo → **Senders, Domains & Dedicated IPs → Domains → Add a domain** → `mesawow.cl`.
-2. Brevo muestra registros DNS (código Brevo, DKIM y DMARC). Agrégalos en Cloudflare → `mesawow.cl` → **DNS → Records**, con el proxy apagado (nube gris).
-3. Vuelve a Brevo y pulsa **Authenticate**.
-4. **Senders → Add a sender**: nombre `mesawow`, correo `avisos@mesawow.cl`.
+1. Brevo → **Senders, Domains & Dedicated IPs → Senders → Add a sender**: nombre `mesawow`, correo `mesawow.cl@gmail.com`.
+2. Brevo envía un código a esa casilla de Gmail: ábrelo y confírmalo.
 
-El remitente no es secreto: va en `wrangler.jsonc` como `BREVO_REMITENTE`.
+Ojo: Gmail no permite que otros servicios firmen correos con `@gmail.com` (DMARC). Brevo puede cambiar el remitente por una dirección suya o los correos pueden llegar a spam. Si eso pasa, la solución es autenticar `mesawow.cl` en Brevo (Domains → Add a domain → registros DNS en Cloudflare, con la nube gris), enviar desde `avisos@mesawow.cl` y dejar `mesawow.cl@gmail.com` como dirección de respuesta.
 
 ## 2. Clave API de Brevo
 

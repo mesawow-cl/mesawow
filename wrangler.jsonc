@@ -22,12 +22,12 @@
     // ID de cliente OAuth de Google Calendar (no es secreto). El secreto va en GOOGLE_CLIENT_SECRET.
     "GOOGLE_CLIENT_ID": "",
     // Avisos (Fase 6). Secretos aparte: BREVO_API_KEY, BREVO_WEBHOOK_CLAVE, VAPID_PRIVADA.
-    "BREVO_REMITENTE": "",
+    "BREVO_REMITENTE": "mesawow.cl@gmail.com",
     "BREVO_REMITENTE_NOMBRE": "mesawow",
     "WHATSAPP_REMITENTE": "",
     "WHATSAPP_PLANTILLA_ID": "",
     "VAPID_PUBLICA": "BMC6HWLNtSgijacHZR56vZcspAGj9J0ABQl9IoY5NNRpYqHF4XvQU9Urv_ASCLnrqnS83gUZ7bJdVh7XySgXXEY",
-    "VAPID_CONTACTO": "mailto:avisos@mesawow.cl"
+    "VAPID_CONTACTO": "mailto:mesawow.cl@gmail.com"
   },
   "d1_databases": [
     {
@@ -51,7 +51,7 @@
   "env": {
     "staging": {
       "name": "mesawow-staging",
-      "vars": { "ENTORNO": "staging", "APP_URL": "https://staging.mesawow.cl", "ACCESS_EQUIPO": "", "ACCESS_AUD": "", "GOOGLE_CLIENT_ID": "", "BREVO_REMITENTE": "", "BREVO_REMITENTE_NOMBRE": "mesawow", "WHATSAPP_REMITENTE": "", "WHATSAPP_PLANTILLA_ID": "", "VAPID_PUBLICA": "", "VAPID_CONTACTO": "mailto:avisos@mesawow.cl" },
+      "vars": { "ENTORNO": "staging", "APP_URL": "https://staging.mesawow.cl", "ACCESS_EQUIPO": "", "ACCESS_AUD": "", "GOOGLE_CLIENT_ID": "", "BREVO_REMITENTE": "mesawow.cl@gmail.com", "BREVO_REMITENTE_NOMBRE": "mesawow", "WHATSAPP_REMITENTE": "", "WHATSAPP_PLANTILLA_ID": "", "VAPID_PUBLICA": "", "VAPID_CONTACTO": "mailto:mesawow.cl@gmail.com" },
       "d1_databases": [
         {
           "binding": "DB",
@@ -75,7 +75,7 @@
     },
     "production": {
       "name": "mesawow",
-      "vars": { "ENTORNO": "production", "APP_URL": "https://app.mesawow.cl", "ACCESS_EQUIPO": "", "ACCESS_AUD": "", "GOOGLE_CLIENT_ID": "", "BREVO_REMITENTE": "", "BREVO_REMITENTE_NOMBRE": "mesawow", "WHATSAPP_REMITENTE": "", "WHATSAPP_PLANTILLA_ID": "", "VAPID_PUBLICA": "", "VAPID_CONTACTO": "mailto:avisos@mesawow.cl" },
+      "vars": { "ENTORNO": "production", "APP_URL": "https://app.mesawow.cl", "ACCESS_EQUIPO": "", "ACCESS_AUD": "", "GOOGLE_CLIENT_ID": "", "BREVO_REMITENTE": "mesawow.cl@gmail.com", "BREVO_REMITENTE_NOMBRE": "mesawow", "WHATSAPP_REMITENTE": "", "WHATSAPP_PLANTILLA_ID": "", "VAPID_PUBLICA": "", "VAPID_CONTACTO": "mailto:mesawow.cl@gmail.com" },
       "d1_databases": [
         {
           "binding": "DB",
