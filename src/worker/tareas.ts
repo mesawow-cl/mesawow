@@ -8,6 +8,7 @@ import {
 import { hoySantiago } from '../shared/fechas';
 import { asegurarPlanDeTarea } from './agenda';
 import { encolarAvisos } from './avisos';
+import { avisarTareasListas, dependientes } from './despacho';
 import { entrarSolaAlSprint } from './sprints';
 import { ErrorApi } from './errores';
 import { exigir, type Ctx, type Entorno, type Persona } from './identidad';
@@ -270,6 +271,7 @@ tareas.post('/tareas', async (c) => {
     auditoria(db, actor.id, `Tarea creada ${d.titulo}`, 'task', id),
     ...encolarAvisos(db, 'Nueva tarea asignada', id, [d.responsableId, d.revisorId, ...d.colaboradores, ...d.aprobadores].filter((x): x is string => !!x && x !== actor.id)),
   ]);
+  await avisarTareasListas(db, [id]);
   return c.json({ id, ...(await reservarHoras(db, id, actor.id)) }, 201);
 });
 
@@ -296,6 +298,7 @@ tareas.patch('/tareas/:id', async (c) => {
     ...encolarAvisos(db, 'Cambio de tarea o asignación', t.fila.id, [...ahora].filter((x) => x !== actor.id)),
     ...encolarAvisos(db, 'Retiro de asignación', t.fila.id, [...antes].filter((x) => !ahora.has(x) && x !== actor.id)),
   ]);
+  await avisarTareasListas(db, [t.fila.id]);
   return c.json({ ok: true, ...(await reservarHoras(db, t.fila.id, actor.id)) });
 });
 
@@ -307,6 +310,9 @@ const accion = (nombre: keyof ReturnType<typeof accionesPosibles>, mensaje: stri
     const actor = c.get('actor');
     if (!accionesPosibles(t, actor.id, actor.permisos)[nombre]) throw new ErrorApi(403, 'sin_permiso', mensaje);
     await c.env.DB.batch(await hacer(c, t, actor));
+    // D2: al terminar una tarea, las que dependían de ella pueden quedar listas; al desbloquear, ella misma.
+    if (nombre === 'aprobar' || nombre === 'entregar') await avisarTareasListas(c.env.DB, await dependientes(c.env.DB, t.fila.id));
+    if (nombre === 'desbloquear') await avisarTareasListas(c.env.DB, [t.fila.id]);
     // Al terminar o reabrir, la agenda libera o vuelve a reservar las horas.
     if (['entregar', 'aprobar', 'reabrir'].includes(nombre)) return c.json({ ok: true, ...(await reservarHoras(c.env.DB, t.fila.id, actor.id)) });
     return c.json({ ok: true });

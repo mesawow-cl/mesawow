@@ -101,7 +101,7 @@ describe('crear y editar tareas', () => {
   it('crea la tarea, avisa a las personas asignadas y registra la auditoría', async () => {
     const id = await crear();
     expect(await fila('SELECT status, owner_id, estimated_hours FROM tasks WHERE id = ?1', id)).toEqual({ status: 'Pendiente', owner_id: 'demo-diego', estimated_hours: 4 });
-    const avisos = (await env.DB.prepare('SELECT person_id FROM outbox WHERE task_id = ?1 ORDER BY person_id').bind(id).all()).results;
+    const avisos = (await env.DB.prepare("SELECT person_id FROM outbox WHERE task_id = ?1 AND event = 'Nueva tarea asignada' ORDER BY person_id").bind(id).all()).results;
     expect(avisos).toEqual([{ person_id: 'demo-diego' }, { person_id: 'demo-elena' }, { person_id: 'demo-fabian' }]);
   });
 

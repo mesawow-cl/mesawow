@@ -1,5 +1,7 @@
 # Copia este archivo como .dev.vars para desarrollo local.
-# CLAVE_CIFRADO: 32 bytes en base64url (cifra los tokens de Google).
 CLAVE_CIFRADO=
-# Secreto del cliente OAuth de Google Calendar.
 GOOGLE_CLIENT_SECRET=
+# Avisos: clave de API de Brevo, clave del webhook y clave privada VAPID (campo d del JWK).
+BREVO_API_KEY=
+BREVO_WEBHOOK_CLAVE=
+VAPID_PRIVADA=

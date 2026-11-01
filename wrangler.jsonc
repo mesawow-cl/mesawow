@@ -12,7 +12,7 @@
   },
   "observability": { "enabled": true },
   // Cada 5 minutos: automatizaciones al aire. Lunes 10:00 UTC: feriados oficiales de Chile.
-  "triggers": { "crons": ["*/5 * * * *", "0 10 * * 1"] },
+  "triggers": { "crons": ["*/5 * * * *", "0 10 * * 1", "0 11 * * *"] },
   "vars": {
     "ENTORNO": "local",
     "APP_URL": "http://localhost:5173",
@@ -20,7 +20,14 @@
     "ACCESS_EQUIPO": "",
     "ACCESS_AUD": "",
     // ID de cliente OAuth de Google Calendar (no es secreto). El secreto va en GOOGLE_CLIENT_SECRET.
-    "GOOGLE_CLIENT_ID": ""
+    "GOOGLE_CLIENT_ID": "",
+    // Avisos (Fase 6). Secretos aparte: BREVO_API_KEY, BREVO_WEBHOOK_CLAVE, VAPID_PRIVADA.
+    "BREVO_REMITENTE": "",
+    "BREVO_REMITENTE_NOMBRE": "mesawow",
+    "WHATSAPP_REMITENTE": "",
+    "WHATSAPP_PLANTILLA_ID": "",
+    "VAPID_PUBLICA": "BMC6HWLNtSgijacHZR56vZcspAGj9J0ABQl9IoY5NNRpYqHF4XvQU9Urv_ASCLnrqnS83gUZ7bJdVh7XySgXXEY",
+    "VAPID_CONTACTO": "mailto:avisos@mesawow.cl"
   },
   "d1_databases": [
     {
@@ -36,10 +43,15 @@
   // En vivo: una sala con WebSocket Hibernation para el Inicio, la campana y los calendarios.
   "durable_objects": { "bindings": [{ "name": "VIVO", "class_name": "SalaEnVivo" }] },
   "migrations": [{ "tag": "v1", "new_sqlite_classes": ["SalaEnVivo"] }],
+  // Cola de avisos por canal (correo, WhatsApp, push), con reintentos.
+  "queues": {
+    "producers": [{ "binding": "AVISOS", "queue": "mesawow-avisos-local" }],
+    "consumers": [{ "queue": "mesawow-avisos-local", "max_batch_size": 20, "max_batch_timeout": 2, "max_retries": 5 }]
+  },
   "env": {
     "staging": {
       "name": "mesawow-staging",
-      "vars": { "ENTORNO": "staging", "APP_URL": "https://staging.mesawow.cl", "ACCESS_EQUIPO": "", "ACCESS_AUD": "", "GOOGLE_CLIENT_ID": "" },
+      "vars": { "ENTORNO": "staging", "APP_URL": "https://staging.mesawow.cl", "ACCESS_EQUIPO": "", "ACCESS_AUD": "", "GOOGLE_CLIENT_ID": "", "BREVO_REMITENTE": "", "BREVO_REMITENTE_NOMBRE": "mesawow", "WHATSAPP_REMITENTE": "", "WHATSAPP_PLANTILLA_ID": "", "VAPID_PUBLICA": "", "VAPID_CONTACTO": "mailto:avisos@mesawow.cl" },
       "d1_databases": [
         {
           "binding": "DB",
@@ -51,11 +63,19 @@
       "r2_buckets": [
         { "binding": "ARCHIVOS", "bucket_name": "mesawow-archivos-staging" }
       ],
-      "durable_objects": { "bindings": [{ "name": "VIVO", "class_name": "SalaEnVivo" }] }
+      "durable_objects": { "bindings": [{ "name": "VIVO", "class_name": "SalaEnVivo" }] },
+      "queues": {
+        "producers": [{ "binding": "AVISOS", "queue": "mesawow-avisos-production" }],
+        "consumers": [{ "queue": "mesawow-avisos-production", "max_batch_size": 20, "max_batch_timeout": 2, "max_retries": 5 }]
+      },
+      "queues": {
+        "producers": [{ "binding": "AVISOS", "queue": "mesawow-avisos-staging" }],
+        "consumers": [{ "queue": "mesawow-avisos-staging", "max_batch_size": 20, "max_batch_timeout": 2, "max_retries": 5 }]
+      }
     },
     "production": {
       "name": "mesawow",
-      "vars": { "ENTORNO": "production", "APP_URL": "https://app.mesawow.cl", "ACCESS_EQUIPO": "", "ACCESS_AUD": "", "GOOGLE_CLIENT_ID": "" },
+      "vars": { "ENTORNO": "production", "APP_URL": "https://app.mesawow.cl", "ACCESS_EQUIPO": "", "ACCESS_AUD": "", "GOOGLE_CLIENT_ID": "", "BREVO_REMITENTE": "", "BREVO_REMITENTE_NOMBRE": "mesawow", "WHATSAPP_REMITENTE": "", "WHATSAPP_PLANTILLA_ID": "", "VAPID_PUBLICA": "", "VAPID_CONTACTO": "mailto:avisos@mesawow.cl" },
       "d1_databases": [
         {
           "binding": "DB",

@@ -76,7 +76,8 @@ invitacionPropia.post('/invitaciones/aceptar', async (c) => {
     db.prepare('INSERT INTO people (id, name, email, phone, role, mesa_id) VALUES (?1, ?2, ?3, ?4, ?5, ?6)')
       .bind(id, datos.nombre, correo, datos.telefono, inv.role, inv.mesa_id),
     db.prepare('INSERT INTO person_brands (person_id, brand_id) SELECT ?1, brand_id FROM invitation_brands WHERE invitation_id = ?2').bind(id, inv.id),
-    db.prepare('INSERT INTO preferences (person_id) VALUES (?1)').bind(id),
+    // D2: el aviso por WhatsApp de tareas listas parte activo.
+    db.prepare('INSERT INTO preferences (person_id, whatsapp) VALUES (?1, 1)').bind(id),
     db.prepare("UPDATE invitations SET status = 'Aceptada', accepted_at = ?2 WHERE id = ?1").bind(inv.id, ahora),
     auditoria(db, id, `Se unió al equipo ${datos.nombre}`, 'person', id, { invitacion: inv.id }),
   ]);
@@ -219,6 +220,9 @@ equipo.post('/invitaciones', async (c) => {
       .bind(id, await sha256(token), datos.correo, datos.nombre || null, mesa, datos.rol, vence, c.get('actor').id),
     ...marcas.map((b) => db.prepare('INSERT INTO invitation_brands (invitation_id, brand_id) VALUES (?1, ?2)').bind(id, b)),
     auditoria(db, c.get('actor').id, `Invitación creada para ${datos.correo}`, 'invitation', id, { rol: datos.rol }),
+    // El correo de invitación sale por Brevo (si está configurado; si no, queda el enlace para enviarlo a mano).
+    db.prepare(`INSERT INTO outbox (id, dedupe_key, channel, event, payload) VALUES (?1, ?2, 'email', 'Invitación a mesawow', ?3)`)
+      .bind(nuevoId(), `invitacion:${id}`, JSON.stringify({ para: datos.correo, enlace: `${c.env.APP_URL}/?invitacion=${token}`, invitador: c.get('actor').name })),
   ]);
   // El token solo se entrega ahora: en la base queda su huella (SHA-256).
   return c.json({ id, enlace: `${c.env.APP_URL}/?invitacion=${token}`, vence }, 201);

@@ -5,6 +5,7 @@ import { aire, procesarAire } from './aire';
 import { alertas } from './alertas';
 import { calendario } from './calendario';
 import { campanas } from './campanas';
+import { despachar, enviarMensaje, enviarResumenes, type MensajeCola } from './despacho';
 import { equipo, invitacionPropia } from './equipo';
 import { estrategia, publico } from './estrategia';
 import { google, googleCallback, sincronizarTodos } from './google';
@@ -12,6 +13,7 @@ import { ical, icalPublico, sincronizarIcalTodos } from './ical';
 import { cuerpoError, ErrorApi } from './errores';
 import { esLocal, requiereIdentidad, requiereSesion, type Entorno } from './identidad';
 import { organizacion } from './organizacion';
+import { notificaciones, webhookBrevo } from './notificaciones';
 import { perfil } from './perfil';
 import { planificacion } from './planificacion';
 import { sprints } from './sprints';
@@ -40,7 +42,7 @@ api.use('*', async (c, next) => {
 api.use('*', async (c, next) => {
   await next();
   if (!['GET', 'HEAD', 'OPTIONS'].includes(c.req.method) && c.res.status < 400 && c.env.VIVO) {
-    c.executionCtx.waitUntil(emitir(c.env, { tipo: 'cambio', origen: c.req.path.split('/')[3] ?? '' }));
+    c.executionCtx.waitUntil(Promise.all([emitir(c.env, { tipo: 'cambio', origen: c.req.path.split('/')[3] ?? '' }), despachar(c.env).catch((e) => console.error('despacho', e))]));
   }
 });
 
@@ -57,7 +59,7 @@ api.get('/dev/personas', async (c) => {
 });
 
 // Una sola puerta: sin sesión (salud y desarrollo), solo correo verificado (aceptar invitación) o sesión completa.
-const SIN_SESION = new Set(['/api/v1/salud', '/api/v1/dev/personas', '/api/v1/publico/mesa', '/api/v1/google/callback']);
+const SIN_SESION = new Set(['/api/v1/salud', '/api/v1/dev/personas', '/api/v1/publico/mesa', '/api/v1/google/callback', '/api/v1/webhooks/brevo']);
 const SOLO_IDENTIDAD = new Set(['/api/v1/invitaciones/mia', '/api/v1/invitaciones/aceptar']);
 api.use('*', (c, next) => {
   if (SIN_SESION.has(c.req.path) || c.req.path.startsWith('/api/v1/ical/feed/')) return next();
@@ -68,6 +70,7 @@ api.use('*', (c, next) => {
 api.route('/', publico);
 api.route('/', googleCallback);
 api.route('/', icalPublico);
+api.route('/', webhookBrevo);
 api.route('/', invitacionPropia);
 api.route('/', equipo);
 api.route('/', perfil);
@@ -76,6 +79,7 @@ api.route('/', calendario);
 api.route('/', google);
 api.route('/', ical);
 api.route('/', alertas);
+api.route('/', notificaciones);
 api.route('/', vivo);
 api.route('/', tareas);
 api.route('/', organizacion);
@@ -124,6 +128,11 @@ export default {
   //   cada 5 minutos: piezas que salen al aire solas, avisos de riesgo (A4, A5) y Google Calendar (D4);
   //   lunes 10:00 UTC: feriados oficiales del año y el siguiente (D3).
   async scheduled(evento, env, ctx) {
+    if (evento.cron === '0 11 * * *') {
+      // Resúmenes por correo: diarios todos los días, semanales los lunes (≈ 08:00 en Chile).
+      ctx.waitUntil(enviarResumenes(env).then(() => despachar(env)).then(() => undefined));
+      return;
+    }
     if (evento.cron === '0 10 * * 1') {
       const anio = new Date().getUTCFullYear();
       ctx.waitUntil((async () => {
@@ -135,8 +144,16 @@ export default {
     ctx.waitUntil((async () => {
       const [aireR] = await Promise.all([procesarAire(env.DB), sincronizarTodos(env.DB, env), sincronizarIcalTodos(env.DB, env)]);
       if (aireR.alAire || aireR.avisos) await emitir(env, { tipo: 'cambio', origen: 'aire' });
+      await despachar(env);
     })());
   },
-} satisfies ExportedHandler<Env>;
+  // Cola de avisos: cada mensaje se envía por su canal; los errores temporales se reintentan con espera creciente.
+  async queue(lote, env) {
+    for (const m of lote.messages) {
+      const r = await enviarMensaje(env, (m.body as MensajeCola).id);
+      if (r === 'reintentar') m.retry({ delaySeconds: Math.min(3600, 60 * 2 ** m.attempts) }); else m.ack();
+    }
+  },
+} satisfies ExportedHandler<Env, MensajeCola>;
 
 export type Api = typeof api;
