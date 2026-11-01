@@ -22,6 +22,7 @@ export const cargarSemilla = () => ejecutar([
   'DELETE FROM air_series',
   'DELETE FROM work_plans',
   'DELETE FROM meetings',
+  'DELETE FROM calendar_links',
   'DELETE FROM holidays',
   'DELETE FROM plan_changes',
   "DELETE FROM tasks WHERE id NOT LIKE 'demo-%'",

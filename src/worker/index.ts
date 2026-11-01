@@ -6,6 +6,7 @@ import { calendario } from './calendario';
 import { campanas } from './campanas';
 import { equipo, invitacionPropia } from './equipo';
 import { estrategia, publico } from './estrategia';
+import { google, googleCallback, sincronizarTodos } from './google';
 import { cuerpoError, ErrorApi } from './errores';
 import { esLocal, requiereIdentidad, requiereSesion, type Entorno } from './identidad';
 import { organizacion } from './organizacion';
@@ -43,7 +44,7 @@ api.get('/dev/personas', async (c) => {
 });
 
 // Una sola puerta: sin sesión (salud y desarrollo), solo correo verificado (aceptar invitación) o sesión completa.
-const SIN_SESION = new Set(['/api/v1/salud', '/api/v1/dev/personas', '/api/v1/publico/mesa']);
+const SIN_SESION = new Set(['/api/v1/salud', '/api/v1/dev/personas', '/api/v1/publico/mesa', '/api/v1/google/callback']);
 const SOLO_IDENTIDAD = new Set(['/api/v1/invitaciones/mia', '/api/v1/invitaciones/aceptar']);
 api.use('*', (c, next) => {
   if (SIN_SESION.has(c.req.path)) return next();
@@ -52,11 +53,13 @@ api.use('*', (c, next) => {
 });
 
 api.route('/', publico);
+api.route('/', googleCallback);
 api.route('/', invitacionPropia);
 api.route('/', equipo);
 api.route('/', perfil);
 api.route('/', aire);
 api.route('/', calendario);
+api.route('/', google);
 api.route('/', tareas);
 api.route('/', organizacion);
 api.route('/', agenda);
@@ -101,7 +104,7 @@ api.route('/', conSesion);
 export default {
   fetch: api.fetch,
   // Tareas programadas (Cron Triggers):
-  //   cada 5 minutos: piezas que salen al aire solas y avisos de riesgo (A4, A5);
+  //   cada 5 minutos: piezas que salen al aire solas, avisos de riesgo (A4, A5) y Google Calendar (D4);
   //   lunes 10:00 UTC: feriados oficiales del año y el siguiente (D3).
   async scheduled(evento, env, ctx) {
     if (evento.cron === '0 10 * * 1') {
@@ -112,7 +115,7 @@ export default {
       })());
       return;
     }
-    ctx.waitUntil(procesarAire(env.DB).then(() => undefined));
+    ctx.waitUntil(Promise.all([procesarAire(env.DB), sincronizarTodos(env.DB, env)]).then(() => undefined));
   },
 } satisfies ExportedHandler<Env>;
 
