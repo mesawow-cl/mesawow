@@ -2,6 +2,7 @@
 import { Hono } from 'hono';
 import { agenda, recalcularAgenda, sincronizarFeriados } from './agenda';
 import { aire, procesarAire } from './aire';
+import { calendario } from './calendario';
 import { campanas } from './campanas';
 import { equipo, invitacionPropia } from './equipo';
 import { estrategia, publico } from './estrategia';
@@ -55,6 +56,7 @@ api.route('/', invitacionPropia);
 api.route('/', equipo);
 api.route('/', perfil);
 api.route('/', aire);
+api.route('/', calendario);
 api.route('/', tareas);
 api.route('/', organizacion);
 api.route('/', agenda);

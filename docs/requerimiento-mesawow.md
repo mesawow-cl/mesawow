@@ -82,7 +82,7 @@ Responsable (owner, uno), Revisor (uno, opcional), Colaboradores (varios), Aprob
 
 | Acción | Quién |
 |---|---|
-| Ver una tarea | Marca permitida **y** (esAdmin o coordina, o participa en ella). Si `confidencial`: solo esAdmin o participantes. |
+| Ver una tarea | Marca permitida **y** (esAdmin, coordina o dirige, o participa en ella). Si `confidencial`: solo esAdmin o participantes. |
 | Crear / editar / reasignar tarea | coordina |
 | Empezar tarea (Pendiente → En curso) | coordina, responsable o colaborador; sin bloqueo y con dependencias hechas |
 | Bloquear / desbloquear ("Necesito ayuda") | participantes y coordina (*Corrección*: el prototipo no lo restringe) |

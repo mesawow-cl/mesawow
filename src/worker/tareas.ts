@@ -47,13 +47,13 @@ export const cargarTarea = async (db: D1Database, id: string): Promise<TareaComp
   };
 };
 
-/** Visibilidad (§5.2): marca permitida y (admin, coordinación o participa); confidencial solo participantes o admin. */
+/** Visibilidad (§5.2): marca permitida y (admin, coordinación, dirección o participa); confidencial solo participantes o admin. */
 export const puedeVer = (t: TareaCompleta, p: Persona) => {
   if (p.permisos.esAdmin) return true;
   if (!p.marcas.includes(t.fila.brand_id)) return false;
   const esParte = participa(t, p.id);
   if (t.confidential) return esParte;
-  return p.permisos.coordina || esParte;
+  return p.permisos.coordinaODirige || esParte;
 };
 
 /** Condición SQL equivalente a `puedeVer` sobre la tabla tasks con alias `t`. */
@@ -63,7 +63,7 @@ export const filtroVisible = (p: Persona, desde = 1): { sql: string; params: unk
   const marcas = p.marcas.length ? p.marcas.map((_, i) => n(i + 1)).join(',') : `''`;
   const yo = n(0);
   const parte = `(t.owner_id = ${yo} OR t.reviewer_id = ${yo} OR EXISTS (SELECT 1 FROM task_people tp WHERE tp.task_id = t.id AND tp.person_id = ${yo}))`;
-  const general = p.permisos.coordina ? `(t.confidential = 0 OR ${parte})` : parte;
+  const general = p.permisos.coordinaODirige ? `(t.confidential = 0 OR ${parte})` : parte;
   return { sql: `(t.brand_id IN (${marcas}) AND ${general})`, params: [p.id, ...p.marcas] };
 };
 
