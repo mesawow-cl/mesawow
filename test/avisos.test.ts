@@ -8,7 +8,7 @@ const COORD = 'bruno@mesawow.test', DIEGO = 'diego@mesawow.test';
 const todos = (sql: string, ...p: unknown[]) => env.DB.prepare(sql).bind(...p).all<any>().then((r) => r.results);
 const fila = (sql: string, ...p: unknown[]) => env.DB.prepare(sql).bind(...p).first<any>();
 const sinCola = { ...env, AVISOS: undefined } as unknown as Env;
-const conBrevo = { ...sinCola, BREVO_API_KEY: 'k', BREVO_REMITENTE: 'avisos@mesawow.test', WHATSAPP_REMITENTE: '56900000000', WHATSAPP_PLANTILLA_ID: '7' } as unknown as Env;
+const conBrevo = { ...sinCola, BREVO_API_KEY: 'k', BREVO_REMITENTE: 'avisos@mesawow.test', BREVO_RESPONDER_A: 'contacto@mesawow.test', WHATSAPP_REMITENTE: '56900000000', WHATSAPP_PLANTILLA_ID: '7' } as unknown as Env;
 const tarea = (cambios: Record<string, unknown> = {}) => llamar('/tareas', { como: COORD, metodo: 'POST', cuerpo: {
   titulo: 'Banner', marcaId: 'demo-aurora', descripcion: 'Banner', entregable: 'PNG', criterio: 'Ok', responsableId: 'demo-diego', revisorId: 'demo-fabian',
   inicio: '2030-01-07', plazo: '2030-01-11', ...cambios,
@@ -62,7 +62,7 @@ describe('envío por canal', () => {
     let cuerpo: any;
     const brevo: typeof fetch = async (_u, init) => { cuerpo = JSON.parse(String(init!.body)); return Response.json({ messageId: '<m1@brevo>' }); };
     expect(await enviarMensaje(conBrevo, id, brevo)).toBe('ok');
-    expect(cuerpo).toMatchObject({ sender: { email: 'avisos@mesawow.test' }, to: [{ email: 'diego@mesawow.test' }], subject: '[mesawow] Una salida al aire está en riesgo' });
+    expect(cuerpo).toMatchObject({ sender: { email: 'avisos@mesawow.test' }, replyTo: { email: 'contacto@mesawow.test' }, to: [{ email: 'diego@mesawow.test' }], subject: '[mesawow] Una salida al aire está en riesgo' });
     expect(cuerpo.htmlContent).toContain('mesa<span style="color:#F22E62">wow</span>');
     expect(await fila('SELECT status, provider_id FROM outbox WHERE id = ?1', id)).toEqual({ status: 'enviado', provider_id: '<m1@brevo>' });
     expect(await enviarMensaje(conBrevo, await mensaje('email'), async () => new Response('caído', { status: 503 }))).toBe('reintentar');

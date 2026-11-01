@@ -12,14 +12,13 @@ Sin estas piezas mesawow funciona igual: el aviso queda en la app y en **Correo 
 
 Ninguna clave se pega en el chat ni en el código. Se cargan con `wrangler secret put` (Cloudflare) o en `.dev.vars` (tu computador, ignorado por git).
 
-## 1. Remitente del correo
+## 1. Dominio y remitentes
 
-Decisión: los avisos salen desde **`mesawow.cl@gmail.com`** (nombre visible `mesawow`). Va en `wrangler.jsonc` como `BREVO_REMITENTE` (no es secreto).
+Decisión: los avisos salen desde **`avisos@mesawow.cl`** (nombre `mesawow`) y las respuestas van a **`contacto@mesawow.cl`**. Ambos están en `wrangler.jsonc` (`BREVO_REMITENTE`, `BREVO_RESPONDER_A`); no son secretos.
 
-1. Brevo → **Senders, Domains & Dedicated IPs → Senders → Add a sender**: nombre `mesawow`, correo `mesawow.cl@gmail.com`.
-2. Brevo envía un código a esa casilla de Gmail: ábrelo y confírmalo.
-
-Ojo: Gmail no permite que otros servicios firmen correos con `@gmail.com` (DMARC). Brevo puede cambiar el remitente por una dirección suya o los correos pueden llegar a spam. Si eso pasa, la solución es autenticar `mesawow.cl` en Brevo (Domains → Add a domain → registros DNS en Cloudflare, con la nube gris), enviar desde `avisos@mesawow.cl` y dejar `mesawow.cl@gmail.com` como dirección de respuesta.
+1. Dominio `mesawow.cl` autenticado en Brevo (Domains → Add a domain → registros DNS en Cloudflare con la nube gris).
+2. Brevo → **Senders → Add a sender**: `mesawow` · `avisos@mesawow.cl`, y otro `mesawow` · `contacto@mesawow.cl`. Con el dominio autenticado no piden código.
+3. Para que existan los buzones (respuestas y rebotes), Cloudflare → `mesawow.cl` → **Email → Email Routing**: reenvía `contacto@mesawow.cl` y `avisos@mesawow.cl` a `mesawow.cl@gmail.com`. Si ya existe un registro SPF (`v=spf1 …`), debe quedar **uno solo** que incluya ambos: `v=spf1 include:_spf.mx.cloudflare.net include:spf.brevo.com ~all`.
 
 ## 2. Clave API de Brevo
 

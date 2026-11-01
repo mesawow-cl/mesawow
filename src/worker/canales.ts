@@ -23,6 +23,7 @@ export const enviarCorreo = async (env: Env, c: Correo, f: typeof fetch = fetch)
     body: JSON.stringify({
       sender: { email: env.BREVO_REMITENTE, name: env.BREVO_REMITENTE_NOMBRE || 'mesawow' },
       to: [{ email: c.para, ...(c.nombre ? { name: c.nombre } : {}) }],
+      ...(env.BREVO_RESPONDER_A ? { replyTo: { email: env.BREVO_RESPONDER_A } } : {}),
       subject: c.asunto, htmlContent: c.html, textContent: c.texto, tags: ['mesawow', c.etiqueta],
     }),
   });
