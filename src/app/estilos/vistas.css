@@ -312,3 +312,23 @@ label.primario { color: #fff; border: 0; cursor: pointer; }
 .publica { min-height: 100dvh; }
 .publica-cabeza { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px clamp(16px, 4vw, 34px); border-bottom: 1px solid var(--linea); background: #fff; }
 @media (max-width: 760px) { .lt-fila { grid-template-columns: 1fr; } }
+
+/* ── Salida al aire */
+.serie { border-color: #FFD9BC; background: #FFFBF7; }
+.dias-serie { display: flex; gap: 8px; flex-wrap: wrap; }
+.dias-serie label { position: relative; }
+.dias-serie input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.dias-serie span { display: grid; place-items: center; width: var(--tactil); height: var(--tactil); border-radius: 50%; border: 1px solid var(--linea); background: #fff; font-weight: 700; cursor: pointer; }
+.dias-serie input:checked + span { background: var(--wow); color: #fff; border-color: transparent; }
+.dias-serie input:focus-visible + span { outline: 3px solid var(--violeta); outline-offset: 2px; }
+.resumen-aire { padding: 10px 14px; border-radius: 12px; background: #FFF6CC; color: #5A4500; }
+.flujo-aire { list-style: none; margin: 0 0 16px; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.flujo-aire li { display: grid; gap: 2px; padding: 12px 14px; border-radius: 14px; background: #fff; border: 1px solid var(--linea); }
+.flujo-aire li:first-child { background: var(--wow-diagonal); color: #fff; border: 0; }
+.flujo-aire li:nth-child(2) { background: #FFF6CC; }
+.flujo-aire span { font-size: 13px; opacity: .9; }
+.dia-aire { margin-top: 16px; }
+.dia-aire h3 { margin-bottom: 8px; }
+.hora-aire { font-weight: 800; color: var(--rosa-oscuro); font-variant-numeric: tabular-nums; }
+.caja-aire { background: #FFF4EC; border: 1px solid #FFD9BC; border-radius: 14px; padding: 14px; }
+@media (max-width: 760px) { .flujo-aire { grid-template-columns: 1fr; } }

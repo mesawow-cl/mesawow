@@ -4,6 +4,7 @@ import { ESTADOS_TAREA } from '../../shared/constantes';
 import { abrirArchivo, pedir, subirArchivo, type Persona } from '../api';
 import { Dialogo } from '../componentes/Dialogo';
 import { fechaCorta, personas as cargarPersonas, TONO_ESTADO, type PersonaDirectorio } from '../datos';
+import { SaleAlAire } from './Aire';
 import { FormTarea } from './FormTarea';
 
 interface Fila {
@@ -97,7 +98,7 @@ export const Tareas = ({ persona, aviso, crear, alCrear }: { persona: Persona; a
       {abierta && <DetalleTarea id={abierta} alCerrar={() => abrir(null)} aviso={aviso} alCambiar={cargar} alEditar={(id) => { abrir(null); setEditar(id); }} />}
       {(crear || editar) && (
         <FormTarea tareaId={editar ?? undefined} alCerrar={() => { alCrear(false); setEditar(null); }}
-          alGuardar={(id) => { alCrear(false); setEditar(null); aviso(editar ? 'Tarea actualizada.' : 'Tarea creada. Avisamos a las personas asignadas.'); cargar(); abrir(id); }} />
+          alGuardar={(id, avisos) => { alCrear(false); setEditar(null); aviso([editar ? 'Tarea actualizada.' : 'Tarea creada. Avisamos a las personas asignadas.', ...(avisos ?? [])].join(' ')); cargar(); abrir(id); }} />
       )}
     </section>
   );
@@ -180,6 +181,8 @@ export const DetalleTarea = ({ id, alCerrar, aviso, alCambiar, alEditar }: {
               <ul class="lista-simple">{t.despues.map((x: any) => <li key={x.id}>{x.title} · <Estado estado={x.status} /></li>)}</ul>
             </section>
           )}
+
+          <SaleAlAire tareaId={id} />
 
           <section class="bloque">
             <h4>Resultado</h4>

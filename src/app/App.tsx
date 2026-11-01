@@ -6,6 +6,7 @@ import { Campana, MenuCrear, MenuCuenta, type PersonaVisible } from './component
 import { logoColor } from './marca';
 import { alHacerClicEnEnlace, ir, useUbicacion } from './rutas';
 import { EntrarComo } from './vistas/EntrarComo';
+import { MesaAlAire } from './vistas/Aire';
 import { Equipo } from './vistas/Equipo';
 import { Estrategia } from './vistas/Estrategia';
 import { MiMesa } from './vistas/MiMesa';
@@ -29,7 +30,7 @@ type Estado =
 
 const DESTINO_CREAR: Record<OpcionCrear['id'], { vista: Parameters<typeof ir>[0]; aviso: string }> = {
   tarea: { vista: 'tasks', aviso: 'El formulario de tarea por pasos llega en la Fase 3.' },
-  aire: { vista: 'aire', aviso: 'Programar salidas al aire llega en la Fase 4.' },
+  aire: { vista: 'aire', aviso: '' },
   catalogo: { vista: 'campaigns', aviso: 'Campañas 360, webinars y catálogo llegan en la Fase 3.' },
   compromiso: { vista: 'muro', aviso: 'Los compromisos del día llegan en la Fase 7.' },
 };
@@ -122,6 +123,7 @@ export const App = () => {
       case 'gantt': return <Gantt />;
       case 'metro': return <MesaDeTrabajo />;
       case 'strategy': return <Estrategia persona={persona} aviso={setAviso} />;
+      case 'aire': return <MesaAlAire persona={persona} aviso={setAviso} />;
       case 'brands': return <Marcas persona={persona} aviso={setAviso} />;
       case 'profile': return <Perfil personaId={idPerfil} soloLectura={viendoOtra || actor.permisos.soloLectura && idPerfil !== actor.id} aviso={setAviso} />;
       default: return <EnConstruccion vista={vistaFinal} />;
@@ -152,6 +154,11 @@ export const App = () => {
           ir(DESTINO_CREAR[id].vista);
           if (id === 'tarea') setCrearTarea(true);
           else if (id === 'catalogo') setPlanificar(true);
+          else if (id === 'aire') {
+            // Abre la Mesa al aire con el selector "Programar una salida".
+            history.replaceState(null, '', '/al-aire?programar=1');
+            dispatchEvent(new PopStateEvent('popstate'));
+          }
           else setAviso(DESTINO_CREAR[id].aviso);
         }} />
       <MenuCuenta abierto={abierto === 'cuenta'} alCerrar={() => setAbierto(null)} persona={actor}

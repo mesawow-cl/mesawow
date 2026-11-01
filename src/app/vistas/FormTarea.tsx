@@ -4,6 +4,8 @@ import { useEffect, useMemo, useState } from 'preact/hooks';
 import { hoySantiago } from '../../shared/fechas';
 import { pedir } from '../api';
 import { Asistente } from '../componentes/Asistente';
+import { aireVacio, BloqueAire, primeraSalida, type EstadoAire } from '../componentes/BloqueAire';
+import { plazoPropuesto } from '../../shared/dominio/aire';
 import { Dialogo } from '../componentes/Dialogo';
 import { marcas as cargarMarcas, mesas as cargarMesas, personas as cargarPersonas, type Marca, type Mesa, type PersonaDirectorio } from '../datos';
 
@@ -42,7 +44,9 @@ const Elegibles = ({ opciones, elegidas, alCambiar, etiqueta }: {
   </fieldset>
 );
 
-export const FormTarea = ({ tareaId, alCerrar, alGuardar }: { tareaId?: string; alCerrar: () => void; alGuardar: (id: string) => void }) => {
+export const FormTarea = ({ tareaId, alCerrar, alGuardar, pasoInicial = 0, conAire = false }: {
+  tareaId?: string; alCerrar: () => void; alGuardar: (id: string, avisos?: string[]) => void; pasoInicial?: number; conAire?: boolean;
+}) => {
   const [d, setD] = useState<Datos>(vacio);
   const [listo, setListo] = useState(!tareaId);
   const [marcas, setMarcas] = useState<Marca[]>([]);
@@ -52,6 +56,9 @@ export const FormTarea = ({ tareaId, alCerrar, alGuardar }: { tareaId?: string; 
   const [tareasMarca, setTareasMarca] = useState<{ id: string; title: string; status: string }[]>([]);
   const [masEquipo, setMasEquipo] = useState(false);
   const [masPlazos, setMasPlazos] = useState(false);
+  const [aire, setAire] = useState<EstadoAire>(() => ({ ...aireVacio(), activo: conAire }));
+  const [aireCargado, setAireCargado] = useState(false);
+  const [plazoTocado, setPlazoTocado] = useState(!!tareaId);
   const [error, setError] = useState('');
   const [enviando, setEnviando] = useState(false);
   const cambiar = (c: Partial<Datos>) => setD((x) => ({ ...x, ...c }));
@@ -73,6 +80,11 @@ export const FormTarea = ({ tareaId, alCerrar, alGuardar }: { tareaId?: string; 
         setMasPlazos(t.necesita.length > 0 || !!t.estimated_hours);
         setListo(true);
       }).catch((e: Error) => setError(e.message));
+      pedir<{ reservar: boolean; series: any[]; piezas: any[] }>(`/tareas/${tareaId}/aire`).then((r) => {
+        setAire({ activo: conAire || r.piezas.length > 0, reservar: r.reservar, series: r.series.map((x) => ({ id: x.id, name: x.name, channel: x.channel, mode: x.mode, days: x.days, time: x.time, from: x.from, weeks: x.weeks, count: x.count, hours: x.hours })),
+          sueltas: r.piezas.filter((x) => !x.series_id).map((x) => ({ id: x.id, channel: x.channel, at: x.at })) });
+        setAireCargado(r.piezas.length > 0);
+      });
     }
   }, [tareaId]);
 
@@ -81,6 +93,15 @@ export const FormTarea = ({ tareaId, alCerrar, alGuardar }: { tareaId?: string; 
     pedir<{ tareas: { id: string; title: string; status: string }[] }>(`/tareas?marca=${encodeURIComponent(d.marcaId)}`)
       .then((r) => setTareasMarca(r.tareas.filter((t) => t.id !== tareaId)));
   }, [d.marcaId]);
+
+  const primera = primeraSalida(aire);
+  useEffect(() => {
+    if (!primera) return;
+    if (!plazoTocado || d.plazo > primera.slice(0, 10)) {
+      const p = plazoPropuesto(primera, hoySantiago());
+      setD((x) => ({ ...x, plazo: p, inicio: x.inicio > p ? p : x.inicio }));
+    }
+  }, [primera]);
 
   // Solo se ofrecen personas que tienen la marca (o la administración general).
   const conMarca = useMemo(() => gente.filter((p) => p.role === 'Administrador general' || p.marcas.includes(d.marcaId)), [gente, d.marcaId]);
@@ -99,7 +120,12 @@ export const FormTarea = ({ tareaId, alCerrar, alGuardar }: { tareaId?: string; 
       const r = tareaId
         ? (await pedir(`/tareas/${tareaId}`, { method: 'PATCH', json: cuerpo }), { id: tareaId })
         : await pedir<{ id: string }>('/tareas', { method: 'POST', json: cuerpo });
-      alGuardar(r.id);
+      let avisos: string[] = [];
+      if (aire.activo || aireCargado) {
+        const a = await pedir<{ avisos: string[]; plazoAjustado: boolean; plazo: string }>(`/tareas/${r.id}/aire`, { method: 'PUT', json: aire });
+        avisos = [...(a.plazoAjustado ? [`La fecha límite quedó el ${a.plazo} para dejar 2 días de revisión.`] : []), ...a.avisos];
+      }
+      alGuardar(r.id, avisos);
     } catch (e) { setError((e as Error).message); } finally { setEnviando(false); }
   };
 
@@ -166,12 +192,7 @@ export const FormTarea = ({ tareaId, alCerrar, alGuardar }: { tareaId?: string; 
     },
     {
       titulo: 'Salida al aire',
-      contenido: (
-        <div class="pronto">
-          <strong>Programar salidas al aire llega en la Fase 4.</strong>
-          <p>Aquí podrás indicar series de publicaciones o anuncios por canal, y mesawow propondrá la fecha límite de trabajo con 2 días de revisión.</p>
-        </div>
-      ),
+      contenido: <BloqueAire aire={aire} alCambiar={setAire} plazo={d.plazo} />,
     },
     {
       titulo: 'Plazos',
@@ -179,7 +200,8 @@ export const FormTarea = ({ tareaId, alCerrar, alGuardar }: { tareaId?: string; 
         <>
           <div class="dos">
             <label>Inicio<input type="date" required value={d.inicio} onInput={(e) => cambiar({ inicio: valor(e) })} /></label>
-            <label>Fecha límite<input type="date" required min={d.inicio} value={d.plazo} onInput={(e) => cambiar({ plazo: valor(e) })} /></label>
+            <label>Fecha límite<input type="date" required min={d.inicio} max={primera?.slice(0, 10)} value={d.plazo} onInput={(e) => { setPlazoTocado(true); cambiar({ plazo: valor(e) }); }} />
+              {primera && <span class="ayuda">Debe ser antes de la primera salida al aire ({primera.slice(0, 10)}).</span>}</label>
           </div>
           <label>Criterio de aceptación<textarea required rows={3} maxLength={2000} placeholder="¿Cómo sabremos que está lista?" value={d.criterio} onInput={(e) => cambiar({ criterio: valor(e) })} /></label>
           <button type="button" class="mas-opciones" aria-expanded={masPlazos} onClick={() => setMasPlazos(!masPlazos)}>{masPlazos ? '－ Menos opciones' : '＋ Más opciones'}</button>
@@ -207,7 +229,7 @@ export const FormTarea = ({ tareaId, alCerrar, alGuardar }: { tareaId?: string; 
   return (
     <Dialogo titulo={tareaId ? 'Editar tarea' : 'Nueva tarea'} abierto alCerrar={alCerrar}>
       {!listo ? <p>{error || 'Cargando…'}</p> : (
-        <Asistente pasos={pasos} alEnviar={guardar} textoEnviar={tareaId ? 'Guardar cambios' : 'Crear tarea'} enviando={enviando} error={error} />
+        <Asistente pasos={pasos} pasoInicial={pasoInicial} alEnviar={guardar} textoEnviar={tareaId ? 'Guardar cambios' : 'Crear tarea'} enviando={enviando} error={error} />
       )}
     </Dialogo>
   );
