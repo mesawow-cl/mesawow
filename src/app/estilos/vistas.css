@@ -332,3 +332,41 @@ label.primario { color: #fff; border: 0; cursor: pointer; }
 .hora-aire { font-weight: 800; color: var(--rosa-oscuro); font-variant-numeric: tabular-nums; }
 .caja-aire { background: #FFF4EC; border: 1px solid #FFD9BC; border-radius: 14px; padding: 14px; }
 @media (max-width: 760px) { .flujo-aire { grid-template-columns: 1fr; } }
+.marca-aire { position: absolute; left: 6px; right: 6px; z-index: 2; padding: 2px 8px; border-radius: 999px; background: #FFEAF0; border: 1px solid #F9B5C8; color: #A3123E; font-size: 11px; font-weight: 700; text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.franja-anuncios { position: absolute; top: 2px; left: 4px; right: 4px; z-index: 2; padding: 1px 8px; border-radius: 6px; background: #F22E62; color: #fff; font-size: 11px; font-weight: 600; }
+.l-aire { background: #FFEAF0; border: 1px solid #F9B5C8; border-radius: 999px !important; }
+
+/* ── Dos calendarios */
+.explica-calendarios { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.explica-calendarios p { padding: 10px 14px; border-radius: 12px; background: #fff; border: 1px solid var(--linea); }
+.explica-calendarios i, .lista-simple i.l-trabajo, .lista-simple i.l-aire { display: inline-block; width: 12px; height: 12px; border-radius: 4px; vertical-align: middle; }
+.mes { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.mes-dia-semana { text-align: center; font-size: 12px; font-weight: 600; color: var(--tinta-2); padding: 4px 0; }
+.mes-celda { display: flex; flex-direction: column; align-items: stretch; gap: 3px; min-height: 112px; padding: 6px; border-radius: 10px; border: 1px solid var(--linea); background: #fff; text-align: left; font-weight: 400; overflow: hidden; }
+.mes-celda.fuera { background: #FAF8FB; color: #8C8AA0; }
+.mes-celda.hoy .mes-n { background: var(--wow-diagonal); color: #fff; }
+.mes-celda.elegido { outline: 2px solid var(--rosa); outline-offset: -2px; }
+.mes-n { align-self: flex-start; min-width: 26px; height: 26px; border-radius: 999px; display: grid; place-items: center; font-weight: 700; font-size: 13px; }
+.mes-feriado { font-size: 10px; font-weight: 600; color: var(--tinta-2); }
+.mes-chips { display: grid; gap: 2px; }
+.mes-chip { font-size: 11px; padding: 1px 6px; border-radius: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mes-chip.w { background: #E2F6F7; color: #00575F; }
+.mes-chip.a { background: #FFEAF0; color: #A3123E; }
+.mes-chip.a.act { background: transparent; border: 1px dashed #F9B5C8; }
+.mes-mas { font-size: 11px; color: var(--apagado); }
+.mes-puntos { display: none; gap: 3px; flex-wrap: wrap; }
+.mes-puntos i { font-style: normal; font-size: 10px; font-weight: 700; padding: 0 5px; border-radius: 999px; }
+.mes-puntos .w { background: #E2F6F7; color: #00575F; }
+.mes-puntos .a { background: #FFEAF0; color: #A3123E; }
+.carga { display: grid; gap: 4px; padding: 8px 0; border-bottom: 1px solid var(--linea); }
+.carga-cabeza { display: flex; justify-content: space-between; gap: 8px; }
+.carga-barra { height: 8px; border-radius: 999px; background: #F1ECF4; overflow: hidden; }
+.carga-barra i { display: block; height: 100%; background: var(--teal); }
+.carga-barra i.mid { background: var(--naranja); }
+.carga-barra i.full { background: var(--rosa); }
+@media (max-width: 760px) {
+  .explica-calendarios { grid-template-columns: 1fr; }
+  .mes-celda { min-height: 58px; padding: 4px; }
+  .mes-chips, .mes-feriado { display: none; }
+  .mes-puntos { display: flex; }
+}
