@@ -163,3 +163,9 @@ describe('pantallas de avisos: permisos', () => {
     expect((await editar('Cuenta', 'http://sin-https.test')).status).toBe(400);
   });
 });
+
+describe('seguridad de las pruebas', () => {
+  it('las pruebas no cargan la clave real de Brevo', () => {
+    expect((env as unknown as { BREVO_API_KEY?: string }).BREVO_API_KEY ?? '').toBe('');
+  });
+});

@@ -7,7 +7,8 @@ export default defineConfig(async () => {
     plugins: [
       cloudflareTest({
         wrangler: { configPath: './wrangler.jsonc' },
-        miniflare: { bindings: { MIGRACIONES: migraciones } },
+        // Las pruebas nunca usan claves reales de .dev.vars: sin Brevo, ningún envío sale de verdad.
+        miniflare: { bindings: { MIGRACIONES: migraciones, BREVO_API_KEY: '', BREVO_WEBHOOK_CLAVE: '', GOOGLE_CLIENT_SECRET: '' } },
       }),
     ],
     test: {
