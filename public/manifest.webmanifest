@@ -1,0 +1,15 @@
+{
+  "name": "mesawow",
+  "short_name": "mesawow",
+  "description": "La plataforma donde el trabajo se vive, se comparte y se celebra.",
+  "lang": "es-CL",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#FBF6FA",
+  "theme_color": "#F22E62",
+  "icons": [
+    { "src": "/marca/favicon/favicon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/marca/favicon/favicon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

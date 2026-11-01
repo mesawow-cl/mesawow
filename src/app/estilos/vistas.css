@@ -384,3 +384,27 @@ label.primario { color: #fff; border: 0; cursor: pointer; }
 .en-vivo.desconectado i { background: #B9B5C6; animation: none; }
 .actividad li.nuevo { animation: entra .6s ease-out; background: #FFF6F9; border-radius: 8px; padding-inline: 6px; }
 @keyframes entra { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+/* Avisos (Fase 6) */
+.hero + .grilla-2, .hero + .tarjeta, .hero + .tabla-avisos, .hero + .casillas, .hero + .pronto { margin-top: 22px; }
+.grilla-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 16px; }
+.tarjeta .ayuda, .tabla-avisos .ayuda, .lista-limpia .ayuda { font-weight: 400; color: var(--apagado); font-size: 13px; }
+.tarjeta p { margin: 6px 0; }
+.formulario .casilla-linea { display: flex; font-weight: 500; font-size: 15px; }
+.nota { margin: 0 0 14px; padding: 12px 14px; border-radius: 12px; background: var(--suave); color: var(--tinta); }
+.lista-limpia { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; overflow-wrap: anywhere; }
+.casilla-linea { display: flex; gap: 12px; align-items: flex-start; min-height: var(--tactil); font-weight: 500; cursor: pointer; }
+.casilla-linea input { width: 22px; height: 22px; min-height: 0; margin-top: 1px; flex: none; accent-color: var(--rosa); }
+a.boton { display: inline-flex; align-items: center; justify-content: center; min-height: var(--tactil); padding: 0 18px; border-radius: 999px; font-weight: 600; text-decoration: none; }
+a.boton.primario { color: #fff; }
+.tabla-avisos [role="row"] { grid-template-columns: 1.6fr .8fr 1.6fr auto; }
+.tabla-avisos [role="row"].con-persona { grid-template-columns: 1.6fr 1fr .8fr 1.6fr auto; }
+.tabla-avisos .casillas { gap: 6px 12px; font-size: 13px; }
+.lista-plataformas li { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding: 14px 0; border-bottom: 1px solid var(--linea); }
+.lista-plataformas li:last-child { border-bottom: 0; }
+.lista-plataformas h3 { margin: 0; font-size: 16px; }
+.lista-plataformas li > div { flex: 1 1 220px; }
+@media (max-width: 760px) {
+  .tabla-avisos [role="row"], .tabla-avisos [role="row"].con-persona { grid-template-columns: 1fr auto; }
+  .tabla-avisos [role="row"] > [role="cell"]:first-child { grid-column: 1 / -1; }
+}

@@ -123,3 +123,43 @@ describe('resúmenes, invitaciones y webhook', () => {
     expect(await fila("SELECT status FROM outbox WHERE id = 'o1'")).toEqual({ status: 'entregado' });
   });
 });
+
+describe('pantallas de avisos: permisos', () => {
+  beforeEach(cargarSemilla);
+  const ANA = 'ana@mesawow.test';
+
+  it('cada persona ve solo sus avisos; la administración puede ver los de todo el equipo', async () => {
+    await tarea();
+    expect((await llamar('/avisos', { como: DIEGO })).cuerpo.avisos.length).toBeGreaterThan(0);
+    expect((await llamar('/avisos', { como: 'elena@mesawow.test' })).cuerpo.avisos).toHaveLength(0);
+    expect((await llamar('/avisos?todos=1', { como: 'elena@mesawow.test' })).cuerpo.avisos).toHaveLength(0);
+    const todos = (await llamar('/avisos?todos=1', { como: ANA })).cuerpo.avisos;
+    expect(new Set(todos.map((a: any) => a.persona)).size).toBeGreaterThan(1);
+  });
+
+  it('preferencias propias: guardar y leer; push solo con https', async () => {
+    const r = await llamar('/me/preferencias', { como: DIEGO, metodo: 'PUT', cuerpo: { menciones: false, resumen: 'Diario', correo: false, whatsapp: false, push: true } });
+    expect(r.status).toBe(200);
+    expect((await llamar('/me/preferencias', { como: DIEGO })).cuerpo).toMatchObject({ menciones: false, resumen: 'Diario', whatsapp: false });
+    expect((await llamar('/me/push', { como: DIEGO, metodo: 'POST', cuerpo: { endpoint: 'http://inseguro.test/x', keys: { p256dh: 'a', auth: 'b' } } })).status).toBe(400);
+    expect((await llamar('/me/push', { como: DIEGO, metodo: 'POST', cuerpo: { endpoint: 'https://push.test/x', keys: { p256dh: 'a', auth: 'b' } } })).status).toBe(201);
+    expect((await llamar('/me/preferencias', { como: DIEGO })).cuerpo.dispositivos).toBe(1);
+  });
+
+  it('Correo y WhatsApp: lo revisa coordinación; fichas y pruebas solo la administración general', async () => {
+    expect((await llamar('/canales', { como: DIEGO })).status).toBe(403);
+    expect((await llamar('/canales', { como: COORD })).status).toBe(200);
+    const ficha = { proveedor: 'Brevo', cuenta: 'avisos@mesawow.test', responsableId: null, plantilla: 'tarea_lista' };
+    expect((await llamar('/canales/Correo', { como: COORD, metodo: 'PUT', cuerpo: ficha })).status).toBe(403);
+    expect((await llamar('/canales/Correo', { como: ANA, metodo: 'PUT', cuerpo: ficha })).status).toBe(200);
+    expect((await llamar('/canales/prueba', { como: COORD, metodo: 'POST', cuerpo: { canal: 'email' } })).status).toBe(403);
+  });
+
+  it('Plataformas: coordinación edita las fichas y nunca acepta claves', async () => {
+    expect((await llamar('/plataformas', { como: DIEGO })).status).toBe(403);
+    const editar = (cuenta: string, url = '') => llamar('/plataformas/Meta%20Ads', { como: COORD, metodo: 'PUT', cuerpo: { cuenta, url, responsableId: null } });
+    expect((await editar('Cuenta de Aurora')).status).toBe(200);
+    expect((await editar('password: 1234')).status).toBe(400);
+    expect((await editar('Cuenta', 'http://sin-https.test')).status).toBe(400);
+  });
+});

@@ -1,3 +1,5 @@
+import { useInstalar } from '../pwa';
+import { BotonInstalar } from './Avisos';
 import { useEffect, useState } from 'preact/hooks';
 import { useEstadoEnVivo, useLatido } from '../vivo';
 import { ESPACIOS, pestanasVisibles, type Vista } from '../../shared/navegacion';
@@ -147,7 +149,9 @@ export const Inicio = ({ persona }: { persona: Persona }) => {
   );
 };
 
-export const Mas = ({ persona, alAbrirCuenta }: { persona: Persona; alAbrirCuenta: () => void }) => (
+export const Mas = ({ persona, alAbrirCuenta }: { persona: Persona; alAbrirCuenta: () => void }) => {
+  const { estado, pedirInstalar } = useInstalar();
+  return (
   <section aria-labelledby="titulo-vista">
     <div class="encabezado">
       <div><p class="ceja">mesawow</p><h1 id="titulo-vista">Todo mesawow</h1></div>
@@ -165,5 +169,7 @@ export const Mas = ({ persona, alAbrirCuenta }: { persona: Persona; alAbrirCuent
         </section>
       ))}
     </div>
+    {estado && estado !== 'instalada' && <div style={{ marginTop: '16px' }}><BotonInstalar estado={estado} alInstalar={pedirInstalar} /></div>}
   </section>
-);
+  );
+};

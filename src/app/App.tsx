@@ -20,6 +20,7 @@ import { Perfil } from './vistas/Perfil';
 import { Bases, Entregables, Proyectos } from './vistas/Proyectos';
 import { Registro } from './vistas/Registro';
 import { Sprints } from './vistas/Sprints';
+import { CorreoYWhatsapp, MisAvisos, Plataformas, PreferenciasAvisos } from './vistas/Avisos';
 import { EnConstruccion, Inicio, Mas } from './vistas/Vistas';
 
 type Estado =
@@ -135,6 +136,10 @@ export const App = () => {
       case 'aire': return <MesaAlAire persona={persona} aviso={setAviso} />;
       case 'calendario': return <Calendarios persona={persona} />;
       case 'brands': return <Marcas persona={persona} aviso={setAviso} />;
+      case 'notifications': return <MisAvisos persona={persona} />;
+      case 'preferences': return <PreferenciasAvisos aviso={setAviso} soloLectura={viendoOtra} />;
+      case 'connections': return <CorreoYWhatsapp persona={persona} aviso={setAviso} />;
+      case 'settings': return <Plataformas persona={persona} aviso={setAviso} />;
       case 'profile': return <Perfil personaId={idPerfil} soloLectura={viendoOtra || actor.permisos.soloLectura && idPerfil !== actor.id} aviso={setAviso} />;
       default: return <EnConstruccion vista={vistaFinal} />;
     }
