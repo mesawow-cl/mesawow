@@ -15,10 +15,13 @@ notificaciones.get('/avisos', async (c) => {
   const p = c.get('actor');
   const todos = p.permisos.esAdmin && c.req.query('todos') === '1';
   const { results } = await c.env.DB.prepare(`
-    SELECT o.id, o.event_id, o.event, o.created_at, o.task_id, o.payload, t.title, pe.name AS persona,
+    SELECT o.id, o.event_id, o.event, o.created_at, o.task_id, o.payload, t.title, pe.name AS persona, pe.role AS rol,
+           t.due AS plazo, t.description AS instruccion, t.deliverable AS entregable, b.name AS marca, ca.name AS campana,
+           (SELECT group_concat(d.title, ', ') FROM task_dependencies td JOIN tasks d ON d.id = td.depends_on_id WHERE td.task_id = t.id) AS depende,
            (SELECT json_group_array(json_object('canal', x.channel, 'estado', x.status, 'error', x.error))
               FROM outbox x WHERE x.channel <> 'app' AND x.person_id = o.person_id AND x.dedupe_key LIKE '%' || o.id || '%') AS canales
       FROM outbox o LEFT JOIN tasks t ON t.id = o.task_id LEFT JOIN people pe ON pe.id = o.person_id
+      LEFT JOIN brands b ON b.id = t.brand_id LEFT JOIN campaigns ca ON ca.id = t.campaign_id
      WHERE o.channel = 'app' AND (?1 = 1 OR o.person_id = ?2) ORDER BY o.created_at DESC LIMIT 100`).bind(todos ? 1 : 0, p.id).all<Fila>();
   return c.json({ avisos: results.map((a) => ({ ...a, titulo: tituloDe(a.event, { cantidad: 1 }), canales: JSON.parse(a.canales), payload: undefined })) });
 });

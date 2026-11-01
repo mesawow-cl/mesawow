@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'preact/hooks';
 import { pedir, type Persona } from '../api';
 import { Dialogo } from '../componentes/Dialogo';
-import { personas as cargarPersonas, type PersonaDirectorio } from '../datos';
+import { fechaCorta, personas as cargarPersonas, type PersonaDirectorio } from '../datos';
 import { activarPush, desactivarPush, pushEnEsteDispositivo, useInstalar } from '../pwa';
 import { useLatido } from '../vivo';
 
@@ -32,7 +32,8 @@ const Cabeza = ({ ceja, titulo, texto }: { ceja: string; titulo: string; texto: 
 // ─────────────────────────────── Avisos (seguimiento)
 
 interface Aviso {
-  id: string; event: string; created_at: string; task_id: string | null; title: string | null; persona: string | null; titulo: string;
+  id: string; event: string; created_at: string; task_id: string | null; title: string | null; persona: string | null; rol: string | null; titulo: string;
+  marca: string | null; campana: string | null; plazo: string | null; instruccion: string | null; entregable: string | null; depende: string | null;
   canales: { canal: string; estado: string; error: string | null }[];
 }
 
@@ -69,7 +70,7 @@ export const MisAvisos = ({ persona }: { persona: Persona }) => {
           {avisos.map((a) => (
             <div role="row" key={a.id} class={todos ? 'con-persona' : ''}>
               <span role="cell"><strong>{a.title ?? a.titulo}</strong><br /><span class="ayuda">{a.event}</span></span>
-              {todos && <span role="cell">{a.persona}</span>}
+              {todos && <span role="cell">{a.persona}<br /><span class="ayuda">{a.rol}</span></span>}
               <span role="cell" class="ayuda">{fechaHora(a.created_at)}</span>
               <span role="cell" class="casillas">
                 <span class="insignia verde">App</span>
@@ -85,8 +86,16 @@ export const MisAvisos = ({ persona }: { persona: Persona }) => {
           <div class="formulario">
             <p class="ceja">{abierto.event}</p>
             <h3>{abierto.title ?? abierto.titulo}</h3>
-            {abierto.persona && <p>Para: {abierto.persona}</p>}
+            {abierto.persona && <p>Para: {abierto.persona}{abierto.rol && ` · ${abierto.rol}`}</p>}
             <p class="ayuda">{fechaHora(abierto.created_at)} · America/Santiago</p>
+            {abierto.task_id && (
+              <div class="tarjeta">
+                <p>Marca: {abierto.marca ?? '—'}<br />Proyecto: {abierto.campana ?? 'Sin proyecto'}<br />Plazo: {abierto.plazo ? fechaCorta(abierto.plazo) : 'Por definir'} · America/Santiago</p>
+                <p>Instrucción: {abierto.instruccion || 'Consultar tarea'}</p>
+                <p>Entregable: {abierto.entregable || 'Consultar tarea'}</p>
+                <p>Depende de: {abierto.depende || 'Sin dependencia'}</p>
+              </div>
+            )}
             <ul class="lista-limpia">
               <li>App <Estado estado="enviado" /></li>
               {abierto.canales.map((c) => <li key={c.canal}>{CANAL[c.canal]} <Estado estado={c.estado} />{c.error && <span class="ayuda"> · {c.error}</span>}</li>)}
