@@ -39,6 +39,12 @@ Google lee el enlace privado de bloques de trabajo de cada persona sin iniciar s
 - **Include:** Everyone.
 - En **Application → Overview → Additional domains / paths**, agrega la ruta `app.mesawow.cl/api/v1/ical/feed/*` (y `staging.mesawow.cl/api/v1/ical/feed/*`) asociada a esa política.
 
+## Excepción para el webhook de Brevo (Fase 6)
+
+Brevo avisa a mesawow si cada correo se entregó o rebotó. Brevo no inicia sesión: la dirección lleva una clave secreta (`BREVO_WEBHOOK_CLAVE`) y mesawow rechaza cualquier llamada sin ella. Agrega la ruta a la misma política Bypass del calendario:
+
+- `app.mesawow.cl/api/v1/webhooks/brevo` (y `staging.mesawow.cl/api/v1/webhooks/brevo`).
+
 ## Cerrar sesión
 
 El botón "Cerrar sesión" de mesawow usa `/cdn-cgi/access/logout`, que cierra la sesión de Access en ese dispositivo.
